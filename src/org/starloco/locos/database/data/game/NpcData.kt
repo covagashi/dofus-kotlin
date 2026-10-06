@@ -17,7 +17,7 @@ class NpcData(dataSource: HikariDataSource?) : FunctionDAO<Pair<Npc, Int>>(dataS
             getData("SELECT * FROM " + getTableName() + ";") { result ->
                 while (result.next()) {
                     val mapID = result.getInt("mapid")
-                    World.world.getMapData(mapID)!!.orElseThrow { IllegalArgumentException(String.format("unknown map #%d", mapID)) }
+                    World.world.getMapData(mapID)!!.orElseThrow { IllegalArgumentException(("unknown map #%d").format( mapID)) }
 
                     val id = result.getInt("npcid")
                     if (!Config.modeChristmas && id == 795) // PNJ Noel

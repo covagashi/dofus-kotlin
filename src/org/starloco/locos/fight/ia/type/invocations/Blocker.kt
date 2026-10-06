@@ -29,8 +29,8 @@ class Blocker(fight: Fight, fighter: Fighter, count: Byte) : AbstractIA(fight, f
                         this.flag = -1
                     }
 
-                    1, 2, 3 -> if (this.fighter.getMob() != null) {
-                        val spell = Function.getInstance().getBestSpellForTargetDopeul(this.fight, this.fighter, enemy, this.fighter.cell!!.cellId, ArrayList(this.fighter.getMob()!!.spells.values))
+                    1, 2, 3 -> if (this.fighter.mob != null) {
+                        val spell = Function.getInstance().getBestSpellForTargetDopeul(this.fight, this.fighter, enemy, this.fighter.cell!!.cellId, ArrayList(this.fighter.mob!!.spells.values))
                         if (spell != null && Function.getInstance().tryCastSpell(this.fight, this.fighter, enemy,
                                 spell.getSpell()!!.id) == 0) {
                             this.count = 3

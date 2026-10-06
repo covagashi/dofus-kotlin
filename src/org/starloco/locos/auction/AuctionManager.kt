@@ -86,7 +86,7 @@ class AuctionManager : Updatable<Void?>(10000) {
     override fun update() {
         if (this.verify()) {
             val date = Calendar.getInstance().time
-            val hour = Integer.parseInt(SimpleDateFormat("HH").format(date))
+            val hour = (SimpleDateFormat("HH").format(date)).toInt()
 
             if (hour >= 16 && hour < 23) {
                 if (current == null) {
@@ -202,7 +202,7 @@ class AuctionManager : Updatable<Void?>(10000) {
         if (this.current != null && this.currentIsAvailable()) {
             val current = this.current!!
             val date = Calendar.getInstance().time
-            val hour = Integer.parseInt(SimpleDateFormat("HH").format(date))
+            val hour = (SimpleDateFormat("HH").format(date)).toInt()
             if (hour >= 16 && hour < 23) {
                 player.sendTypeMessage("Auction", player.lang.trans("game.auction.auctionmanager.encherie.infos"))
             }
@@ -232,8 +232,8 @@ class AuctionManager : Updatable<Void?>(10000) {
                     val split = msg.split(" ")
                     if (split.size == 2) {
                         try {
-                            if (Integer.parseInt(split[1]) > price)
-                                price = Integer.parseInt(split[1])
+                            if ((split[1]).toInt() > price)
+                                price = (split[1]).toInt()
                         } catch (ignored: Exception) {
                         }
                     }
@@ -279,7 +279,7 @@ class AuctionManager : Updatable<Void?>(10000) {
                 } else {
                     try {
                         if (exchange != null) {
-                            val price = Integer.parseInt(info[1])
+                            val price = (info[1]).toInt()
                             if (price < 10 || price > 1_000_000) throw Exception()
 
                             if (this.auctions.stream().filter { it.owner != null && it.owner!!.id == player.id }.count() >= 3) {

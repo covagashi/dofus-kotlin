@@ -134,7 +134,7 @@ class HouseManager {
     fun sell(P: Player, packet: String)//Vendre une maison
     {
         val h = P.inHouse
-        val price = Integer.parseInt(packet)
+        val price = (packet).toInt()
         if (h!!.isHouse(P, h!!)) {
             SocketManager.GAME_SEND_hOUSE(P, "V")
             SocketManager.GAME_SEND_hOUSE(P, "SK" + h!!.id + "|" + price)
@@ -240,8 +240,8 @@ class HouseManager {
                 DatabaseManager.get(HouseData::class.java).updateGuild(h!!, 0, 0)
                 parseHG(P, null)
             } else {
-                DatabaseManager.get(HouseData::class.java).updateGuild(h!!, h!!.guildId, Integer.parseInt(packet))
-                h!!.parseIntToRight(Integer.parseInt(packet))
+                DatabaseManager.get(HouseData::class.java).updateGuild(h!!, h!!.guildId, (packet).toInt())
+                h!!.parseIntToRight((packet).toInt())
             }
         } else {
             if (h!!.guildId <= 0) {
@@ -266,7 +266,7 @@ class HouseManager {
         val h = player.inHouse
         if (!h!!.isHouse(player, h!!))
             return
-        val Pguid = Integer.parseInt(packet)
+        val Pguid = (packet).toInt()
         val Target = World.world.getPlayer(Pguid)
         if (Target == null || !Target.isOnline || Target.fight != null
                 || Target.curMap.id != player.curMap.id)

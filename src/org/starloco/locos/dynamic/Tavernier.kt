@@ -83,7 +83,7 @@ class Tavernier : Updatable<Void?>(5 * 60_000) {
             str = str.replace(">", "")
             if (!str.matches("(.*)margin(.*)".toRegex()) && !str.matches("(.*)<p>(.*)".toRegex()) && !str.matches("(.*)--(.*)".toRegex()) && str != "p") {
                 if (str.length > 300) {
-                    temp.addAll(Arrays.asList(*str.split(".".toRegex()).toTypedArray()))
+                    temp.addAll(listOf(*str.split(".".toRegex()).toTypedArray()))
                 } else temp.add(str)
             }
         }

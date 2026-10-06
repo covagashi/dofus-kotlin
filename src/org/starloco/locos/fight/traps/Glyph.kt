@@ -30,15 +30,15 @@ class Glyph(
 
     fun onTrapped(target: Fighter) {
         if (this.spell == 1072 || this.spell == 1073) {//glyph pair/impair
-            if (target.getMob() != null) {
-                if (target.getMob()!!.template!!.id == 1045) {
+            if (target.mob != null) {
+                if (target.mob!!.template!!.id == 1045) {
                     if (this.spell == 1072) {
                         target.addBuff(217, 400, 2, false, 1077, "", target, false, true)// - 400 air
                         target.addBuff(218, 400, 2, false, 1077, "", target, false, true)// - 400 feu
                         SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 1077, caster.id.toString() + "", target.id.toString() + "," + "" + "," + 1)
-                        this.fight.getFighters(7).stream().filter { it.getPlayer()!! != null && it.getPlayer()!!.isOnline }.forEach {
-                            it.getPlayer()!!.send("GA;217;-100;" + target.id + ",400,1")
-                            it.getPlayer()!!.send("GA;218;-100;" + target.id + ",400,1")
+                        this.fight.getFighters(7).stream().filter { it.player!! != null && it.player!!.isOnline }.forEach {
+                            it.player!!.send("GA;217;-100;" + target.id + ",400,1")
+                            it.player!!.send("GA;218;-100;" + target.id + ",400,1")
                         }
                     } else {
                         target.addBuff(215, 400, 2, false, 1077, "", target, false, true)// - 400 terre
@@ -46,9 +46,9 @@ class Glyph(
 
                         SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 1077, caster.id.toString() + "", target.id.toString() + "," + "" + "," + 1)
 
-                        this.fight.getFighters(7).stream().filter { it.getPlayer()!! != null && it.getPlayer()!!.isOnline }.forEach {
-                            it.getPlayer()!!.send("GA;216;-100;" + target.id + ",400,1")
-                            it.getPlayer()!!.send("GA;215;-100;" + target.id + ",400,1")
+                        this.fight.getFighters(7).stream().filter { it.player!! != null && it.player!!.isOnline }.forEach {
+                            it.player!!.send("GA;216;-100;" + target.id + ",400,1")
+                            it.player!!.send("GA;215;-100;" + target.id + ",400,1")
                         }
                     }
                 } else {

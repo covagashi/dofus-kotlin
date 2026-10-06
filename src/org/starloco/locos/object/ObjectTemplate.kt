@@ -57,12 +57,12 @@ class ObjectTemplate(
         if (!armesInfos.isEmpty()) {
             try {
                 val infos = armesInfos.split(";")
-                pACost = Integer.parseInt(infos[0])
-                pOmin = Integer.parseInt(infos[1])
-                pOmax = Integer.parseInt(infos[2])
-                tauxCC = Integer.parseInt(infos[3])
-                tauxEC = Integer.parseInt(infos[4])
-                bonusCC = Integer.parseInt(infos[5])
+                pACost = (infos[0]).toInt()
+                pOmin = (infos[1]).toInt()
+                pOmax = (infos[2]).toInt()
+                tauxCC = (infos[3]).toInt()
+                tauxEC = (infos[4]).toInt()
+                bonusCC = (infos[5]).toInt()
                 isTwoHanded = infos[6] == "1"
             } catch (e: Exception) {
                 log.error("unexpected error", e)
@@ -91,12 +91,12 @@ class ObjectTemplate(
         this.newPrice = newPrice
         try {
             val infos = armesInfos.split(";")
-            pACost = Integer.parseInt(infos[0])
-            pOmin = Integer.parseInt(infos[1])
-            pOmax = Integer.parseInt(infos[2])
-            tauxCC = Integer.parseInt(infos[3])
-            tauxEC = Integer.parseInt(infos[4])
-            bonusCC = Integer.parseInt(infos[5])
+            pACost = (infos[0]).toInt()
+            pOmin = (infos[1]).toInt()
+            pOmax = (infos[2]).toInt()
+            tauxCC = (infos[3]).toInt()
+            tauxEC = (infos[4]).toInt()
+            bonusCC = (infos[5]).toInt()
             isTwoHanded = infos[6] == "1"
         } catch (e: Exception) {
             log.error("unexpected error", e)
@@ -481,6 +481,6 @@ class ObjectTemplate(
     }
 
     companion object {
-        private val bannedObjects = Arrays.asList(493, 494, 495, 496, 922, 7098, 9972, 454, 577, 596, 492, 491, 493, 494, 495, 496, 498, 499, 500, 577, 579, 911, 922, 1501, 1520, 1539, 1560, 1561, 1562, 1563, 1564, 1565, 2154, 2155, 2156, 2170, 2376, 6663, 6713, 6839, 6840, 7098, 7493, 7495, 7650, 7913, 7920, 8539, 8540, 8854, 9031, 9202, 9396, 9627, 9961, 9544, 9545, 9546, 9547, 9548, 10125, 10126, 10127, 10133)
+        private val bannedObjects = listOf(493, 494, 495, 496, 922, 7098, 9972, 454, 577, 596, 492, 491, 493, 494, 495, 496, 498, 499, 500, 577, 579, 911, 922, 1501, 1520, 1539, 1560, 1561, 1562, 1563, 1564, 1565, 2154, 2155, 2156, 2170, 2376, 6663, 6713, 6839, 6840, 7098, 7493, 7495, 7650, 7913, 7920, 8539, 8540, 8854, 9031, 9202, 9396, 9627, 9961, 9544, 9545, 9546, 9547, 9548, 10125, 10126, 10127, 10133)
     }
 }

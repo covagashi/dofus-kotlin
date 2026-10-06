@@ -1,25 +1,25 @@
-package org.starloco.locos.kernel;
+package org.starloco.locos.kernel
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashMap
+import java.util.Map
 
-import org.starloco.locos.area.map.GameCase;
-import org.starloco.locos.area.map.GameMap;
-import org.starloco.locos.client.Player;
-import org.starloco.locos.client.other.Stats;
-import org.starloco.locos.common.Formulas;
-import org.starloco.locos.entity.mount.Mount;
-import org.starloco.locos.fight.spells.Spell.SortStats;
-import org.starloco.locos.game.world.World;
-import org.starloco.locos.`object`.ObjectTemplate;
-import org.starloco.locos.util.RandomStats;
+import org.starloco.locos.area.map.GameCase
+import org.starloco.locos.area.map.GameMap
+import org.starloco.locos.client.Player
+import org.starloco.locos.client.other.Stats
+import org.starloco.locos.common.Formulas
+import org.starloco.locos.entity.mount.Mount
+import org.starloco.locos.fight.spells.Spell.SortStats
+import org.starloco.locos.game.world.World
+import org.starloco.locos.`object`.ObjectTemplate
+import org.starloco.locos.util.RandomStats
 
 object Constant {
     //DEBUG
     const val DEBUG_MAP_LIMIT: Int = 30000
     //Fight
     const val TIME_START_FIGHT: Int = 45000
-    @JvmField var TIME_BY_TURN: Int = 30000;
+    @JvmField var TIME_BY_TURN: Int = 30000
     //Phoenix
     const val ALL_PHOENIX: String = "-11-54|2;-12|-41;-17|5;-9|25;-4|36;5|12;12|10;19|-10;13|-14;31|-43;0|-60;-3|-58;18|24;-43|27;-33"
 
@@ -409,134 +409,134 @@ object Constant {
         for (v in 0 until HUNTING_QUESTS.size)
             if (World.world.getMonstre(HUNTING_QUESTS[v][3].toInt()) != null
                     && World.world.getMonstre(HUNTING_QUESTS[v][3].toInt())!!.gfxId == mobSkin)
-                return HUNTING_QUESTS[v][5].toInt();
-        return -1;
+                return HUNTING_QUESTS[v][5].toInt()
+        return -1
     }
 
     @JvmStatic fun getSkinByHuntMob(mobId: Int): Int {
         for (v in 0 until HUNTING_QUESTS.size)
             if (HUNTING_QUESTS[v][3].toInt() == mobId)
-                return World.world.getMonstre(mobId)!!.gfxId;
-        return -1;
+                return World.world.getMonstre(mobId)!!.gfxId
+        return -1
     }
 
     @JvmStatic fun getItemByHuntMob(mobId: Int): Int {
         for (v in 0 until HUNTING_QUESTS.size)
             if (HUNTING_QUESTS[v][3].toInt() == mobId)
-                return HUNTING_QUESTS[v][4].toInt();
-        return -1;
+                return HUNTING_QUESTS[v][4].toInt()
+        return -1
     }
 
     @JvmStatic fun getItemByMobSkin(mobSkin: Int): Int {
         for (v in 0 until HUNTING_QUESTS.size)
             if (World.world.getMonstre(HUNTING_QUESTS[v][3].toInt()) != null
                     && World.world.getMonstre(HUNTING_QUESTS[v][3].toInt())!!.gfxId == mobSkin)
-                return HUNTING_QUESTS[v][4].toInt();
-        return -1;
+                return HUNTING_QUESTS[v][4].toInt()
+        return -1
     }
 
     @JvmStatic fun getDocNameByBornePos(borneId: Int, cellid: Int): String {
         for (v in 0 until HUNTING_QUESTS.size)
             if (HUNTING_QUESTS[v][0].toInt() == borneId
                     && HUNTING_QUESTS[v][1].toInt() == cellid)
-                return HUNTING_QUESTS[v][2];
-        return "";
+                return HUNTING_QUESTS[v][2]
+        return ""
     }
 
     @JvmStatic fun getClassStatueMap(classID: Int): Short {
         var pos: Short = 10298
         when (classID) {
-1 -> {return 7398;
+1 -> {return 7398
 }
-2 -> {return 7545;
+2 -> {return 7545
 }
-3 -> {return 7442;
+3 -> {return 7442
 }
-4 -> {return 7392;
+4 -> {return 7392
 }
-5 -> {return 7332;
+5 -> {return 7332
 }
-6 -> {return 7446;
+6 -> {return 7446
 }
-7 -> {return 7361;
+7 -> {return 7361
 }
-8 -> {return 7427;
+8 -> {return 7427
 }
-9 -> {return 7378;
+9 -> {return 7378
 }
-10 -> {return 7395;
+10 -> {return 7395
 }
-11 -> {return 7336;
+11 -> {return 7336
 }
-12 -> {return 8035;
+12 -> {return 8035
 }
-13 -> {return 7427;
+13 -> {return 7427
         
 }
 }
-        return pos;
+        return pos
     }
 
     @JvmStatic fun getClassStatueCell(classID: Int): Int {
         var pos: Int = 314
         when (classID) {
-1 -> {return 299;
+1 -> {return 299
 }
-2 -> {return 311;
+2 -> {return 311
 }
-3 -> {return 255;
+3 -> {return 255
 }
-4 -> {return 282;
+4 -> {return 282
 }
-5 -> {return 326;
+5 -> {return 326
 }
-6 -> {return 300;
+6 -> {return 300
 }
-7 -> {return 207;
+7 -> {return 207
 }
-8, 13 -> {return 282;
+8, 13 -> {return 282
 }
-9 -> {return 368;
+9 -> {return 368
 }
-10 -> {return 370;
+10 -> {return 370
 }
-11 -> {return 197;
+11 -> {return 197
 }
-12 -> {return 384;
+12 -> {return 384
         
 }
 }
-        return pos;
+        return pos
     }
 
     @JvmStatic fun getStartMap(classID: Int): Short {
         when (classID) {
-Constant.CLASS_FECA -> {return 10300;
+Constant.CLASS_FECA -> {return 10300
 }
-Constant.CLASS_OSAMODAS -> {return 10284;
+Constant.CLASS_OSAMODAS -> {return 10284
 }
-Constant.CLASS_ENUTROF -> {return 10299;
+Constant.CLASS_ENUTROF -> {return 10299
 }
-Constant.CLASS_SRAM -> {return 10285;
+Constant.CLASS_SRAM -> {return 10285
 }
-Constant.CLASS_XELOR -> {return 10298;
+Constant.CLASS_XELOR -> {return 10298
 }
-Constant.CLASS_ECAFLIP -> {return 10276;
+Constant.CLASS_ECAFLIP -> {return 10276
 }
-Constant.CLASS_ENIRIPSA -> {return 10283;
+Constant.CLASS_ENIRIPSA -> {return 10283
 }
-Constant.CLASS_IOP -> {return 10294;
+Constant.CLASS_IOP -> {return 10294
 }
-Constant.CLASS_CRA -> {return 10292;
+Constant.CLASS_CRA -> {return 10292
 }
-Constant.CLASS_SADIDA -> {return 10279;
+Constant.CLASS_SADIDA -> {return 10279
 }
-Constant.CLASS_SACRIEUR -> {return 10296;
+Constant.CLASS_SACRIEUR -> {return 10296
 }
-Constant.CLASS_PANDAWA -> {return 10289;
+Constant.CLASS_PANDAWA -> {return 10289
         
 }
-else -> {return 10300;
+else -> {return 10300
 }
 }
     }
@@ -544,44 +544,44 @@ else -> {return 10300;
     @JvmStatic fun getStartCell(classID: Int): Int {
         var pos: Int = 314
         when (classID) {
-Constant.CLASS_FECA -> {pos = 337;
+Constant.CLASS_FECA -> {pos = 337
                 
 }
-Constant.CLASS_OSAMODAS -> {pos = 386;
+Constant.CLASS_OSAMODAS -> {pos = 386
                 
 }
-Constant.CLASS_ENUTROF -> {pos = 300;
+Constant.CLASS_ENUTROF -> {pos = 300
                 
 }
-Constant.CLASS_SRAM -> {pos = 263;
+Constant.CLASS_SRAM -> {pos = 263
                 
 }
-Constant.CLASS_XELOR -> {pos = 315;
+Constant.CLASS_XELOR -> {pos = 315
                 
 }
-Constant.CLASS_ECAFLIP -> {pos = 311;
+Constant.CLASS_ECAFLIP -> {pos = 311
                 
 }
-Constant.CLASS_ENIRIPSA -> {pos = 299;
+Constant.CLASS_ENIRIPSA -> {pos = 299
                 
 }
-Constant.CLASS_IOP -> {pos = 309;
+Constant.CLASS_IOP -> {pos = 309
                 
 }
-Constant.CLASS_CRA -> {pos = 299;
+Constant.CLASS_CRA -> {pos = 299
                 
 }
-Constant.CLASS_SADIDA -> {pos = 284;
+Constant.CLASS_SADIDA -> {pos = 284
                 
 }
-Constant.CLASS_SACRIEUR -> {pos = 258;
+Constant.CLASS_SACRIEUR -> {pos = 258
                 
 }
-Constant.CLASS_PANDAWA -> {pos = 250;
+Constant.CLASS_PANDAWA -> {pos = 250
                 
 }
 }
-        return pos;
+        return pos
     }
 
     @JvmStatic fun getStartSortsPlaces(classID: Int): HashMap<Int,Int> {
@@ -648,7 +648,7 @@ CLASS_SACRIEUR -> {start.put(432, 1);//Pied du Sacrieur
                 
 }
 }
-        return start;
+        return start
     }
 
     @JvmStatic fun getStartSorts(classID: Int): HashMap<Int,SortStats> {
@@ -715,118 +715,118 @@ CLASS_SACRIEUR -> {start.put(432, World.world.getSort(432)!!.getStatsByLevel(1)!
                 
 }
 }
-        return start;
+        return start
     }
 
     @JvmStatic fun getReqPtsToBoostStatsByClass(classID: Int, statID: Int, v  : Int): Int {
         when (statID) {
-11 -> {return 1;
+11 -> {return 1
 }
-12 -> {return 3;
+12 -> {return 3
 }
 10 -> {when (classID) {
-CLASS_SACRIEUR -> {if(v   < 100) return 1;
-                        if(v   < 200) return 2;
-                        if(v   < 300) return 3;
-                        return 4;
+CLASS_SACRIEUR -> {if(v   < 100) return 1
+                        if(v   < 200) return 2
+                        if(v   < 300) return 3
+                        return 4
 }
 CLASS_FECA -> {if (v   < 50)
-                            return 2;
+                            return 2
                         if (v   < 150)
-                            return 3;
+                            return 3
                         if (v   < 250)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_XELOR -> {if (v   < 50)
-                            return 2;
+                            return 2
                         if (v   < 150)
-                            return 3;
+                            return 3
                         if (v   < 250)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_SRAM -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_OSAMODAS -> {if (v   < 50)
-                            return 2;
+                            return 2
                         if (v   < 150)
-                            return 3;
+                            return 3
                         if (v   < 250)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ENIRIPSA -> {if (v   < 50)
-                            return 2;
+                            return 2
                         if (v   < 150)
-                            return 3;
+                            return 3
                         if (v   < 250)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_PANDAWA -> {if (v   < 50)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
-                        return 3;
+                            return 2
+                        return 3
 }
 CLASS_SADIDA -> {if (v   < 50)
-                            return 1;
+                            return 1
                         if (v   < 250)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_CRA -> {if (v   < 50)
-                            return 1;
+                            return 1
                         if (v   < 150)
-                            return 2;
+                            return 2
                         if (v   < 250)
-                            return 3;
+                            return 3
                         if (v   < 350)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ENUTROF -> {if (v   < 50)
-                            return 1;
+                            return 1
                         if (v   < 150)
-                            return 2;
+                            return 2
                         if (v   < 250)
-                            return 3;
+                            return 3
                         if (v   < 350)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ECAFLIP -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_IOP -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
                 
 }
 }
@@ -834,115 +834,115 @@ CLASS_IOP -> {if (v   < 100)
 }
 13 -> {when (classID) {
 CLASS_FECA -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_XELOR -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
-CLASS_SACRIEUR -> {if(v   < 100) return 1;
-                        if(v   < 200) return 2;
-                        if(v   < 300) return 3;
-                        return 4;
+CLASS_SACRIEUR -> {if(v   < 100) return 1
+                        if(v   < 200) return 2
+                        if(v   < 300) return 3
+                        return 4
 }
 CLASS_SRAM -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_SADIDA -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_PANDAWA -> {if (v   < 50)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
-                        return 3;
+                            return 2
+                        return 3
 }
 CLASS_IOP -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ENUTROF -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 150)
-                            return 2;
+                            return 2
                         if (v   < 230)
-                            return 3;
+                            return 3
                         if (v   < 330)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_OSAMODAS -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ECAFLIP -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ENIRIPSA -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_CRA -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
                 
 }
 }
@@ -950,115 +950,115 @@ CLASS_CRA -> {if (v   < 20)
 }
 14 -> {when (classID) {
 CLASS_FECA -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_XELOR -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
-CLASS_SACRIEUR -> {if(v   < 100) return 1;
-                        if(v   < 200) return 2;
-                        if(v   < 300) return 3;
-                        return 4;
+CLASS_SACRIEUR -> {if(v   < 100) return 1
+                        if(v   < 200) return 2
+                        if(v   < 300) return 3
+                        return 4
 }
 CLASS_SRAM -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_SADIDA -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_PANDAWA -> {if (v   < 50)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
-                        return 3;
+                            return 2
+                        return 3
 }
 CLASS_ENIRIPSA -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_IOP -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ENUTROF -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ECAFLIP -> {if (v   < 50)
-                            return 1;
+                            return 1
                         if (v   < 100)
-                            return 2;
+                            return 2
                         if (v   < 150)
-                            return 3;
+                            return 3
                         if (v   < 200)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_CRA -> {if (v   < 50)
-                            return 1;
+                            return 1
                         if (v   < 100)
-                            return 2;
+                            return 2
                         if (v   < 150)
-                            return 3;
+                            return 3
                         if (v   < 200)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_OSAMODAS -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
                 
 }
 }
@@ -1066,120 +1066,120 @@ CLASS_OSAMODAS -> {if (v   < 20)
 }
 15 -> {when (classID) {
 CLASS_XELOR -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_FECA -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
-CLASS_SACRIEUR -> {if(v   < 100) return 1;
-                        if(v   < 200) return 2;
-                        if(v   < 300) return 3;
-                        return 4;
+CLASS_SACRIEUR -> {if(v   < 100) return 1
+                        if(v   < 200) return 2
+                        if(v   < 300) return 3
+                        return 4
 }
 CLASS_SRAM -> {if (v   < 50)
-                            return 2;
+                            return 2
                         if (v   < 150)
-                            return 3;
+                            return 3
                         if (v   < 250)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_SADIDA -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ENUTROF -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 60)
-                            return 2;
+                            return 2
                         if (v   < 100)
-                            return 3;
+                            return 3
                         if (v   < 140)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_PANDAWA -> {if (v   < 50)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
-                        return 3;
+                            return 2
+                        return 3
 }
 CLASS_IOP -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ENIRIPSA -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_CRA -> {if (v   < 50)
-                            return 1;
+                            return 1
                         if (v   < 150)
-                            return 2;
+                            return 2
                         if (v   < 250)
-                            return 3;
+                            return 3
                         if (v   < 350)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_OSAMODAS -> {if (v   < 100)
-                            return 1;
+                            return 1
                         if (v   < 200)
-                            return 2;
+                            return 2
                         if (v   < 300)
-                            return 3;
+                            return 3
                         if (v   < 400)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
 }
 CLASS_ECAFLIP -> {if (v   < 20)
-                            return 1;
+                            return 1
                         if (v   < 40)
-                            return 2;
+                            return 2
                         if (v   < 60)
-                            return 3;
+                            return 3
                         if (v   < 80)
-                            return 4;
-                        return 5;
+                            return 4
+                        return 5
                 
 }
 }
                 
 }
 }
-        return 5;
+        return 5
     }
 
     @JvmStatic fun onLevelUpSpells(perso: Player, lvl: Int) {
@@ -1645,21 +1645,21 @@ CLASS_PANDAWA -> {if (lvl == 3)
 
     @JvmStatic fun getGlyphColor(spell: Int): Int {
         when (spell) {
-10, 2033 -> {return 4;
+10, 2033 -> {return 4
 }
-12, 2034 -> {return 3;
+12, 2034 -> {return 3
 }
-13, 2035 -> {return 6;
+13, 2035 -> {return 6
 }
-15, 2036 -> {return 5;
+15, 2036 -> {return 5
 }
-17, 2037 -> {return 2;
+17, 2037 -> {return 2
 }
-1072, 1073, 949 -> {return 0;
+1072, 1073, 949 -> {return 0
 }
-476 -> {return 0;
+476 -> {return 0
 }
-else -> {return 4;
+else -> {return 4
         
 }
 }
@@ -1667,21 +1667,21 @@ else -> {return 4;
 
     @JvmStatic fun getTrapsColor(spell: Int): Int {
         when (spell) {
-65 -> {return 7;
+65 -> {return 7
 }
-69 -> {return 10;
+69 -> {return 10
 }
-71, 2068 -> {return 9;
+71, 2068 -> {return 9
 }
-73 -> {return 12;
+73 -> {return 12
 }
-77, 2071 -> {return 11;
+77, 2071 -> {return 11
 }
-79, 2072 -> {return 8;
+79, 2072 -> {return 8
 }
-80 -> {return 13;
+80 -> {return 13
 }
-else -> {return 7;
+else -> {return 7
         
 }
 }
@@ -1692,7 +1692,7 @@ else -> {return 7;
         when (color) {
 1 -> {
 }
-3 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2);
+3 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2)
                 stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.25) as Int));//100/1.25 = 80
                 
 }
@@ -1703,471 +1703,471 @@ else -> {return 7;
                 stats.addOneStat(STATS_SUMMON_COUNT, lvl / 50); // 100/50 = 2
                 
 }
-18 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2);
+18 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2)
                 stats.addOneStat(STATS_ADD_SAGE, ((lvl / 2.50) as Int)); // 100/2.50 = 40
                 
 }
 38 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5); // 100*5 = 500
-                stats.addOneStat(STATS_ADD_VITA, lvl);
+                stats.addOneStat(STATS_ADD_VITA, lvl)
                 stats.addOneStat(STATS_SUMMON_COUNT, lvl / 50); // 100/50 = 2
                 
 }
-46 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
+46 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
                 stats.addOneStat(STATS_ADD_SAGE, lvl / 4); //100/4 = 25
                 
 }
-33 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5);
-                stats.addOneStat(STATS_ADD_SAGE, lvl / 4);
-                stats.addOneStat(STATS_ADD_VITA, lvl / 2);
+33 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
+                stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
+                stats.addOneStat(STATS_ADD_VITA, lvl / 2)
                 stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100); // 100/100 = 1
                 
 }
-17 -> {stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.25) as Int));
-                stats.addOneStat(STATS_ADD_VITA, lvl / 2);
+17 -> {stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.25) as Int))
+                stats.addOneStat(STATS_ADD_VITA, lvl / 2)
                 
 }
 62 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.50) as Int)); // 100*1.50 = 150
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int));
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int))
                 
 }
-12 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.50) as Int));
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int));
+12 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.50) as Int))
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int))
                 
 }
-36 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5);
-                stats.addOneStat(STATS_ADD_VITA, lvl / 2);
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100);
+36 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
+                stats.addOneStat(STATS_ADD_VITA, lvl / 2)
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
-19 -> {stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.25) as Int));
-                stats.addOneStat(STATS_ADD_VITA, lvl / 2);
+19 -> {stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.25) as Int))
+                stats.addOneStat(STATS_ADD_VITA, lvl / 2)
                 
 }
-22 -> {stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.25) as Int));
-                stats.addOneStat(STATS_ADD_VITA, lvl / 2);
+22 -> {stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.25) as Int))
+                stats.addOneStat(STATS_ADD_VITA, lvl / 2)
                 
 }
-48 -> {stats.addOneStat(STATS_ADD_VITA, (lvl));
-                stats.addOneStat(STATS_ADD_SAGE, lvl / 4);
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int));
+48 -> {stats.addOneStat(STATS_ADD_VITA, (lvl))
+                stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int))
                 
 }
-65 -> {stats.addOneStat(STATS_ADD_VITA, (lvl));
-                stats.addOneStat(STATS_ADD_CHAN, lvl / 2);
-                stats.addOneStat(STATS_ADD_FORC, lvl / 2);
+65 -> {stats.addOneStat(STATS_ADD_VITA, (lvl))
+                stats.addOneStat(STATS_ADD_CHAN, lvl / 2)
+                stats.addOneStat(STATS_ADD_FORC, lvl / 2)
                 
 }
-67 -> {stats.addOneStat(STATS_ADD_VITA, (lvl));
-                stats.addOneStat(STATS_ADD_PERDOM, lvl / 2);
-                stats.addOneStat(STATS_ADD_INTE, lvl / 2);
+67 -> {stats.addOneStat(STATS_ADD_VITA, (lvl))
+                stats.addOneStat(STATS_ADD_PERDOM, lvl / 2)
+                stats.addOneStat(STATS_ADD_INTE, lvl / 2)
                 
 }
-54 -> {stats.addOneStat(STATS_ADD_VITA, (lvl));
-                stats.addOneStat(STATS_ADD_FORC, lvl / 2);
-                stats.addOneStat(STATS_ADD_AGIL, lvl / 2);
+54 -> {stats.addOneStat(STATS_ADD_VITA, (lvl))
+                stats.addOneStat(STATS_ADD_FORC, lvl / 2)
+                stats.addOneStat(STATS_ADD_AGIL, lvl / 2)
                 
 }
-53 -> {stats.addOneStat(STATS_ADD_VITA, (lvl));
-                stats.addOneStat(STATS_ADD_AGIL, lvl / 2);
-                stats.addOneStat(STATS_ADD_INTE, lvl / 2);
+53 -> {stats.addOneStat(STATS_ADD_VITA, (lvl))
+                stats.addOneStat(STATS_ADD_AGIL, lvl / 2)
+                stats.addOneStat(STATS_ADD_INTE, lvl / 2)
                 
 }
-76 -> {stats.addOneStat(STATS_ADD_VITA, (lvl));
-                stats.addOneStat(STATS_ADD_INTE, lvl / 2);
-                stats.addOneStat(STATS_ADD_FORC, lvl / 2);
+76 -> {stats.addOneStat(STATS_ADD_VITA, (lvl))
+                stats.addOneStat(STATS_ADD_INTE, lvl / 2)
+                stats.addOneStat(STATS_ADD_FORC, lvl / 2)
                 
 }
-34 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5);
-                stats.addOneStat(STATS_ADD_VITA, lvl / 2);
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100);
+34 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
+                stats.addOneStat(STATS_ADD_VITA, lvl / 2)
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
-37 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5);
-                stats.addOneStat(STATS_ADD_VITA, ((lvl * 0.4) as Int));
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl * 0.4) as Int));
-                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100);
+37 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
+                stats.addOneStat(STATS_ADD_VITA, ((lvl * 0.4) as Int))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl * 0.4) as Int))
+                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
-44 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_SAGE, lvl / 4);
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int));
+44 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int))
                 
 }
-42 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_SAGE, lvl / 4);
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int));
+42 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int))
                 
 }
-51 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_CHAN, lvl / 2);
-                stats.addOneStat(STATS_ADD_AGIL, lvl / 2);
+51 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_CHAN, lvl / 2)
+                stats.addOneStat(STATS_ADD_AGIL, lvl / 2)
                 
 }
-71 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.5) as Int));
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int));
+71 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.5) as Int))
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
                 
 }
-70 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.5) as Int));
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int));
+70 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.5) as Int))
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int))
                 
 }
-41 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5);
-                stats.addOneStat(STATS_ADD_VITA, lvl / 2);
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100);
+41 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
+                stats.addOneStat(STATS_ADD_VITA, lvl / 2)
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
-40 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5);
-                stats.addOneStat(STATS_ADD_VITA, lvl / 2);
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100);
+40 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
+                stats.addOneStat(STATS_ADD_VITA, lvl / 2)
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
-49 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_SAGE, lvl / 4);
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int));
+49 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
                 
 }
-16 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2);
-                stats.addOneStat(STATS_ADD_PERDOM, lvl / 2);
+16 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2)
+                stats.addOneStat(STATS_ADD_PERDOM, lvl / 2)
                 
 }
-15 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2);
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 1.25) as Int));
+15 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2)
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 1.25) as Int))
                 
 }
 11 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2); // 100*2 = 200
                 stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int)); // = 40
                 
 }
-69 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int));
+69 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
                 
 }
-39 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5);
-                stats.addOneStat(STATS_ADD_VITA, lvl / 2);
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int));
-                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100);
+39 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
+                stats.addOneStat(STATS_ADD_VITA, lvl / 2)
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
+                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
-45 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int));
-                stats.addOneStat(STATS_ADD_SAGE, lvl / 4);
+45 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int))
+                stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
                 
 }
-47 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int));
-                stats.addOneStat(STATS_ADD_SAGE, lvl / 4);
+47 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
+                stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
                 
 }
-61 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 2.50) as Int));
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int));
+61 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 2.50) as Int))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int))
                 
 }
-63 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.5) as Int));
+63 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.5) as Int))
                 
 }
-9 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 2.50) as Int));
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int));
+9 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 2.50) as Int))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int))
                 
 }
-52 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int));
+52 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
                 
 }
-68 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int));
+68 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int))
                 
 }
-73 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int));
+73 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
                 
 }
-72 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.5) as Int));
+72 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.5) as Int))
                 
 }
-66 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int));
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int));
+66 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
                 
 }
-21 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
+21 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
 23 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2); // 100*2 = 200
-                stats.addOneStat(STATS_ADD_PO, lvl / 50);
+                stats.addOneStat(STATS_ADD_PO, lvl / 50)
                 
 }
 57 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 3); // 100*3 = 300
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
-84 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 3);
-                stats.addOneStat(STATS_ADD_PO, lvl / 100);
+84 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 3)
+                stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
-35 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
-                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100);
-                stats.addOneStat(STATS_ADD_INIT, lvl * 5);
+35 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
+                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
+                stats.addOneStat(STATS_ADD_INIT, lvl * 5)
                 
 }
-77 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_INIT, lvl * 5);
-                stats.addOneStat(STATS_ADD_PO, lvl / 100);
-                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100);
+77 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_INIT, lvl * 5)
+                stats.addOneStat(STATS_ADD_PO, lvl / 100)
+                stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
-43 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_SAGE, lvl / 4);
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
+43 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
-78 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_SAGE, lvl / 4);
-                stats.addOneStat(STATS_ADD_PO, lvl / 100);
+78 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
+                stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
-55 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 3.33) as Int));
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
+55 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
-82 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PO, lvl / 100);
+82 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
-50 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 3.33) as Int));
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
+50 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
-79 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PO, lvl / 100);
+79 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
-60 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 3.33) as Int));
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
+60 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
-87 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PO, lvl / 100);
+87 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
-59 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 3.33) as Int));
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
+59 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
-86 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PO, lvl / 100);
+86 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
-56 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 3.33) as Int));
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
+56 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
-83 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PO, lvl / 100);
+83 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
-58 -> {stats.addOneStat(STATS_ADD_VITA, lvl);
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 3.33) as Int));
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
+58 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
-85 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 1.65) as Int));
-                stats.addOneStat(STATS_ADD_PO, lvl / 100);
+85 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
-80 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2);
-                stats.addOneStat(STATS_ADD_PM, lvl / 100);
-                stats.addOneStat(STATS_ADD_PO, lvl / 100);
+80 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
+                stats.addOneStat(STATS_ADD_PM, lvl / 100)
+                stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
-88 -> {stats.addOneStat(STATS_ADD_PERDOM, lvl / 2);
-                stats.addOneStat(STATS_ADD_RP_AIR, lvl / 20);
-                stats.addOneStat(STATS_ADD_RP_EAU, lvl / 20);
-                stats.addOneStat(STATS_ADD_RP_TER, lvl / 20);
-                stats.addOneStat(STATS_ADD_RP_FEU, lvl / 20);
-                stats.addOneStat(STATS_ADD_RP_NEU, lvl / 20);
+88 -> {stats.addOneStat(STATS_ADD_PERDOM, lvl / 2)
+                stats.addOneStat(STATS_ADD_RP_AIR, lvl / 20)
+                stats.addOneStat(STATS_ADD_RP_EAU, lvl / 20)
+                stats.addOneStat(STATS_ADD_RP_TER, lvl / 20)
+                stats.addOneStat(STATS_ADD_RP_FEU, lvl / 20)
+                stats.addOneStat(STATS_ADD_RP_NEU, lvl / 20)
                 
 }
-75 -> {stats.addOneStat(STATS_ADD_PERDOM, lvl / 2);
-                stats.addOneStat(STATS_ADD_RP_AIR, lvl / 20);
-                stats.addOneStat(STATS_ADD_RP_EAU, lvl / 20);
-                stats.addOneStat(STATS_ADD_RP_TER, lvl / 20);
-                stats.addOneStat(STATS_ADD_RP_FEU, lvl / 20);
-                stats.addOneStat(STATS_ADD_RP_NEU, lvl / 20);
+75 -> {stats.addOneStat(STATS_ADD_PERDOM, lvl / 2)
+                stats.addOneStat(STATS_ADD_RP_AIR, lvl / 20)
+                stats.addOneStat(STATS_ADD_RP_EAU, lvl / 20)
+                stats.addOneStat(STATS_ADD_RP_TER, lvl / 20)
+                stats.addOneStat(STATS_ADD_RP_FEU, lvl / 20)
+                stats.addOneStat(STATS_ADD_RP_NEU, lvl / 20)
                 
 }
 }
-        return stats;
+        return stats
     }
 
     @JvmStatic fun getParchoTemplateByMountColor(color: Int): ObjectTemplate? {
         when (color) {
-2 -> {return World.world.getObjTemplate(7807);
+2 -> {return World.world.getObjTemplate(7807)
 }
-3 -> {return World.world.getObjTemplate(7808);
+3 -> {return World.world.getObjTemplate(7808)
 }
-4 -> {return World.world.getObjTemplate(7809);
+4 -> {return World.world.getObjTemplate(7809)
 }
-9 -> {return World.world.getObjTemplate(7810);
+9 -> {return World.world.getObjTemplate(7810)
 }
-10 -> {return World.world.getObjTemplate(7811);
+10 -> {return World.world.getObjTemplate(7811)
 }
-11 -> {return World.world.getObjTemplate(7812);
+11 -> {return World.world.getObjTemplate(7812)
 }
-12 -> {return World.world.getObjTemplate(7813);
+12 -> {return World.world.getObjTemplate(7813)
 }
-15 -> {return World.world.getObjTemplate(7814);
+15 -> {return World.world.getObjTemplate(7814)
 }
-16 -> {return World.world.getObjTemplate(7815);
+16 -> {return World.world.getObjTemplate(7815)
 }
-17 -> {return World.world.getObjTemplate(7816);
+17 -> {return World.world.getObjTemplate(7816)
 }
-18 -> {return World.world.getObjTemplate(7817);
+18 -> {return World.world.getObjTemplate(7817)
 }
-19 -> {return World.world.getObjTemplate(7818);
+19 -> {return World.world.getObjTemplate(7818)
 }
-20 -> {return World.world.getObjTemplate(7819);
+20 -> {return World.world.getObjTemplate(7819)
 }
-21 -> {return World.world.getObjTemplate(7820);
+21 -> {return World.world.getObjTemplate(7820)
 }
-22 -> {return World.world.getObjTemplate(7821);
+22 -> {return World.world.getObjTemplate(7821)
 }
-23 -> {return World.world.getObjTemplate(7822);
+23 -> {return World.world.getObjTemplate(7822)
 }
-33 -> {return World.world.getObjTemplate(7823);
+33 -> {return World.world.getObjTemplate(7823)
 }
-34 -> {return World.world.getObjTemplate(7824);
+34 -> {return World.world.getObjTemplate(7824)
 }
-35 -> {return World.world.getObjTemplate(7825);
+35 -> {return World.world.getObjTemplate(7825)
 }
-36 -> {return World.world.getObjTemplate(7826);
+36 -> {return World.world.getObjTemplate(7826)
 }
-37 -> {return World.world.getObjTemplate(7827);
+37 -> {return World.world.getObjTemplate(7827)
 }
-38 -> {return World.world.getObjTemplate(7828);
+38 -> {return World.world.getObjTemplate(7828)
 }
-39 -> {return World.world.getObjTemplate(7829);
+39 -> {return World.world.getObjTemplate(7829)
 }
-40 -> {return World.world.getObjTemplate(7830);
+40 -> {return World.world.getObjTemplate(7830)
 }
-41 -> {return World.world.getObjTemplate(7831);
+41 -> {return World.world.getObjTemplate(7831)
 }
-42 -> {return World.world.getObjTemplate(7832);
+42 -> {return World.world.getObjTemplate(7832)
 }
-43 -> {return World.world.getObjTemplate(7833);
+43 -> {return World.world.getObjTemplate(7833)
 }
-44 -> {return World.world.getObjTemplate(7834);
+44 -> {return World.world.getObjTemplate(7834)
 }
-45 -> {return World.world.getObjTemplate(7835);
+45 -> {return World.world.getObjTemplate(7835)
 }
-46 -> {return World.world.getObjTemplate(7836);
+46 -> {return World.world.getObjTemplate(7836)
 }
-47 -> {return World.world.getObjTemplate(7837);
+47 -> {return World.world.getObjTemplate(7837)
 }
-48 -> {return World.world.getObjTemplate(7838);
+48 -> {return World.world.getObjTemplate(7838)
 }
-49 -> {return World.world.getObjTemplate(7839);
+49 -> {return World.world.getObjTemplate(7839)
 }
-50 -> {return World.world.getObjTemplate(7840);
+50 -> {return World.world.getObjTemplate(7840)
 }
-51 -> {return World.world.getObjTemplate(7841);
+51 -> {return World.world.getObjTemplate(7841)
 }
-52 -> {return World.world.getObjTemplate(7842);
+52 -> {return World.world.getObjTemplate(7842)
 }
-53 -> {return World.world.getObjTemplate(7843);
+53 -> {return World.world.getObjTemplate(7843)
 }
-54 -> {return World.world.getObjTemplate(7844);
+54 -> {return World.world.getObjTemplate(7844)
 }
-55 -> {return World.world.getObjTemplate(7845);
+55 -> {return World.world.getObjTemplate(7845)
 }
-56 -> {return World.world.getObjTemplate(7846);
+56 -> {return World.world.getObjTemplate(7846)
 }
-57 -> {return World.world.getObjTemplate(7847);
+57 -> {return World.world.getObjTemplate(7847)
 }
-58 -> {return World.world.getObjTemplate(7848);
+58 -> {return World.world.getObjTemplate(7848)
 }
-59 -> {return World.world.getObjTemplate(7849);
+59 -> {return World.world.getObjTemplate(7849)
 }
-60 -> {return World.world.getObjTemplate(7850);
+60 -> {return World.world.getObjTemplate(7850)
 }
-61 -> {return World.world.getObjTemplate(7851);
+61 -> {return World.world.getObjTemplate(7851)
 }
-62 -> {return World.world.getObjTemplate(7852);
+62 -> {return World.world.getObjTemplate(7852)
 }
-63 -> {return World.world.getObjTemplate(7853);
+63 -> {return World.world.getObjTemplate(7853)
 }
-64 -> {return World.world.getObjTemplate(7854);
+64 -> {return World.world.getObjTemplate(7854)
 }
-65 -> {return World.world.getObjTemplate(7855);
+65 -> {return World.world.getObjTemplate(7855)
 }
-66 -> {return World.world.getObjTemplate(7856);
+66 -> {return World.world.getObjTemplate(7856)
 }
-67 -> {return World.world.getObjTemplate(7857);
+67 -> {return World.world.getObjTemplate(7857)
 }
-68 -> {return World.world.getObjTemplate(7858);
+68 -> {return World.world.getObjTemplate(7858)
 }
-69 -> {return World.world.getObjTemplate(7859);
+69 -> {return World.world.getObjTemplate(7859)
 }
-70 -> {return World.world.getObjTemplate(7860);
+70 -> {return World.world.getObjTemplate(7860)
 }
-71 -> {return World.world.getObjTemplate(7861);
+71 -> {return World.world.getObjTemplate(7861)
 }
-72 -> {return World.world.getObjTemplate(7862);
+72 -> {return World.world.getObjTemplate(7862)
 }
-73 -> {return World.world.getObjTemplate(7863);
+73 -> {return World.world.getObjTemplate(7863)
 }
-74 -> {return World.world.getObjTemplate(7864);
+74 -> {return World.world.getObjTemplate(7864)
 }
-75 -> {return World.world.getObjTemplate(7865);
+75 -> {return World.world.getObjTemplate(7865)
 }
-76 -> {return World.world.getObjTemplate(7866);
+76 -> {return World.world.getObjTemplate(7866)
 }
-77 -> {return World.world.getObjTemplate(7867);
+77 -> {return World.world.getObjTemplate(7867)
 }
-78 -> {return World.world.getObjTemplate(7868);
+78 -> {return World.world.getObjTemplate(7868)
 }
-79 -> {return World.world.getObjTemplate(7869);
+79 -> {return World.world.getObjTemplate(7869)
 }
-80 -> {return World.world.getObjTemplate(7870);
+80 -> {return World.world.getObjTemplate(7870)
 }
-82 -> {return World.world.getObjTemplate(7871);
+82 -> {return World.world.getObjTemplate(7871)
 }
-83 -> {return World.world.getObjTemplate(7872);
+83 -> {return World.world.getObjTemplate(7872)
 }
-84 -> {return World.world.getObjTemplate(7873);
+84 -> {return World.world.getObjTemplate(7873)
 }
-85 -> {return World.world.getObjTemplate(7874);
+85 -> {return World.world.getObjTemplate(7874)
 }
-86 -> {return World.world.getObjTemplate(7875);
+86 -> {return World.world.getObjTemplate(7875)
 }
-87 -> {return World.world.getObjTemplate(7876);
+87 -> {return World.world.getObjTemplate(7876)
 }
-88 -> {return World.world.getObjTemplate(9582);
+88 -> {return World.world.getObjTemplate(9582)
 }
 else -> {return getParchoTemplateByMountColor(Formulas.getRandomValue(2, 88))
 }
@@ -2179,90 +2179,90 @@ else -> {return getParchoTemplateByMountColor(Formulas.getRandomValue(2, 88))
             var color: Int = -1
             var template: ObjectTemplate? = null
             while(template == null) {
-                color = Formulas.getRandomValue(2, 88);
-                template = getParchoTemplateByMountColor(color);
+                color = Formulas.getRandomValue(2, 88)
+                template = getParchoTemplateByMountColor(color)
             }
-            return color;
+            return color
         }
         for (a in 1 until 100) {
             var template: ObjectTemplate? = getParchoTemplateByMountColor(a)
             if (template != null) {
                 if (template!!.id == templateId) {
-                    return a;
+                    return a
                 }
             }
         }
-        return -1;
+        return -1
     }
 
     @JvmStatic fun isValidPlaceForItem(template: ObjectTemplate, place: Int): Boolean {
         if (template.type == 41 && place == ITEM_POS_DRAGODINDE)
-            return true;
+            return true
 
         when (template.type) {
 ITEM_TYPE_AMULETTE -> {if (place == ITEM_POS_AMULETTE)
-                    return true;
+                    return true
                 
 }
 113 -> {if ((template!!.id == 9233) && (place == 7))
-                    return true;
+                    return true
                 if ((template!!.id == 9234) && (place == 6))
-                    return true;
+                    return true
                 if ((template!!.id == 9255) && (place == 0))
-                    return true;
+                    return true
                 if ((template!!.id == 9256)
                         && ((place == 2) || (place == 4)))
-                    return true;
+                    return true
                 
 }
 114 -> {if (place == 1) // CaC
-                    return true;
+                    return true
                 
 }
 ITEM_TYPE_ARC, ITEM_TYPE_BAGUETTE, ITEM_TYPE_BATON, ITEM_TYPE_DAGUES, ITEM_TYPE_EPEE, ITEM_TYPE_MARTEAU, ITEM_TYPE_PELLE, ITEM_TYPE_HACHE, ITEM_TYPE_OUTIL, ITEM_TYPE_PIOCHE, ITEM_TYPE_FAUX, ITEM_TYPE_PIERRE_AME, ITEM_TYPE_FILET_CAPTURE -> {if (place == ITEM_POS_ARME)
-                    return true;
+                    return true
                 
 }
 ITEM_TYPE_ANNEAU -> {if (place == ITEM_POS_ANNEAU1 || place == ITEM_POS_ANNEAU2)
-                    return true;
+                    return true
                 
 }
 ITEM_TYPE_CEINTURE -> {if (place == ITEM_POS_CEINTURE)
-                    return true;
+                    return true
                 
 }
 ITEM_TYPE_BOTTES -> {if (place == ITEM_POS_BOTTES)
-                    return true;
+                    return true
                 
 }
 ITEM_TYPE_COIFFE -> {if (place == ITEM_POS_COIFFE)
-                    return true;
+                    return true
                 
 }
 ITEM_TYPE_CAPE, ITEM_TYPE_SAC_DOS -> {if (place == ITEM_POS_CAPE)
-                    return true;
+                    return true
                 
 }
 ITEM_TYPE_FAMILIER -> {if (place == ITEM_POS_FAMILIER)
-                    return true;
+                    return true
                 
 }
 ITEM_TYPE_DOFUS -> {if (place == ITEM_POS_DOFUS1 || place == ITEM_POS_DOFUS2
                         || place == ITEM_POS_DOFUS3 || place == ITEM_POS_DOFUS4
                         || place == ITEM_POS_DOFUS5 || place == ITEM_POS_DOFUS6)
-                    return true;
+                    return true
                 
 }
 ITEM_TYPE_BOUCLIER -> {if (place == ITEM_POS_BOUCLIER)
-                    return true;
+                    return true
                 
 }
 ITEM_TYPE_POTION, ITEM_TYPE_PARCHO_EXP, ITEM_TYPE_BOOST_FOOD, ITEM_TYPE_PAIN, ITEM_TYPE_BIERE, ITEM_TYPE_POISSON, ITEM_TYPE_BONBON, ITEM_TYPE_COMESTI_POISSON, ITEM_TYPE_VIANDE, ITEM_TYPE_VIANDE_CONSERVEE, ITEM_TYPE_VIANDE_COMESTIBLE, ITEM_TYPE_TEINTURE, ITEM_TYPE_MAITRISE, ITEM_TYPE_BOISSON, ITEM_TYPE_PIERRE_AME_PLEINE, ITEM_TYPE_PARCHO_RECHERCHE, ITEM_TYPE_CADEAUX, ITEM_TYPE_OBJET_ELEVAGE, ITEM_TYPE_OBJET_UTILISABLE, ITEM_TYPE_PRISME, ITEM_TYPE_FEE_ARTIFICE, ITEM_TYPE_DONS -> {if (place >= 35 && place <= 48)
-                    return true;
+                    return true
                 
 }
 }
-        return false;
+        return false
     }
 
 	/*
@@ -2275,250 +2275,253 @@ ITEM_TYPE_POTION, ITEM_TYPE_PARCHO_EXP, ITEM_TYPE_BOOST_FOOD, ITEM_TYPE_PAIN, IT
         var idArea: Int = perso.curMap.area!!.id
 
         if(idSuperArea == INCARNAM_SUPERAREA) {
-            perso.teleport(10342, 222);
-            return;
+            perso.teleport(10342, 222)
+            return
         }
 
         when (idArea) {
-0, 5, 29, 39, 40, 43, 44 -> {perso.teleport(1174, 279);
+0, 5, 29, 39, 40, 43, 44 -> {perso.teleport(1174, 279)
                 
 }
-3, 4, 6, 18, 25, 27, 41 -> {perso.teleport(8534, 196);
+3, 4, 6, 18, 25, 27, 41 -> {perso.teleport(8534, 196)
                 
 }
-2 -> {perso.teleport(420, 408);
+2 -> {perso.teleport(420, 408)
                 
 }
-1 -> {perso.teleport(844, 370);
+1 -> {perso.teleport(844, 370)
                 
 }
-7 -> {perso.teleport(4285, 572);
+7 -> {perso.teleport(4285, 572)
                 
 }
-8, 14, 15, 16, 32 -> {perso.teleport(4748, 133);
+8, 14, 15, 16, 32 -> {perso.teleport(4748, 133)
                 
 }
-11, 12, 13, 33 -> {perso.teleport(5719, 196);
+11, 12, 13, 33 -> {perso.teleport(5719, 196)
                 
 }
-19, 22, 23 -> {perso.teleport(7910, 381);
+19, 22, 23 -> {perso.teleport(7910, 381)
                 
 }
-20, 21, 24 -> {perso.teleport(8054, 115);
+20, 21, 24 -> {perso.teleport(8054, 115)
                 
 }
-28, 34, 35, 36 -> {perso.teleport(9231, 257);
+28, 34, 35, 36 -> {perso.teleport(9231, 257)
                 
 }
-30 -> {perso.teleport(9539, 128);
+30 -> {perso.teleport(9539, 128)
                 
 }
 31 -> {if (perso.isGhost)
-                    perso.teleport(9558, 268);
+                    perso.teleport(9558, 268)
                 else
-                    perso.teleport(9558, 224);
+                    perso.teleport(9558, 224)
                 
 }
-37 -> {perso.teleport(7796, 433);
+37 -> {perso.teleport(7796, 433)
                 
 }
-42 -> {perso.teleport(8534, 196);
+42 -> {perso.teleport(8534, 196)
                 
 }
-46 -> {perso.teleport(10422, 327);
+46 -> {perso.teleport(10422, 327)
                 
 }
-47 -> {perso.teleport(10590, 302);
+47 -> {perso.teleport(10590, 302)
                 
 }
-26 -> {perso.teleport(9398, 268);
+26 -> {perso.teleport(9398, 268)
 // fallthrough
-perso.teleport(8534, 196);
+perso.teleport(8534, 196)
                 
+}
+else -> {perso.teleport(8534, 196)
+
 }
 }
     }
 
     @JvmStatic fun isTaverne(map: GameMap): Boolean {
         when (map.id) {
-10354, 7573, 7572, 7574, 465, 463, 6064, 461, 462, 5867, 6197, 6021, 6044, 8196, 6055, 8195, 1905, 1907, 6049 -> {return true;
+10354, 7573, 7572, 7574, 465, 463, 6064, 461, 462, 5867, 6197, 6021, 6044, 8196, 6055, 8195, 1905, 1907, 6049 -> {return true
         
 }
 }
-        return false;
+        return false
     }
 
     @JvmStatic fun getLevelForChevalier(target: Player): Int {
         var lvl: Int = target.level
         if (lvl <= 50)
-            return 50;
+            return 50
         if ((lvl <= 80) && (lvl > 50))
-            return 80;
+            return 80
         if ((lvl <= 110) && (lvl > 80))
-            return 110;
+            return 110
         if ((lvl <= 140) && (lvl > 110))
-            return 140;
+            return 140
         if ((lvl <= 170) && (lvl > 140))
-            return 170;
+            return 170
         if ((lvl <= 500) && (lvl > 170))
-            return 200;
-        return 200;
+            return 200
+        return 200
     }
 
     @JvmStatic fun getStatsOfCandy(id: Int, turn: Int): String {
         var a: String = World.world.getObjTemplate(id)!!.strTemplate
-        a += ",32b#64#0#" + Integer.toHexString(turn) + "#0d0+1;";
-        return a;
+        a += ",32b#64#0#" + Integer.toHexString(turn) + "#0d0+1;"
+        return a
     }
 
     @JvmStatic fun getStatsOfMascotte(): String {
         var a: String = Integer.toHexString(148) + "#0#0#0#0d0+1,"
-        a += "32b#64#0#" + Integer.toHexString(1) + "#0d0+1;";
-        return a;
+        a += "32b#64#0#" + Integer.toHexString(1) + "#0d0+1;"
+        return a
     }
 
 
     @JvmStatic fun getStringColorDragodinde(color: Int): String {
         when (color) {
-1 -> {return "16772045,-1,16772045";
+1 -> {return "16772045,-1,16772045"
 }
-3 -> {return "1245184,393216,1245184";
+3 -> {return "1245184,393216,1245184"
 }
-6 -> {return "16747520,-1,16747520";
+6 -> {return "16747520,-1,16747520"
 }
-9 -> {return "1182992,16777200,16777200";
+9 -> {return "1182992,16777200,16777200"
 }
-10 -> {return "16747520,-1,16747520";
+10 -> {return "16747520,-1,16747520"
 }
-11 -> {return "16747520,16777200,16777200";
+11 -> {return "16747520,16777200,16777200"
 }
-12 -> {return "16747520,1703936,1774084";
+12 -> {return "16747520,1703936,1774084"
 }
-15 -> {return "4251856,-1,4251856";
+15 -> {return "4251856,-1,4251856"
 }
-16 -> {return "16777200,16777200,16777200";
+16 -> {return "16777200,16777200,16777200"
 }
-17 -> {return "4915330,-1,4915330";
+17 -> {return "4915330,-1,4915330"
 }
-18 -> {return "16766720,16766720,16766720";
+18 -> {return "16766720,16766720,16766720"
 }
-19 -> {return "14423100,-1,14423100";
+19 -> {return "14423100,-1,14423100"
 }
-20 -> {return "16772045,-1,16772045";
+20 -> {return "16772045,-1,16772045"
 }
-21 -> {return "3329330,-1,3329330";
+21 -> {return "3329330,-1,3329330"
 }
-22 -> {return "15859954,16777200,15859954";
+22 -> {return "15859954,16777200,15859954"
 }
-23 -> {return "14524637,-1,14524637";
+23 -> {return "14524637,-1,14524637"
 }
-33 -> {return "16772045,16766720,16766720";
+33 -> {return "16772045,16766720,16766720"
 }
-34 -> {return "16772045,1245184,1245184";
+34 -> {return "16772045,1245184,1245184"
 }
-35 -> {return "16772045,3329330,3329330";
+35 -> {return "16772045,3329330,3329330"
 }
-36 -> {return "16772045,4915330,4915330";
+36 -> {return "16772045,4915330,4915330"
 }
-37 -> {return "16772045,16777200,16777200";
+37 -> {return "16772045,16777200,16777200"
 }
-38 -> {return "16772045,16747520,16747520";
+38 -> {return "16772045,16747520,16747520"
 }
-39 -> {return "16772045,4251856,4251856";
+39 -> {return "16772045,4251856,4251856"
 }
-40 -> {return "16772045,15859954,15859954";
+40 -> {return "16772045,15859954,15859954"
 }
-41 -> {return "16772045,14423100,14423100";
+41 -> {return "16772045,14423100,14423100"
 }
-42 -> {return "1245184,16766720,16766720";
+42 -> {return "1245184,16766720,16766720"
 }
-43 -> {return "16766720,3329330,3329330";
+43 -> {return "16766720,3329330,3329330"
 }
-44 -> {return "16766720,4915330,4915330";
+44 -> {return "16766720,4915330,4915330"
 }
-45 -> {return "16766720,16777200,16777200";
+45 -> {return "16766720,16777200,16777200"
 }
-46 -> {return "16766720,16747520,16747520";
+46 -> {return "16766720,16747520,16747520"
 }
-47 -> {return "16766720,4251856,4251856";
+47 -> {return "16766720,4251856,4251856"
 }
-48 -> {return "16766720,15859954,15859954";
+48 -> {return "16766720,15859954,15859954"
 }
-49 -> {return "16766720,14423100,14423100";
+49 -> {return "16766720,14423100,14423100"
 }
-50 -> {return "1245184,3329330,3329330";
+50 -> {return "1245184,3329330,3329330"
 }
-51 -> {return "4915330,4915330,1245184";
+51 -> {return "4915330,4915330,1245184"
 }
-52 -> {return "1245184,4251856,4251856";
+52 -> {return "1245184,4251856,4251856"
 }
-53 -> {return "15859954,0,0";
+53 -> {return "15859954,0,0"
 }
-54 -> {return "14423100,14423100,1245184";
+54 -> {return "14423100,14423100,1245184"
 }
-55 -> {return "3329330,4915330,4915330";
+55 -> {return "3329330,4915330,4915330"
 }
-56 -> {return "3329330,16777200,16777200";
+56 -> {return "3329330,16777200,16777200"
 }
-57 -> {return "3329330,16747520,16747520";
+57 -> {return "3329330,16747520,16747520"
 }
-58 -> {return "3329330,4251856,4251856";
+58 -> {return "3329330,4251856,4251856"
 }
-59 -> {return "3329330,15859954,15859954";
+59 -> {return "3329330,15859954,15859954"
 }
-60 -> {return "3329330,14423100,14423100";
+60 -> {return "3329330,14423100,14423100"
 }
-61 -> {return "4915330,16777200,16777200";
+61 -> {return "4915330,16777200,16777200"
 }
-62 -> {return "4915330,16747520,16747520";
+62 -> {return "4915330,16747520,16747520"
 }
-63 -> {return "4915330,4251856,4251856";
+63 -> {return "4915330,4251856,4251856"
 }
-64 -> {return "4915330,15859954,15859954";
+64 -> {return "4915330,15859954,15859954"
 }
-65 -> {return "14423100,4915330,4915330";
+65 -> {return "14423100,4915330,4915330"
 }
-66 -> {return "16777200,4251856,4251856";
+66 -> {return "16777200,4251856,4251856"
 }
-67 -> {return "16777200,16731355,16711910";
+67 -> {return "16777200,16731355,16711910"
 }
-68 -> {return "14423100,16777200,16777200";
+68 -> {return "14423100,16777200,16777200"
 }
-69 -> {return "4251856,16747520,16747520";
+69 -> {return "4251856,16747520,16747520"
 }
-70 -> {return "14315734,16747520,16747520";
+70 -> {return "14315734,16747520,16747520"
 }
-71 -> {return "14423100,16747520,16747520";
+71 -> {return "14423100,16747520,16747520"
 }
-72 -> {return "15859954,4251856,4251856";
+72 -> {return "15859954,4251856,4251856"
 }
-73 -> {return "14423100,4251856,4251856";
+73 -> {return "14423100,4251856,4251856"
 }
-74 -> {return "16766720,16766720,16766720";
+74 -> {return "16766720,16766720,16766720"
 }
-76 -> {return "14315734,14423100,14423100";
+76 -> {return "14315734,14423100,14423100"
 }
-77 -> {return "14524637,16772045,16772045";
+77 -> {return "14524637,16772045,16772045"
 }
-78 -> {return "14524637,16766720,16766720";
+78 -> {return "14524637,16766720,16766720"
 }
-79 -> {return "14524637,1245184,1245184";
+79 -> {return "14524637,1245184,1245184"
 }
-80 -> {return "14524637,3329330,3329330";
+80 -> {return "14524637,3329330,3329330"
 }
-82 -> {return "14524637,4915330,4915330";
+82 -> {return "14524637,4915330,4915330"
 }
-83 -> {return "14524637,16777200,16777200";
+83 -> {return "14524637,16777200,16777200"
 }
-84 -> {return "14524637,16747520,16747520";
+84 -> {return "14524637,16747520,16747520"
 }
-85 -> {return "14524637,4251856,4251856";
+85 -> {return "14524637,4251856,4251856"
 }
-86 -> {return "14524637,15859954,15859954";
+86 -> {return "14524637,15859954,15859954"
 }
-87 -> {return "14524637,14423100,14423100";
+87 -> {return "14524637,14423100,14423100"
 }
-else -> {return "-1,-1,-1";
+else -> {return "-1,-1,-1"
         
 }
 }
@@ -2526,27 +2529,27 @@ else -> {return "-1,-1,-1";
 
     @JvmStatic fun getGeneration(color: Int): Int {
         when (color) {
-10, 18, 20 -> {return 1;
+10, 18, 20 -> {return 1
 }
-33, 38, 46 -> {return 2;
+33, 38, 46 -> {return 2
 }
-3, 17 -> {return 3;
+3, 17 -> {return 3
 }
-62, 12, 36, 34, 44, 42, 51 -> {return 4;
+62, 12, 36, 34, 44, 42, 51 -> {return 4
 }
-19, 22 -> {return 5;
+19, 22 -> {return 5
 }
-71, 70, 41, 40, 49, 48, 65, 64, 54, 53, 76 -> {return 6;
+71, 70, 41, 40, 49, 48, 65, 64, 54, 53, 76 -> {return 6
 }
-15, 16 -> {return 7;
+15, 16 -> {return 7
 }
-11, 69, 37, 39, 45, 47, 61, 63, 9, 52, 68, 73, 67, 72, 66 -> {return 8;
+11, 69, 37, 39, 45, 47, 61, 63, 9, 52, 68, 73, 67, 72, 66 -> {return 8
 }
-21, 23 -> {return 9;
+21, 23 -> {return 9
 }
-57, 35, 43, 50, 55, 56, 58, 59, 60, 77, 78, 79, 80, 82, 83, 84, 85, 86 -> {return 10;
+57, 35, 43, 50, 55, 56, 58, 59, 60, 77, 78, 79, 80, 82, 83, 84, 85, 86 -> {return 10
 }
-else -> {return 1;
+else -> {return 1
         
 }
 }
@@ -2564,53 +2567,53 @@ else -> {return 1;
 
         var i: Int = 0
         for (str in  splitM) {
-            i++;
-            if (str.equals("?")) continue;
+            i++
+            if (str.equals("?")) continue
 
             var pct: Int = 1
 
             when (i) {
-1, 2 -> {pct = 25;
+1, 2 -> {pct = 25
                     
 }
-3, 4, 5, 6 -> {pct = 10;
+3, 4, 5, 6 -> {pct = 10
             
 }
 }
 
-            random.add(pct, str.toInt());
+            random.add(pct, str.toInt())
         }
 
-        random.add(if (random.size() == 0) 100 else 33, mother.color);
-        color1 = random.get();
+        random.add(if (random.size() == 0) 100 else 33, mother.color)
+        color1 = random.get()
 
-        random = RandomStats();
-        i = 0;
+        random = RandomStats()
+        i = 0
         for (str in  splitF) {
-            i++;
-            if (str.equals("?")) continue;
+            i++
+            if (str.equals("?")) continue
 
             var pct: Int = 1
 
             when (i) {
-1, 2 -> {pct = 25;
+1, 2 -> {pct = 25
                     
 }
-3, 4, 5, 6 -> {pct = 10;
+3, 4, 5, 6 -> {pct = 10
             
 }
 }
 
-            random.add(pct, str.toInt());
+            random.add(pct, str.toInt())
         }
 
-        random.add(if (random.size() == 0) 100 else 33, father.color);
-        color2 = random.get();
+        random.add(if (random.size() == 0) 100 else 33, father.color)
+        color2 = random.get()
 
         if (color1 == 75)
-            color1 = 10;
+            color1 = 10
         if (color2 == 75)
-            color2 = 10;
+            color2 = 10
 
         if (color1 > color2) {
             A = color2;// moins
@@ -2747,349 +2750,349 @@ else -> {return 1;
             C = 87; // Prune - Purpre
         else if (A == B)
             A = B
-            C = A;
+            C = A
         if (C == 0) {
 
-            random = RandomStats();
-            i = 0;
+            random = RandomStats()
+            i = 0
             for (str in  splitF) {
-                i++;
-                if (str.equals("?")) continue;
+                i++
+                if (str.equals("?")) continue
 
                 var pct: Int = 1
 
                 when (i) {
-1, 2 -> {pct = 25;
+1, 2 -> {pct = 25
                         
 }
-3, 4, 5, 6 -> {pct = 10;
+3, 4, 5, 6 -> {pct = 10
                 
 }
 }
 
-                random.add(pct, str.toInt());
+                random.add(pct, str.toInt())
             }
-            i = 0;
+            i = 0
             for (str in  splitM) {
-                i++;
-                if (str.equals("?")) continue;
+                i++
+                if (str.equals("?")) continue
 
                 var pct: Int = 1
 
                 when (i) {
-1, 2 -> {pct = 25;
+1, 2 -> {pct = 25
                         
 }
-3, 4, 5, 6 -> {pct = 10;
+3, 4, 5, 6 -> {pct = 10
                 
 }
 }
 
-                random.add(pct, str.toInt());
+                random.add(pct, str.toInt())
             }
-            C = random.get();
+            C = random.get()
             //player.sendMessage("Merci de Poster sur le forum afin de débug l'élevage ! C = 0, A = " + A + ", et B = " + B + ". Valeur finale : " + C + ". Message bien évidement sérieux.");
 
-            return C;
+            return C
         }
-        random = RandomStats();
-        random.add(33, A);
-        random.add(33, B);
-        random.add(33, C);
-        return random.get();
+        random = RandomStats()
+        random.add(33, A)
+        random.add(33, B)
+        random.add(33, C)
+        return random.get()
     }
 
     @JvmStatic fun getParchoByIdPets(id: Int): Int {
         when (id) {
-10802 -> {return 10806;
+10802 -> {return 10806
 }
-10107 -> {return 10135;
+10107 -> {return 10135
 }
-10106 -> {return 10134;
+10106 -> {return 10134
 }
-9795 -> {return 9810;
+9795 -> {return 9810
 }
-9624 -> {return 9685;
+9624 -> {return 9685
 }
-9623 -> {return 9684;
+9623 -> {return 9684
 }
-9620 -> {return 9683;
+9620 -> {return 9683
 }
-9619 -> {return 9682;
+9619 -> {return 9682
 }
-9617 -> {return 9675;
+9617 -> {return 9675
 }
-9594 -> {return 9598;
+9594 -> {return 9598
 }
-8693 -> {return 8707;
+8693 -> {return 8707
 }
-8677 -> {return 8684;
+8677 -> {return 8684
 }
-8561 -> {return 8564;
+8561 -> {return 8564
 }
-8211 -> {return 8544;
+8211 -> {return 8544
 }
-8155 -> {return 8179;
+8155 -> {return 8179
 }
-8154 -> {return 8178;
+8154 -> {return 8178
 }
-8153 -> {return 8175;
+8153 -> {return 8175
 }
-8151 -> {return 8176;
+8151 -> {return 8176
 }
-8000 -> {return 8180;
+8000 -> {return 8180
 }
-7911 -> {return 8526;
+7911 -> {return 8526
 }
-7892 -> {return 7896;
+7892 -> {return 7896
 }
-7891 -> {return 7895;
+7891 -> {return 7895
 }
-7714 -> {return 8708;
+7714 -> {return 8708
 }
-7713 -> {return 9681;
+7713 -> {return 9681
 }
-7712 -> {return 9680;
+7712 -> {return 9680
 }
-7711 -> {return 9679;
+7711 -> {return 9679
 }
-7710 -> {return 9678;
+7710 -> {return 9678
 }
-7709 -> {return 9677;
+7709 -> {return 9677
 }
-7708 -> {return 9676;
+7708 -> {return 9676
 }
-7707 -> {return 9674;
+7707 -> {return 9674
 }
-7706 -> {return 8685;
+7706 -> {return 8685
 }
-7705 -> {return 8889;
+7705 -> {return 8889
 }
-7704 -> {return 8888;
+7704 -> {return 8888
 }
-7703 -> {return 8421;
+7703 -> {return 8421
 }
-7524 -> {return 8887;
+7524 -> {return 8887
 }
-7522 -> {return 7535;
+7522 -> {return 7535
 }
-7520 -> {return 7533;
+7520 -> {return 7533
 }
-7519 -> {return 7534;
+7519 -> {return 7534
 }
-7518 -> {return 7532;
+7518 -> {return 7532
 }
-7415 -> {return 7419;
+7415 -> {return 7419
 }
-7414 -> {return 7418;
+7414 -> {return 7418
 }
-6978 -> {return 7417;
+6978 -> {return 7417
 }
-6716 -> {return 7420;
+6716 -> {return 7420
 }
-2077 -> {return 2098;
+2077 -> {return 2098
 }
-2076 -> {return 2101;
+2076 -> {return 2101
 }
-2075 -> {return 2100;
+2075 -> {return 2100
 }
-2074 -> {return 2099;
+2074 -> {return 2099
 }
-1748 -> {return 2102;
+1748 -> {return 2102
 }
-1728 -> {return 1735;
+1728 -> {return 1735
         
 }
 }
-        return -1;
+        return -1
     }
 
     @JvmStatic fun getPetsByIdParcho(id: Int): Int {
         when (id) {
-10806 -> {return 10802;
+10806 -> {return 10802
 }
-10135 -> {return 10107;
+10135 -> {return 10107
 }
-10134 -> {return 10106;
+10134 -> {return 10106
 }
-9810 -> {return 9795;
+9810 -> {return 9795
 }
-9685 -> {return 9624;
+9685 -> {return 9624
 }
-9684 -> {return 9623;
+9684 -> {return 9623
 }
-9683 -> {return 9620;
+9683 -> {return 9620
 }
-9682 -> {return 9619;
+9682 -> {return 9619
 }
-9675 -> {return 9617;
+9675 -> {return 9617
 }
-9598 -> {return 9594;
+9598 -> {return 9594
 }
-8707 -> {return 8693;
+8707 -> {return 8693
 }
-8684 -> {return 8677;
+8684 -> {return 8677
 }
-8564 -> {return 8561;
+8564 -> {return 8561
 }
-8544 -> {return 8211;
+8544 -> {return 8211
 }
-8179 -> {return 8155;
+8179 -> {return 8155
 }
-8178 -> {return 8154;
+8178 -> {return 8154
 }
-8175 -> {return 8153;
+8175 -> {return 8153
 }
-8176 -> {return 8151;
+8176 -> {return 8151
 }
-8180 -> {return 8000;
+8180 -> {return 8000
 }
-8526 -> {return 7911;
+8526 -> {return 7911
 }
-7896 -> {return 7892;
+7896 -> {return 7892
 }
-7895 -> {return 7891;
+7895 -> {return 7891
 }
-8708 -> {return 7714;
+8708 -> {return 7714
 }
-9681 -> {return 7713;
+9681 -> {return 7713
 }
-9680 -> {return 7712;
+9680 -> {return 7712
 }
-9679 -> {return 7711;
+9679 -> {return 7711
 }
-9678 -> {return 7710;
+9678 -> {return 7710
 }
-9677 -> {return 7709;
+9677 -> {return 7709
 }
-9676 -> {return 7708;
+9676 -> {return 7708
 }
-9674 -> {return 7707;
+9674 -> {return 7707
 }
-8685 -> {return 7706;
+8685 -> {return 7706
 }
-8889 -> {return 7705;
+8889 -> {return 7705
 }
-8888 -> {return 7704;
+8888 -> {return 7704
 }
-8421 -> {return 7703;
+8421 -> {return 7703
 }
-8887 -> {return 7524;
+8887 -> {return 7524
 }
-7535 -> {return 7522;
+7535 -> {return 7522
 }
-7533 -> {return 7520;
+7533 -> {return 7520
 }
-7534 -> {return 7519;
+7534 -> {return 7519
 }
-7532 -> {return 7518;
+7532 -> {return 7518
 }
-7419 -> {return 7415;
+7419 -> {return 7415
 }
-7418 -> {return 7414;
+7418 -> {return 7414
 }
-7417 -> {return 6978;
+7417 -> {return 6978
 }
-7420 -> {return 6716;
+7420 -> {return 6716
 }
-2098 -> {return 2077;
+2098 -> {return 2077
 }
-2101 -> {return 2076;
+2101 -> {return 2076
 }
-2100 -> {return 2075;
+2100 -> {return 2075
 }
-2099 -> {return 2074;
+2099 -> {return 2074
 }
-2102 -> {return 1748;
+2102 -> {return 1748
 }
-1735 -> {return 1728;
+1735 -> {return 1728
         
 }
 }
-        return -1;
+        return -1
     }
 
     @JvmStatic fun getDoplonDopeul(IDmob: Int): Int {
         when (IDmob) {
-168 -> {return 10302;
+168 -> {return 10302
 }
-165 -> {return 10303;
+165 -> {return 10303
 }
-166 -> {return 10304;
+166 -> {return 10304
 }
-162 -> {return 10305;
+162 -> {return 10305
 }
-160 -> {return 10306;
+160 -> {return 10306
 }
-167 -> {return 10307;
+167 -> {return 10307
 }
-161 -> {return 10308;
+161 -> {return 10308
 }
-2691 -> {return 10309;
+2691 -> {return 10309
 }
-455 -> {return 10310;
+455 -> {return 10310
 }
-169 -> {return 10311;
+169 -> {return 10311
 }
-163 -> {return 10312;
+163 -> {return 10312
 }
-164 -> {return 10313;
+164 -> {return 10313
         
 }
 }
-        return -1;
+        return -1
     }
 
     @JvmStatic fun getIDdoplonByMapID(IDmap: Int): Int {
         when (IDmap) {
-6926 -> {return 10312;
+6926 -> {return 10312
 }
-1470 -> {return 10305;
+1470 -> {return 10305
 }
-1461 -> {return 10303;
+1461 -> {return 10303
 }
-6949 -> {return 10310;
+6949 -> {return 10310
 }
-1556 -> {return 10302;
+1556 -> {return 10302
 }
-1549 -> {return 10307;
+1549 -> {return 10307
 }
-1469 -> {return 10313;
+1469 -> {return 10313
 }
-487 -> {return 10304;
+487 -> {return 10304
 }
-490 -> {return 10308;
+490 -> {return 10308
 }
-177 -> {return 10306;
+177 -> {return 10306
 }
-1466 -> {return 10311;
+1466 -> {return 10311
 }
-8207 -> {return 10309;
+8207 -> {return 10309
         
 }
 }
-        return -1;
+        return -1
     }
 
     @JvmStatic fun getArmeSoin(idArme: Int): Int {
         when (idArme) {
-7172 -> {return 100;
+7172 -> {return 100
 }
-7156 -> {return 80;
+7156 -> {return 80
 }
-1355 -> {return 42;
+1355 -> {return 42
 }
-7182 -> {return 100;
+7182 -> {return 100
 }
-7040 -> {return 10;
+7040 -> {return 10
 }
-6539 -> {return 80;
+6539 -> {return 80
 }
-6519 -> {return 23;
+6519 -> {return 23
 }
-8118 -> {return 30;
+8118 -> {return 30
 }
-else -> {return -1;
+else -> {return -1
         
 }
 }
@@ -3097,243 +3100,243 @@ else -> {return -1;
 
     @JvmStatic fun getSectionByDopeuls(id: Int): Int {
         when (id) {
-160 -> {return 1;
+160 -> {return 1
 }
-161 -> {return 2;
+161 -> {return 2
 }
-162 -> {return 3;
+162 -> {return 3
 }
-163 -> {return 4;
+163 -> {return 4
 }
-164 -> {return 5;
+164 -> {return 5
 }
-165 -> {return 6;
+165 -> {return 6
 }
-166 -> {return 7;
+166 -> {return 7
 }
-167 -> {return 8;
+167 -> {return 8
 }
-168 -> {return 9;
+168 -> {return 9
 }
-169 -> {return 10;
+169 -> {return 10
 }
-455 -> {return 11;
+455 -> {return 11
 }
-2691 -> {return 12;
+2691 -> {return 12
         
 }
 }
-        return -1;
+        return -1
     }
 
     @JvmStatic fun getCertificatByDopeuls(id: Int): Int {
         when (id) {
-160 -> {return 10293;
+160 -> {return 10293
 }
-161 -> {return 10295;
+161 -> {return 10295
 }
-162 -> {return 10292;
+162 -> {return 10292
 }
-163 -> {return 10299;
+163 -> {return 10299
 }
-164 -> {return 10300;
+164 -> {return 10300
 }
-165 -> {return 10290;
+165 -> {return 10290
 }
-166 -> {return 10291;
+166 -> {return 10291
 }
-167 -> {return 10294;
+167 -> {return 10294
 }
-168 -> {return 10289;
+168 -> {return 10289
 }
-169 -> {return 10298;
+169 -> {return 10298
 }
-455 -> {return 10297;
+455 -> {return 10297
 }
-2691 -> {return 10296;
+2691 -> {return 10296
         
 }
 }
-        return -1;
+        return -1
     }
 
     @JvmStatic fun isCertificatDopeuls(id: Int): Boolean {
         when (id) {
-10293, 10295, 10292, 10299, 10300, 10290, 10291, 10294, 10289, 10298, 10297, 10296 -> {return true;
+10293, 10295, 10292, 10299, 10300, 10290, 10291, 10294, 10289, 10298, 10297, 10296 -> {return true
         
 }
 }
-        return false;
+        return false
     }
 
     @JvmStatic fun getItemIdByMascotteId(id: Int): Int {
         when (id) {
-10118 -> {return 1498;
+10118 -> {return 1498
 }
-10078 -> {return 70;
+10078 -> {return 70
 }
-10077 -> {return -1;
+10077 -> {return -1
 }
-10009 -> {return 90;
+10009 -> {return 90
 }
-9993 -> {return 71;
+9993 -> {return 71
 }
-9096 -> {return 30;
+9096 -> {return 30
 }
-9061 -> {return 40;
+9061 -> {return 40
 }
-8563 -> {return 1076;
+8563 -> {return 1076
 }
-7425 -> {return 1588;
+7425 -> {return 1588
 }
-7354 -> {return 1264;
+7354 -> {return 1264
 }
-7353 -> {return 1076;
+7353 -> {return 1076
 }
-7352 -> {return 1153;
+7352 -> {return 1153
 }
-7351 -> {return 1248;
+7351 -> {return 1248
 }
-7350 -> {return 1228;
+7350 -> {return 1228
 }
-7062 -> {return 9001;
+7062 -> {return 9001
 }
-6876 -> {return 1245;
+6876 -> {return 1245
 }
-6875 -> {return 1249;
+6875 -> {return 1249
 }
-6874 -> {return 70;
+6874 -> {return 70
 }
-6873 -> {return 1243;
+6873 -> {return 1243
 }
-6872 -> {return 50;
+6872 -> {return 50
 }
-6871 -> {return 1247;
+6871 -> {return 1247
 }
-6870 -> {return 1246;
+6870 -> {return 1246
 }
-6869 -> {return 9043;
+6869 -> {return 9043
 }
-6832 -> {return -1;
+6832 -> {return -1
 }
-6768 -> {return 9001;
+6768 -> {return 9001
 }
-2272 -> {return 1577;
+2272 -> {return 1577
 }
-2169 -> {return 1205;
+2169 -> {return 1205
 }
-2152 -> {return 1001;
+2152 -> {return 1001
 }
-2134 -> {return 1205;
+2134 -> {return 1205
 }
-2132 -> {return 9004;
+2132 -> {return 9004
 }
-2130 -> {return 1001;
+2130 -> {return 1001
 }
 2082 -> {return 1208;//Marcassin
         
 }
 }
-        return -1;
+        return -1
     }
 
     @JvmStatic fun isIncarnationWeapon(id: Int): Boolean {
         when (id) {
-9544, 9545, 9546, 9547, 9548, 10133, 10127, 10126, 10125 -> {return true;
+9544, 9545, 9546, 9547, 9548, 10133, 10127, 10126, 10125 -> {return true
         
 }
 }
-        return false;
+        return false
     }
 
     @JvmStatic fun isTourmenteurWeapon(id: Int): Boolean {
         when (id) {
-9544, 9545, 9546, 9547, 9548 -> {return true;
+9544, 9545, 9546, 9547, 9548 -> {return true
         
 }
 }
-        return false;
+        return false
     }
 
     @JvmStatic fun isBanditsWeapon(id: Int): Boolean {
         when (id) {
-10133, 10127, 10126, 10125 -> {return true;
+10133, 10127, 10126, 10125 -> {return true
         
 }
 }
-        return false;
+        return false
     }
 
     @JvmStatic fun getSpecialSpellByClasse(classe: Int): Int {
         when (classe) {
-Constant.CLASS_FECA -> {return 422;
+Constant.CLASS_FECA -> {return 422
 }
-Constant.CLASS_OSAMODAS -> {return 420;
+Constant.CLASS_OSAMODAS -> {return 420
 }
-Constant.CLASS_ENUTROF -> {return 425;
+Constant.CLASS_ENUTROF -> {return 425
 }
-Constant.CLASS_SRAM -> {return 416;
+Constant.CLASS_SRAM -> {return 416
 }
-Constant.CLASS_XELOR -> {return 424;
+Constant.CLASS_XELOR -> {return 424
 }
-Constant.CLASS_ECAFLIP -> {return 412;
+Constant.CLASS_ECAFLIP -> {return 412
 }
-Constant.CLASS_ENIRIPSA -> {return 427;
+Constant.CLASS_ENIRIPSA -> {return 427
 }
-Constant.CLASS_IOP -> {return 410;
+Constant.CLASS_IOP -> {return 410
 }
-Constant.CLASS_CRA -> {return 418;
+Constant.CLASS_CRA -> {return 418
 }
-Constant.CLASS_SADIDA -> {return 426;
+Constant.CLASS_SADIDA -> {return 426
 }
-Constant.CLASS_SACRIEUR -> {return 421;
+Constant.CLASS_SACRIEUR -> {return 421
 }
-Constant.CLASS_PANDAWA -> {return 423;
+Constant.CLASS_PANDAWA -> {return 423
         
 }
 }
-        return 0;
+        return 0
     }
 
     @JvmStatic fun isFlacGelee(id: Int): Boolean {
         when (id) {
-2430, 2431, 2432, 2433 -> {return true;
+2430, 2431, 2432, 2433 -> {return true
         
 }
 }
-        return false;
+        return false
     }
 
     @JvmStatic fun isDoplon(id: Int): Boolean {
         when (id) {
-10302, 10303, 10304, 10305, 10306, 10307, 10308, 10309, 10310, 10311, 10312, 10313 -> {return true;
+10302, 10303, 10304, 10305, 10306, 10307, 10308, 10309, 10310, 10311, 10312, 10313 -> {return true
         
 }
 }
-        return false;
+        return false
     }
 
     @JvmStatic fun isInMorphDonjon(id: Int): Boolean {
         when (id) {
-8716, 8718, 8719, 9121, 9122, 9123, 8979, 8980, 8981, 8982, 8983, 8984, 9716 -> {return true;
+8716, 8718, 8719, 9121, 9122, 9123, 8979, 8980, 8981, 8982, 8983, 8984, 9716 -> {return true
         
 }
 }
-        return false;
+        return false
     }
 
     @JvmStatic fun getOppositeStats(statsId: Int): IntArray {
         if (statsId == 217)
-            return intArrayOf(210, 211, 213, 214);
+            return intArrayOf(210, 211, 213, 214)
         else if (statsId == 216)
-            return intArrayOf(210, 212, 213, 214);
+            return intArrayOf(210, 212, 213, 214)
         else if (statsId == 218)
-            return intArrayOf(210, 211, 212, 214);
+            return intArrayOf(210, 211, 212, 214)
         else if (statsId == 219)
-            return intArrayOf(210, 211, 212, 214);
+            return intArrayOf(210, 211, 212, 214)
         else if (statsId == 215)
-            return intArrayOf(211, 212, 213, 214);
-        return intArrayOf();
+            return intArrayOf(211, 212, 213, 214)
+        return intArrayOf()
     }
 
     @JvmStatic fun getNearestCellIdUnused(player: Player): Int {
@@ -3346,147 +3349,147 @@ Constant.CLASS_PANDAWA -> {return 423;
         for (available in  cells) {
             var c: GameCase? = map.getCase(available)
             if (c != null && c.getDroppedItem(false) == null && c.players.isEmpty() && c.isWalkable(player.fight!=null) && map.interactiveObjects?.get(available) == null) {
-                return available;
+                return available
             }
         }
-        return -1;
+        return -1
     }
 
     @JvmStatic fun getWeaponBonusByClass(type: Int, classId: Int): Float {
         when (classId) {
 Constant.CLASS_IOP -> {when (type) {
-ITEM_TYPE_EPEE -> {return 100f;
+ITEM_TYPE_EPEE -> {return 100f
 }
-ITEM_TYPE_MARTEAU -> {return 95f;
+ITEM_TYPE_MARTEAU -> {return 95f
                 
 }
 }
                 
 }
 Constant.CLASS_OSAMODAS -> {when (type) {
-ITEM_TYPE_MARTEAU -> {return 100f;
+ITEM_TYPE_MARTEAU -> {return 100f
 }
-ITEM_TYPE_BATON -> {return 95f;
+ITEM_TYPE_BATON -> {return 95f
                 
 }
 }
                 
 }
 Constant.CLASS_XELOR -> {when (type) {
-ITEM_TYPE_MARTEAU -> {return 100f;
+ITEM_TYPE_MARTEAU -> {return 100f
 }
-ITEM_TYPE_BAGUETTE -> {return 95f;
+ITEM_TYPE_BAGUETTE -> {return 95f
                 
 }
 }
                 
 }
 Constant.CLASS_ENIRIPSA -> {when (type) {
-ITEM_TYPE_BAGUETTE -> {return 100f;
+ITEM_TYPE_BAGUETTE -> {return 100f
 }
-ITEM_TYPE_BATON -> {return 95f;
+ITEM_TYPE_BATON -> {return 95f
                 
 }
 }
                 
 }
 Constant.CLASS_SRAM -> {when (type) {
-ITEM_TYPE_DAGUES -> {return 100f;
+ITEM_TYPE_DAGUES -> {return 100f
 }
-ITEM_TYPE_ARC -> {return 95f;
+ITEM_TYPE_ARC -> {return 95f
                 
 }
 }
                 
 }
 Constant.CLASS_CRA -> {when (type) {
-ITEM_TYPE_ARC -> {return 100f;
+ITEM_TYPE_ARC -> {return 100f
 }
-ITEM_TYPE_DAGUES -> {return 95f;
+ITEM_TYPE_DAGUES -> {return 95f
                 
 }
 }
                 
 }
 Constant.CLASS_SADIDA -> {when (type) {
-ITEM_TYPE_BATON -> {return 100f;
+ITEM_TYPE_BATON -> {return 100f
 }
-ITEM_TYPE_BAGUETTE -> {return 95f;
+ITEM_TYPE_BAGUETTE -> {return 95f
                 
 }
 }
                 
 }
 Constant.CLASS_ENUTROF -> {when (type) {
-ITEM_TYPE_PELLE -> {return 100f;
+ITEM_TYPE_PELLE -> {return 100f
 }
-ITEM_TYPE_MARTEAU -> {return 95f;
+ITEM_TYPE_MARTEAU -> {return 95f
                 
 }
 }
                 
 }
 Constant.CLASS_ECAFLIP -> {when (type) {
-ITEM_TYPE_EPEE -> {return 100f;
+ITEM_TYPE_EPEE -> {return 100f
 }
-ITEM_TYPE_DAGUES -> {return 95f;
+ITEM_TYPE_DAGUES -> {return 95f
                 
 }
 }
                 
 }
 Constant.CLASS_FECA -> {when (type) {
-ITEM_TYPE_BATON -> {return 100f;
+ITEM_TYPE_BATON -> {return 100f
 }
-ITEM_TYPE_BAGUETTE -> {return 95f;
+ITEM_TYPE_BAGUETTE -> {return 95f
                 
 }
 }
                 
 }
 Constant.CLASS_PANDAWA -> {when (type) {
-ITEM_TYPE_HACHE -> {return 100f;
+ITEM_TYPE_HACHE -> {return 100f
 }
-ITEM_TYPE_BATON -> {return 95f;
+ITEM_TYPE_BATON -> {return 95f
                 
 }
 }
                 
 }
-else -> {return 90f;
+else -> {return 90f
         
 }
 }
-        return 90f;
+        return 90f
     }
 
     @JvmStatic fun getClassNameById(forbiddenClass: Byte): String {
         when (forbiddenClass.toInt()) {
-CLASS_ENUTROF -> {return "Enutrof";
+CLASS_ENUTROF -> {return "Enutrof"
 }
-CLASS_SACRIEUR -> {return "Sacrieur";
+CLASS_SACRIEUR -> {return "Sacrieur"
 }
-CLASS_FECA -> {return "Féca";
+CLASS_FECA -> {return "Féca"
 }
-CLASS_SADIDA -> {return "Sadida";
+CLASS_SADIDA -> {return "Sadida"
 }
-CLASS_SRAM -> {return "Sram";
+CLASS_SRAM -> {return "Sram"
 }
-CLASS_ENIRIPSA -> {return "Eniripsa";
+CLASS_ENIRIPSA -> {return "Eniripsa"
 }
-CLASS_XELOR -> {return "Xelor";
+CLASS_XELOR -> {return "Xelor"
 }
-CLASS_CRA -> {return "Crâ";
+CLASS_CRA -> {return "Crâ"
 }
-CLASS_ECAFLIP -> {return "Ecaflip";
+CLASS_ECAFLIP -> {return "Ecaflip"
 }
-CLASS_PANDAWA -> {return "Pandawa";
+CLASS_PANDAWA -> {return "Pandawa"
 }
-CLASS_OSAMODAS -> {return "Osamodas";
+CLASS_OSAMODAS -> {return "Osamodas"
 }
-CLASS_IOP -> {return "Iop";
+CLASS_IOP -> {return "Iop"
 }
-else -> {return "Undefined";
+else -> {return "Undefined"
         
 }
 }
@@ -3494,28 +3497,28 @@ else -> {return "Undefined";
 
     @JvmStatic fun getPositionByItemType(type: Int): IntArray {
         when (type) {
-Constant.ITEM_TYPE_FAMILIER -> {return intArrayOf(Constant.ITEM_POS_FAMILIER);
+Constant.ITEM_TYPE_FAMILIER -> {return intArrayOf(Constant.ITEM_POS_FAMILIER)
 }
-Constant.ITEM_TYPE_COIFFE -> {return intArrayOf(Constant.ITEM_POS_COIFFE);
+Constant.ITEM_TYPE_COIFFE -> {return intArrayOf(Constant.ITEM_POS_COIFFE)
 }
-Constant.ITEM_TYPE_CAPE -> {return intArrayOf(Constant.ITEM_POS_CAPE);
+Constant.ITEM_TYPE_CAPE -> {return intArrayOf(Constant.ITEM_POS_CAPE)
 }
-Constant.ITEM_TYPE_ANNEAU -> {return intArrayOf(Constant.ITEM_POS_ANNEAU1, Constant.ITEM_POS_ANNEAU2);
+Constant.ITEM_TYPE_ANNEAU -> {return intArrayOf(Constant.ITEM_POS_ANNEAU1, Constant.ITEM_POS_ANNEAU2)
 }
-Constant.ITEM_TYPE_CEINTURE -> {return intArrayOf(Constant.ITEM_POS_CEINTURE);
+Constant.ITEM_TYPE_CEINTURE -> {return intArrayOf(Constant.ITEM_POS_CEINTURE)
 }
-Constant.ITEM_TYPE_AMULETTE -> {return intArrayOf(Constant.ITEM_POS_AMULETTE);
+Constant.ITEM_TYPE_AMULETTE -> {return intArrayOf(Constant.ITEM_POS_AMULETTE)
 }
-Constant.ITEM_TYPE_BOTTES -> {return intArrayOf(Constant.ITEM_POS_BOTTES);
+Constant.ITEM_TYPE_BOTTES -> {return intArrayOf(Constant.ITEM_POS_BOTTES)
 }
-Constant.ITEM_TYPE_BOUCLIER -> {return intArrayOf(Constant.ITEM_POS_BOUCLIER);
+Constant.ITEM_TYPE_BOUCLIER -> {return intArrayOf(Constant.ITEM_POS_BOUCLIER)
 }
 Constant.ITEM_TYPE_DOFUS -> {return intArrayOf(Constant.ITEM_POS_DOFUS1, Constant.ITEM_POS_DOFUS2, Constant.ITEM_POS_DOFUS3,
-                        Constant.ITEM_POS_DOFUS4, Constant.ITEM_POS_DOFUS5, Constant.ITEM_POS_DOFUS6);
+                        Constant.ITEM_POS_DOFUS4, Constant.ITEM_POS_DOFUS5, Constant.ITEM_POS_DOFUS6)
 }
-Constant.ITEM_TYPE_ARC, Constant.ITEM_TYPE_EPEE, Constant.ITEM_TYPE_DAGUES, Constant.ITEM_TYPE_BATON, Constant.ITEM_TYPE_FAUX, Constant.ITEM_TYPE_PELLE, Constant.ITEM_TYPE_HACHE, Constant.ITEM_TYPE_BAGUETTE -> {return intArrayOf(Constant.ITEM_POS_ARME);
+Constant.ITEM_TYPE_ARC, Constant.ITEM_TYPE_EPEE, Constant.ITEM_TYPE_DAGUES, Constant.ITEM_TYPE_BATON, Constant.ITEM_TYPE_FAUX, Constant.ITEM_TYPE_PELLE, Constant.ITEM_TYPE_HACHE, Constant.ITEM_TYPE_BAGUETTE -> {return intArrayOf(Constant.ITEM_POS_ARME)
 }
-else -> {return intArrayOf();
+else -> {return intArrayOf()
         
 }
 }
@@ -3523,23 +3526,23 @@ else -> {return intArrayOf();
 
     @JvmStatic fun isTypeWeapon(type: Int): Boolean {
         when (type) {
-ITEM_TYPE_ARME_MAGIQUE, ITEM_TYPE_ARBALETE, ITEM_TYPE_ARC, ITEM_TYPE_BAGUETTE, ITEM_TYPE_BATON, ITEM_TYPE_DAGUES, ITEM_TYPE_EPEE, ITEM_TYPE_MARTEAU, ITEM_TYPE_PELLE, ITEM_TYPE_HACHE, ITEM_TYPE_OUTIL, ITEM_TYPE_PIOCHE, ITEM_TYPE_FAUX -> {return true;
+ITEM_TYPE_ARME_MAGIQUE, ITEM_TYPE_ARBALETE, ITEM_TYPE_ARC, ITEM_TYPE_BAGUETTE, ITEM_TYPE_BATON, ITEM_TYPE_DAGUES, ITEM_TYPE_EPEE, ITEM_TYPE_MARTEAU, ITEM_TYPE_PELLE, ITEM_TYPE_HACHE, ITEM_TYPE_OUTIL, ITEM_TYPE_PIOCHE, ITEM_TYPE_FAUX -> {return true
         
 }
 }
-        return false;
+        return false
     }
 
     @JvmStatic fun isTypeForMimibiote(type: Int): Boolean {
         return type == Constant.ITEM_TYPE_COIFFE || type == Constant.ITEM_TYPE_CAPE ||
-                type == Constant.ITEM_TYPE_BOUCLIER || type == Constant.ITEM_TYPE_SAC_DOS || isTypeWeapon(type);
+                type == Constant.ITEM_TYPE_BOUCLIER || type == Constant.ITEM_TYPE_SAC_DOS || isTypeWeapon(type)
     }
 
     @JvmStatic fun getColorByElement(element: Int): Byte {
         when (element) {
-ELEMENT_FEU -> {return 2;
+ELEMENT_FEU -> {return 2
 }
-ELEMENT_EAU -> {return 3;
+ELEMENT_EAU -> {return 3
 }
 ELEMENT_NEUTRE, ELEMENT_TERRE, ELEMENT_AIR -> {return element.toByte()
 }

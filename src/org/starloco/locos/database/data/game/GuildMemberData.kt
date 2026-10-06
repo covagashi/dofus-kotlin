@@ -51,18 +51,18 @@ class GuildMemberData(dataSource: HikariDataSource?) : FunctionDAO<Player>(dataS
         }
     }
 
-    override fun update(player: Player) {
+    override fun update(entity: Player) {
         var p: PreparedStatement? = null
         try {
             p = getPreparedStatement("REPLACE INTO " + getTableName() + " VALUES(?,?,?,?,?,?,?,?,?,?,?)")
-            val gm = player.guildMember ?: return
+            val gm = entity.guildMember ?: return
             p?.setInt(1, gm.playerId)
             p?.setInt(2, gm.guild.id)
-            p?.setString(3, player.name)
+            p?.setString(3, entity.name)
             p?.setInt(4, gm.lvl)
             var gfx: Int = gm.gfx
             if (gfx > 121 || gfx < 10)
-                gfx = player.classe * 10 + player.sexe
+                gfx = entity.classe * 10 + entity.sexe
             p?.setInt(5, gfx)
             p?.setInt(6, gm.rank)
             p?.setLong(7, gm.xpGave)

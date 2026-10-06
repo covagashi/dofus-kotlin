@@ -66,8 +66,8 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
 
     fun challengeLoose(fighter: Fighter?) {
         var name = ""
-        if (fighter != null && fighter.getPlayer() != null)
-            name = fighter.getPlayer()!!.name
+        if (fighter != null && fighter.player != null)
+            name = fighter.player!!.name
         looseBy = name
         challengeWin = false
         challengeAlive = false
@@ -108,10 +108,10 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
         for (fighter in fight.getFighters(1)) {
             if (fighter.hasLeft())
                 continue
-            if (fighter.getPlayer() == null
-                    || !fighter.getPlayer()!!.isOnline)
+            if (fighter.player == null
+                    || !fighter.player!!.isOnline)
                 continue
-            Pws.add(fighter.getPlayer()!!.getGameClient()!!)
+            Pws.add(fighter.player!!.getGameClient()!!)
         }
         SocketManager.GAME_SEND_FIGHT_SHOW_CASE(Pws, _cible!!.id, _cible!!.cell!!.cellId)
     }
@@ -127,9 +127,9 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                     Choix.addAll(_ordreJeu)
                     Choix.shuffle()//Mélange l'ArrayList
                     for (f in Choix) {
-                        if (f.getPlayer() != null)
+                        if (f.player != null)
                             continue
-                        if (f.getMob() != null && f.getTeam2() == 2
+                        if (f.mob != null && f.getTeam2() == 2
                                 && !f.isDead && !f.isInvocation())
                             _cible = f
                     }
@@ -142,8 +142,8 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                 {
                     if (fighter.isInvocation())
                         continue
-                    if (fighter.getPlayer() == null
-                            && fighter.getMob() != null
+                    if (fighter.player == null
+                            && fighter.mob != null
                             && fighter.getLvl() < levelMin
                             && fighter.getInvocator() == null) {
                         levelMin = fighter.getLvl()
@@ -158,7 +158,7 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                 for (fighter in fight.getFighters(2)) {
                     if (fighter.isDead || fighter.isInvocation())
                         continue
-                    if (fighter.getPlayer() == null && fighter.getMob() != null && fighter.getInvocator() == null && fighter.getLvl() > levelMax) {
+                    if (fighter.player == null && fighter.mob != null && fighter.getInvocator() == null && fighter.getLvl() > levelMax) {
                         levelMax = fighter.getLvl()
                         this._cible = fighter
                     }
@@ -190,11 +190,11 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
             return
         when (Type) {
             33, 49 -> {
-                if (fighter.getPlayer() != null)
+                if (fighter.player != null)
                     challengeLoose(fight.getFighterByGameOrder())
             }
             44 -> {
-                if (fighter.getPlayer() != null)
+                if (fighter.player != null)
                     if (!Args.contains(fighter.id.toString()))
                         challengeLoose(fighter)
             }
@@ -374,13 +374,13 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
     }
 
     fun onMobDie(mob: Fighter, killer: Fighter) {
-        if (mob.getMob() == null)
+        if (mob.mob == null)
             return
-        if (mob.getPlayer() != null)
+        if (mob.player != null)
             return
         if (mob.team != 1)
             return
-        if (mob.isInvocation() && mob.getInvocator()!!.getPlayer() != null)
+        if (mob.isInvocation() && mob.getInvocator()!!.player != null)
             return
 
         val isKiller = (killer.id != mob.id)
@@ -421,20 +421,20 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                 }
             }
             28 -> {
-                if (!mob.isInvocation() && isKiller && killer.getPlayer() != null)
-                    if (killer.getPlayer()!!.sexe == 0) {
+                if (!mob.isInvocation() && isKiller && killer.player != null)
+                    if (killer.player!!.sexe == 0) {
                         challengeLoose(fight.getFighterByGameOrder())
                     }
             }
             29 -> {
-                if (!mob.isInvocation() && isKiller && killer.getPlayer() != null) {
-                    if (killer.getPlayer()!!.sexe == 1) {
+                if (!mob.isInvocation() && isKiller && killer.player != null) {
+                    if (killer.player!!.sexe == 1) {
                         challengeLoose(fight.getFighterByGameOrder())
                     }
                 }
             }
             31 -> {
-                if (killer.getMob() != null || killer === mob || mob.levelUp)
+                if (killer.mob != null || killer === mob || mob.levelUp)
                     return
                 if (Args.contains("|" + mob.id))
                     Args = ""
@@ -486,13 +486,13 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                         while (it.hasNext()) {
                             val f = it.next()
                             if (f.isInvocation() || f.isDead
-                                    || f.getPlayer() != null)
+                                    || f.player != null)
                                 it.remove()
                         }
-                        Collections.sort(fighters)
+                        fighters.sort()
                         for (f in fighters) {
                             if (!f.isInvocation() && !f.isDead
-                                    && f.getPlayer() == null) {
+                                    && f.player == null) {
                                 _cible = f
                                 break
                             }
@@ -506,7 +506,7 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
             10 -> {
                 if (_cible == null)
                     return
-                if (_cible!!.isInvocation() || mob.getPlayer() != null)
+                if (_cible!!.isInvocation() || mob.player != null)
                     return
                 if (_cible!!.id != mob.id
                         && _cible!!.getLvl() != mob.getLvl()) {
@@ -516,9 +516,9 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                     try {
                         var levelMin = 2000
                         for (fighter in fight.getFighters(2)) {
-                            if (fighter.isInvocation() || fighter.getPlayer() != null || fighter.isDead)
+                            if (fighter.isInvocation() || fighter.player != null || fighter.isDead)
                                 continue
-                            if (fighter.getPlayer() == null
+                            if (fighter.player == null
                                     && fighter.getLvl() < levelMin) {
                                 levelMin = fighter.getLvl()
                                 _cible = fighter
@@ -534,9 +534,9 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
             25 -> {
                 if (_cible == null)
                     return
-                if (mob.isInvocation() || mob.getPlayer() != null)
+                if (mob.isInvocation() || mob.player != null)
                     return
-                if (killer.getMob() != null && killer !== mob)
+                if (killer.mob != null && killer !== mob)
                     return
 
                 if (_cible!!.id != mob.id) {
@@ -545,7 +545,7 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                 } else {
                     var levelMax = 0
                     for (fighter in fight.getFighters(2)) {
-                        if (fighter.isInvocation() || fighter.getPlayer() != null || fighter.isDead)
+                        if (fighter.isInvocation() || fighter.player != null || fighter.isDead)
                             continue
                         if (fighter.getLvl() > levelMax) {
                             levelMax = fighter.getLvl()
@@ -616,14 +616,14 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
     fun onPlayerSpell(fighter: Fighter, spellStats: Spell.SortStats) {
         if (!challengeAlive)
             return
-        if (fighter.getPlayer() == null)
+        if (fighter.player == null)
             return
         when (Type) {
             9 -> {
                 challengeLoose(fight.getFighterByGameOrder())
             }
             14 -> {
-                if (fighter.getPlayer() != null)
+                if (fighter.player != null)
                     if (spellStats.spellID == 101)
                         Args = "cast"
             }
@@ -635,7 +635,7 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
             return
         when (Type) {
             2 -> {
-                if (fighter.getPlayer() == null)
+                if (fighter.player == null)
                     return
                 Arg = fighter.cell!!.cellId
             }
@@ -643,7 +643,7 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                 lastActions = ""
             }
             14 -> {
-                if (fighter.getPlayer() != null)
+                if (fighter.player != null)
                     if (fighter.canLaunchSpell(101))
                         Args = "ok"
                     else Args = "cant"
@@ -659,7 +659,7 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                         if (_ordreJeu.size > 0) {
                             GUID = Formulas.getRandomValue(0, _ordreJeu.size - 1)
                             val f = _ordreJeu[GUID]
-                            if (f.getPlayer() == null && !f.isDead)
+                            if (f.player == null && !f.isDead)
                                 _cible = f
                             noBoucle++
                             if (noBoucle > 150)
@@ -680,7 +680,7 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                     for (string in this.Args.split(";")) {
                         if (string.contains("" + fighter.id)) {
                             for (test in string.split(","))
-                                id = Integer.parseInt(test)
+                                id = (test).toInt()
                             break
                         }
                     }
@@ -718,12 +718,12 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                     challengeLoose(fighter)
             }
             2 -> {
-                if (fighter.getPlayer() != null)
+                if (fighter.player != null)
                     if (fighter.cell!!.cellId != Arg)
                         challengeLoose(fighter)
             }
             7 -> {
-                if (fighter.getPlayer() != null)
+                if (fighter.player != null)
                     if (fighter.canLaunchSpell(367))
                         challengeLoose(fighter)
             }
@@ -732,17 +732,17 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                     challengeLoose(fighter)
             }
             12 -> {
-                if (fighter.getPlayer() != null)
+                if (fighter.player != null)
                     if (fighter.canLaunchSpell(373))
                         challengeLoose(fighter)
             }
             14 -> {
-                if (fighter.getPlayer() != null)
+                if (fighter.player != null)
                     if (Args == "ok")
                         challengeLoose(fighter)
             }
             15 -> {
-                if (fighter.getPlayer() != null)
+                if (fighter.player != null)
                     if (fighter.canLaunchSpell(370))
                         challengeLoose(fighter)
             }

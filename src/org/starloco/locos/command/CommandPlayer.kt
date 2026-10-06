@@ -132,7 +132,7 @@ object CommandPlayer {
             val option = player.party!!.getOptionByPlayer(player)
             if (option != null) {
                 try {
-                    val second = java.lang.Byte.parseByte(msg.split(" ")[1])
+                    val second = (msg.split(" ")[1]).toByte()
                     for (opt in player.party!!.getOptions()) {
                         if (opt != null && opt.second == second) {
                             player.sendMessage(player.getLang().trans("command.commandplayer.interval.error"))
@@ -157,7 +157,7 @@ object CommandPlayer {
         return false
     }
 
-    private val bannedItemJob = Arrays.asList(491, 493, 494, 495, 496)
+    private val bannedItemJob = listOf(491, 493, 494, 495, 496)
 
     private fun commandTransfert(player: Player, msg: String): Boolean {
         if (player.isInPrison() || player.fight != null)
@@ -453,7 +453,7 @@ object CommandPlayer {
         val min = (uptime / (1000 * 60)).toInt()
         uptime %= (1000 * 60)
         val sec = (uptime / 1000).toInt()
-        val nbPlayer = Config.gameServer!!.getClients().stream().filter { gc -> gc != null && gc.getPlayer() != null }.count().toInt()
+        val nbPlayer = Config.gameServer!!.getClients().stream().filter { gc -> gc != null && gc.player != null }.count().toInt()
 
         var mess = player.getLang().trans("command.commandplayer.info.uptime", jour.toString(), hour.toString(), min.toString(), sec.toString())
         if (nbPlayer > 0)

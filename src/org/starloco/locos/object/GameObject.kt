@@ -815,7 +815,7 @@ open class GameObject {
         }
         val statsObj = HashMap(obj.stats.effects)
         val keys = ArrayList(obj.stats.effects.keys)
-        Collections.shuffle(keys)
+        keys.shuffle()
         var p = 0
         var key = 0
         if (keys.size > 1) {
@@ -1093,7 +1093,7 @@ open class GameObject {
 
     fun getAppearanceTemplateId(): Int {
         if (this.txtStat[Constant.STATS_MIMIBIOTE] != null) {
-            return Integer.parseInt(this.txtStat[Constant.STATS_MIMIBIOTE]!!.split(";")[1], 16)
+            return (this.txtStat[Constant.STATS_MIMIBIOTE]!!.split(";")[1]).toInt(16)
         }
         return this.template!!.id
     }

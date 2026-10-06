@@ -503,8 +503,8 @@ abstract class Fighter protected constructor(val id: Int, val fight: Fight) : Co
                 iterator.remove()
                 when (effect.effectID) {
                     787 -> {
-                        val id = Integer.parseInt(effect.args.split(";")[0])
-                        val level = Integer.parseInt(effect.args.split(";")[1])
+                        val id = (effect.args.split(";")[0]).toInt()
+                        val level = (effect.args.split(";")[1]).toInt()
                         val spell = World.world.getSort(id)
 
                         for (e in spell!!.getStatsByLevel(level)!!.effects) {
@@ -530,7 +530,7 @@ abstract class Fighter protected constructor(val id: Int, val fight: Fight) : Co
                     }
                     950 -> {
                         val args = effect.args
-                        val id = Integer.parseInt(args.split(";")[2])
+                        val id = (args.split(";")[2]).toInt()
 
                         if (id != -1) {
                             setState(id, 0)
@@ -688,9 +688,9 @@ abstract class Fighter protected constructor(val id: Int, val fight: Fight) : Co
         return isStatique
     }
 
-    override fun compareTo(t: Fighter): Int {
+    override fun compareTo(other: Fighter): Int {
         if (this.isInvocation()) return 0
-        return this.getPros() - t.getPros()
+        return this.getPros() - other.getPros()
     }
 
     override fun scripted(): Any {
@@ -753,26 +753,10 @@ abstract class Fighter protected constructor(val id: Int, val fight: Fight) : Co
         return Stream.empty()
     }
 
-    // Tmp helpers to help compilation. This will eventually go
-    @Deprecated("")
-    open fun getPlayer(): Player? {
-        return null
-    }
-
-    @Deprecated("")
-    open fun getMob(): MonsterGrade? {
-        return null
-    }
-
-    @Deprecated("")
-    open fun getCollector(): Collector? {
-        return null
-    }
-
-    @Deprecated("")
-    open fun getPrism(): Prism? {
-        return null
-    }
+    open val player: Player? get() = null
+    open val mob: MonsterGrade? get() = null
+    open val collector: Collector? get() = null
+    open val prism: Prism? get() = null
 
     companion object {
         @JvmStatic

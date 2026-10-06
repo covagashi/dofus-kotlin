@@ -18,7 +18,7 @@ class Chafer(fight: Fight, fighter: Fighter, count: Byte) : AbstractNeedSpell(fi
     private var target: Fighter? = null
 
     init {
-        if (fighter.getMob()!! != null && fighter.getMob()!!.template!!.id == 1108)
+        if (fighter.mob!! != null && fighter.mob!!.template!!.id == 1108)
             this.flag = -1 // Chaferfu lancier to buff himself
     }
 
@@ -80,7 +80,7 @@ class Chafer(fight: Fight, fighter: Fighter, count: Byte) : AbstractNeedSpell(fi
                         }
                     }
                     1, 2, 3 -> {
-                        val spell = Function.getInstance().getBestSpellForTargetDopeul(this.fight, this.fighter, target!!, this.fighter.cell!!.cellId, ArrayList(this.fighter.getMob()!!.spells.values))
+                        val spell = Function.getInstance().getBestSpellForTargetDopeul(this.fight, this.fighter, target!!, this.fighter.cell!!.cellId, ArrayList(this.fighter.mob!!.spells.values))
                         if (spell != null && Function.getInstance().tryCastSpell(this.fight, this.fighter, target!!, spell.getSpell()!!.id) == 0) {
                             if (spell.getMaxLaunchByTarget() == 1) {
                                 val fighters = PathFinding.getEnemyFighterArround(this.fighter.cell!!.cellId, this.fight.map, this.fight, false)

@@ -362,16 +362,14 @@ class Collector(
                     packet.append(",")
                     packet.append(name) // callerName
                     packet.append(",")
-                    packet.append(java.lang.Long.toString(perco.date)) // startDate
+                    packet.append((perco.date).toString()) // startDate
                     packet.append(",")
                     packet.append("") // lastHName
                     packet.append(",")
                     packet.append("-1") // lastHD
                     packet.append(",")
                     packet.append(
-                        java.lang.Long.toString(
-                            perco.date + World.world.getGuild(GuildID)!!.lvl * 600000
-                        )
+                        (perco.date + World.world.getGuild(GuildID)!!.lvl * 600000).toString()
                     ) // nextHD
                     packet.append(";")
 
@@ -468,11 +466,11 @@ class Collector(
             val gameMap = World.world.getMap(map)
 
             gameMap?.fights?.stream()?.filter { it.id == fightId }?.forEach { fight ->
-                fight.getFighters(1).stream().filter { it.getPlayer() != null }.forEach { f ->
+                fight.getFighters(1).stream().filter { it.player != null }.forEach { f ->
                     str.append("|")
-                    str.append(Integer.toString(f.getPlayer()!!.id, 36)).append(";")
-                    str.append(f.getPlayer()!!.name).append(";")
-                    str.append(f.getPlayer()!!.level).append(";")
+                    str.append(Integer.toString(f.player!!.id, 36)).append(";")
+                    str.append(f.player!!.name).append(";")
+                    str.append(f.player!!.level).append(";")
                     str.append("0;")
                 }
             }

@@ -158,42 +158,42 @@ class Config {
             var i = 5
             try {
                 Config.exchangeIp = properties.getProperty(Params.EXCHANGE_IP.toString()); i++
-                Config.exchangePort = Integer.parseInt(properties.getProperty(Params.EXCHANGE_PORT.toString())); i++
+                Config.exchangePort = (properties.getProperty(Params.EXCHANGE_PORT.toString())).toInt(); i++
                 Config.exchangeKey = properties.getProperty(Params.EXCHANGE_KEY.toString()); i++
                 Config.encryption = java.lang.Boolean.parseBoolean(properties.getProperty(Params.ENCRYPTION.toString())); i++
                 Config.debug = java.lang.Boolean.parseBoolean(properties.getProperty(Params.DEBUG.toString())); i++
                 Config.logs = java.lang.Boolean.parseBoolean(properties.getProperty(Params.LOGS.toString())); i = 12
 
                 Config.databaseLoginHost = properties.getProperty(Params.LOGIN_DB_HOST.toString()); i++
-                Config.databaseLoginPort = Integer.parseInt(properties.getProperty(Params.LOGIN_DB_PORT.toString())); i++
+                Config.databaseLoginPort = (properties.getProperty(Params.LOGIN_DB_PORT.toString())).toInt(); i++
                 Config.databaseLoginUser = properties.getProperty(Params.LOGIN_DB_USER.toString()); i++
                 Config.databaseLoginPass = properties.getProperty(Params.LOGIN_DB_PASS.toString()); i++
                 Config.databaseLoginName = properties.getProperty(Params.LOGIN_DB_NAME.toString()); i = 18
 
                 Config.databaseGameHost = properties.getProperty(Params.GAME_DB_HOST.toString()); i++
-                Config.databaseGamePort = Integer.parseInt(properties.getProperty(Params.GAME_DB_PORT.toString())); i++
+                Config.databaseGamePort = (properties.getProperty(Params.GAME_DB_PORT.toString())).toInt(); i++
                 Config.databaseGameUser = properties.getProperty(Params.GAME_DB_USER.toString()); i++
                 Config.databaseGamePass = properties.getProperty(Params.GAME_DB_PASS.toString()); i++
                 Config.databaseGameName = properties.getProperty(Params.GAME_DB_NAME.toString()); i = 25
 
                 Config.gameIp = properties.getProperty(Params.GAME_IP.toString()); i++
-                Config.gamePort = Integer.parseInt(properties.getProperty(Params.GAME_PORT.toString())); i++
-                Config.gameServerId = Integer.parseInt(properties.getProperty(Params.GAME_SERVER_ID.toString())); i++
+                Config.gamePort = (properties.getProperty(Params.GAME_PORT.toString())).toInt(); i++
+                Config.gameServerId = (properties.getProperty(Params.GAME_SERVER_ID.toString())).toInt(); i++
                 Config.gameServerKey = properties.getProperty(Params.GAME_SERVER_KEY.toString()); i++
                 Config.version = properties.getProperty(Params.VERSION.toString()); i++
-                Config.rateXp = java.lang.Short.parseShort(properties.getProperty(Params.RATE_XP.toString())); i++
-                Config.rateDrop = java.lang.Short.parseShort(properties.getProperty(Params.RATE_DROP.toString())); i++
-                Config.rateProspectThreshold = java.lang.Double.parseDouble(properties.getProperty(Params.RATE_PROSPECT_THRESHOLD.toString())); i++
-                Config.rateHonor = java.lang.Short.parseShort(properties.getProperty(Params.RATE_HONOR.toString())); i++
-                Config.rateKamas = java.lang.Short.parseShort(properties.getProperty(Params.RATE_KAMAS.toString())); i++
-                Config.rateJob = java.lang.Short.parseShort(properties.getProperty(Params.RATE_JOB.toString())); i++
-                Config.rateFm = java.lang.Short.parseShort(properties.getProperty(Params.RATE_FM.toString())); i++
+                Config.rateXp = (properties.getProperty(Params.RATE_XP.toString())).toShort(); i++
+                Config.rateDrop = (properties.getProperty(Params.RATE_DROP.toString())).toShort(); i++
+                Config.rateProspectThreshold = (properties.getProperty(Params.RATE_PROSPECT_THRESHOLD.toString())).toDouble(); i++
+                Config.rateHonor = (properties.getProperty(Params.RATE_HONOR.toString())).toShort(); i++
+                Config.rateKamas = (properties.getProperty(Params.RATE_KAMAS.toString())).toShort(); i++
+                Config.rateJob = (properties.getProperty(Params.RATE_JOB.toString())).toShort(); i++
+                Config.rateFm = (properties.getProperty(Params.RATE_FM.toString())).toShort(); i++
                 Config.startMessage = properties.getProperty(Params.START_MESSAGE.toString()); i++
-                Config.startLevel = Integer.parseInt(properties.getProperty(Params.START_LEVEL.toString())); i++
-                Config.startKamas = Integer.parseInt(properties.getProperty(Params.START_KAMAS.toString())); i++
-                Config.startMap = Integer.parseInt(properties.getProperty(Params.START_MAP.toString())); i++
-                Config.startCell = Integer.parseInt(properties.getProperty(Params.START_CELL.toString())); i++
-                Config.limitByIp = Integer.parseInt(properties.getProperty(Params.LIMIT_BY_IP.toString())); i++
+                Config.startLevel = (properties.getProperty(Params.START_LEVEL.toString())).toInt(); i++
+                Config.startKamas = (properties.getProperty(Params.START_KAMAS.toString())).toInt(); i++
+                Config.startMap = (properties.getProperty(Params.START_MAP.toString())).toInt(); i++
+                Config.startCell = (properties.getProperty(Params.START_CELL.toString())).toInt(); i++
+                Config.limitByIp = (properties.getProperty(Params.LIMIT_BY_IP.toString())).toInt(); i++
                 Config.subscription = java.lang.Boolean.parseBoolean(properties.getProperty(Params.SUBSCRIPTION.toString())); i++
                 Config.autoReboot = java.lang.Boolean.parseBoolean(properties.getProperty(Params.AUTO_REBOOT.toString())); i++
                 Config.resetLimit = java.lang.Boolean.parseBoolean(properties.getProperty(Params.RESET_LIMIT.toString())); i++
@@ -201,12 +201,12 @@ class Config {
                 Config.allZaap = java.lang.Boolean.parseBoolean(properties.getProperty(Params.ALL_ZAAP.toString())); i++
                 Config.allEmotes = java.lang.Boolean.parseBoolean(properties.getProperty(Params.ALL_EMOTES.toString())); i++
                 Config.allowMulePvp = java.lang.Boolean.parseBoolean(properties.getProperty(Params.ALLOW_MULE_PVP.toString())); i++
-                Constant.TIME_BY_TURN = Integer.parseInt(properties.getProperty(Params.TIME_BY_TURN.toString())) * 1000; i++
+                Constant.TIME_BY_TURN = (properties.getProperty(Params.TIME_BY_TURN.toString())).toInt() * 1000; i++
                 Config.modeChristmas = java.lang.Boolean.parseBoolean(properties.getProperty(Params.MODE_CHRISTMAS.toString())); i++
                 Config.modeHalloween = java.lang.Boolean.parseBoolean(properties.getProperty(Params.MODE_HALLOWEEN.toString())); i++
                 Config.modeHeroic = java.lang.Boolean.parseBoolean(properties.getProperty(Params.MODE_HEROIC.toString())); i++
                 Config.modeEvent = java.lang.Boolean.parseBoolean(properties.getProperty(Params.MODE_EVENT.toString())); i++
-                Config.timeBetweenEvent = Integer.parseInt(properties.getProperty(Params.TIME_BETWEEN_EVENT.toString()))
+                Config.timeBetweenEvent = (properties.getProperty(Params.TIME_BETWEEN_EVENT.toString())).toInt()
             } catch (e: Exception) {
                 Main.logger.error(" > Config : not found or invalid parameters! (line $i)")
                 verify(name)

@@ -13,7 +13,7 @@ enum class LangEnum(val flag: String) {
     FRENCH("fr"),
     ENGLISH("en"),
     SPANISH("es"),
-    PORTUGUESE("pt");
+PORTUGUESE("pt");
 
     private var result: Map<String, Any>? = loadYAML("${flag}_${flag.uppercase()}.yaml")
 

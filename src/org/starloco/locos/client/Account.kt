@@ -75,12 +75,12 @@ class Account(guid: Int, val name: String, val pseudo: String,
         this.lastVoteIP = lastVoteIP
 
         if (heureVote.equals("", ignoreCase = true)) this.heureVote = 0
-        else this.heureVote = java.lang.Long.parseLong(heureVote)
+        else this.heureVote = (heureVote).toLong()
 
         if (friends != null && !friends.equals("", ignoreCase = true)) {
             for (f in friends.split(";")) {
                 try {
-                    this.friends.add(Integer.parseInt(f))
+                    this.friends.add((f).toInt())
                 } catch (e: Exception) {
                     log.error("unexpected error", e)
                 }
@@ -89,7 +89,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
         if (enemy != null && !enemy.equals("", ignoreCase = true)) {
             for (e in enemy.split(";")) {
                 try {
-                    this.enemys.add(Integer.parseInt(e))
+                    this.enemys.add((e).toInt())
                 } catch (e1: Exception) {
                     log.error("unexpected error", e1)
                 }
@@ -364,11 +364,11 @@ class Account(guid: Int, val name: String, val pseudo: String,
     }
 
     fun getHdvEntries(id: Int): List<BigStoreListing> {
-        return Collections.unmodifiableList(Optional.ofNullable(this.hdvsItems[id]).orElse(Collections.emptyList()))
+        return Collections.unmodifiableList(Optional.ofNullable(this.hdvsItems[id]).orElse(emptyList<BigStoreListing>()))
     }
 
     fun countHdvEntries(id: Int): Int {
-        return Optional.ofNullable(this.hdvsItems[id]).orElse(Collections.emptyList()).size
+        return Optional.ofNullable(this.hdvsItems[id]).orElse(emptyList<BigStoreListing>()).size
     }
 
     fun resetAllChars() {
@@ -427,7 +427,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
 
     fun updateVote(hour: String, ip: String) {
         if (hour.equals("", ignoreCase = true)) this.heureVote = 0
-        else this.heureVote = java.lang.Long.parseLong(hour)
+        else this.heureVote = (hour).toLong()
         this.lastVoteIP = ip
     }
 
@@ -440,7 +440,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
             if (items != "") {
                 for (item in items!!.split("|")) {
                     if (item != "") {
-                        val obj = World.world.getGameObject(Integer.parseInt(item))
+                        val obj = World.world.getGameObject((item).toInt())
                         if (obj != null)
                             this.bank.add(obj)
                     }

@@ -120,7 +120,7 @@ class NpcExchange(var player: Player, n: NpcTemplate) {
                 World.world.addGameObject(obj1)
 
             if (t!!.type == Constant.ITEM_TYPE_CERTIF_MONTURE) {
-                //obj.setMountStats(this.getPlayer(), null);
+                //obj.setMountStats(this.player, null);
                 val mount =
                     Mount(Constant.getMountColorByParchoTemplate(obj1!!.template!!.id), this.player.id, false)
                 obj1.clearStats()

@@ -34,9 +34,9 @@ class ItemHash(item: GameObject) {
         return this.hash.hashCode()
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (o !is ItemHash) return false
-        return o.hash == this.hash
+    override fun equals(other: Any?): Boolean {
+        if (other !is ItemHash) return false
+        return other.hash == this.hash
     }
 
     companion object {
@@ -88,7 +88,7 @@ class ItemHash(item: GameObject) {
             synchronized(digest) {
                 val sb = StringBuilder()
                 for (b in digest.digest(message)) {
-                    sb.append(String.format("%02X", b))
+                    sb.append(("%02X").format( b))
                 }
                 return sb.toString()
             }

@@ -106,7 +106,7 @@ class DataScriptVM private constructor() : ScriptVM("Data") {
             val gCommands = args.next()
 
             if (gCommands is Boolean) {
-                Group(gId, gName, gIsPlayer, gCommands, Collections.emptyList())
+                Group(gId, gName, gIsPlayer, gCommands, emptyList())
             } else if (gCommands is Table) {
                 Group(gId, gName, gIsPlayer, false, listOfString(gCommands)!!)
             } else {

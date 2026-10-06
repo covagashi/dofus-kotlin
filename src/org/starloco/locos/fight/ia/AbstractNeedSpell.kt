@@ -26,7 +26,7 @@ abstract class AbstractNeedSpell(fight: Fight, fighter: Fighter, count: Byte) : 
         private fun getListSpellOf(fighter: Fighter, type: String): List<SortStats> {
             val spells = ArrayList<SortStats>()
 
-            for (spell in fighter.getMob()!!.spells.values) {
+            for (spell in fighter.mob!!.spells.values) {
                 if (spells.contains(spell)) continue
                 when (type) {
                     "BUFF" -> if (spell.getSpell()!!.type == 1) spells.add(spell)

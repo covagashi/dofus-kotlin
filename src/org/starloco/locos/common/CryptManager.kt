@@ -37,7 +37,7 @@ class CryptManager {
         var i = 0
 
         while (i <= num2) {
-            data.append(Integer.parseInt(key.substring(i, i + 2), 16).toChar())
+            data.append((key.substring(i, i + 2)).toInt(16).toChar())
             i += 2
         }
 
@@ -67,7 +67,7 @@ class CryptManager {
     fun decryptMessage(message: String, key: String): String {
         var message = message
         try {
-            val c = Integer.parseInt(message[1].toString(), 16) * 2
+            val c = (message[1].toString()).toInt(16) * 2
             val str = StringBuilder()
             var j = 0
             val keyLength = key.length
@@ -75,7 +75,7 @@ class CryptManager {
             var i = 2
             while (i < message.length) {
                 try {
-                    str.append((Integer.parseInt(message.substring(i, i + 2), 16) xor key[(j++ + c) % keyLength].code).toChar())
+                    str.append(((message.substring(i, i + 2)).toInt(16) xor key[(j++ + c) % keyLength].code).toChar())
                 } catch (ignored: Exception) {
                     log.warn("CryptManager : DecryptMessage : $message (key: $key) : $i to${i + 2}")
                 }
@@ -210,7 +210,7 @@ class CryptManager {
             val sb = StringBuilder()
             var i = 0
             while (i < key.length) {
-                sb.append(Integer.parseInt(key.substring(i, i + 2), 16).toChar())
+                sb.append((key.substring(i, i + 2)).toInt(16).toChar())
                 i += 2
             }
             return URLDecoder.decode(sb.toString(), "UTF-8")

@@ -16,7 +16,7 @@ import java.util.ArrayList
 class IAPerco(fight: Fight, fighter: Fighter, b: Byte) : AbstractIA(fight, fighter, b) {
 
     private var flag: Byte = 0
-    private val spells: MutableCollection<Spell.SortStats?> = World.world.getGuild(this.fighter.getCollector()!!.guildId)!!.spells.values
+    private val spells: MutableCollection<Spell.SortStats?> = World.world.getGuild(this.fighter.collector!!.guildId)!!.spells.values
 
     override fun apply() {
         if (!this.stop && this.fighter.canPlay() && count > 0) {

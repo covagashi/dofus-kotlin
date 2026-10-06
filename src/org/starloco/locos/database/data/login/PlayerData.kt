@@ -129,10 +129,10 @@ class PlayerData(dataSource: HikariDataSource?) : FunctionDAO<Player>(dataSource
             val dao = DatabaseManager.get(ObjectData::class.java)
             if (entity.getItemsIDSplitByChar(",") != "")
                 for (id in entity.getItemsIDSplitByChar(",").split(","))
-                    dao.delete(World.world.getGameObject(Integer.parseInt(id))!!)
+                    dao.delete(World.world.getGameObject((id).toInt())!!)
             if (entity.getStoreItemsIDSplitByChar(",") != "")
                 for (id in entity.getStoreItemsIDSplitByChar(",").split(","))
-                    dao.delete(World.world.getGameObject(Integer.parseInt(id))!!)
+                    dao.delete(World.world.getGameObject((id).toInt())!!)
             if (entity.mount != null)
                 DatabaseManager.get(MountData::class.java).update(entity.mount!!)
         } catch (e: SQLException) {

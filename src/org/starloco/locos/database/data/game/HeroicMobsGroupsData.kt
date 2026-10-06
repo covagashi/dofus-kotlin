@@ -136,7 +136,7 @@ class HeroicMobsGroupsData(dataSource: HikariDataSource?) : FunctionDAO<Any>(dat
                 while (result.next()) {
                     val objects = ArrayList<GameObject>()
                     for (value in result.getString("objects").split(",")) {
-                        val obj = World.world.getGameObject(Integer.parseInt(value))
+                        val obj = World.world.getGameObject((value).toInt())
                         if (obj != null)
                             objects.add(obj)
                     }
@@ -186,9 +186,9 @@ class HeroicMobsGroupsData(dataSource: HikariDataSource?) : FunctionDAO<Any>(dat
 
                 prepare = getPreparedStatement("UPDATE `heroic_mobs_groups_fix` SET `objects` = ? WHERE `map` = ? AND `cell` = ? AND `group` = ?;")
                 prepare?.setString(1, objects.toString())
-                prepare?.setLong(2, Integer.parseInt(split[0]).toLong())
-                prepare?.setInt(3, Integer.parseInt(split[1]))
-                prepare?.setString(4, World.world.getGroupFix(Integer.parseInt(split[0]), Integer.parseInt(split[1]))!!["groupData"])
+                prepare?.setLong(2, (split[0]).toInt().toLong())
+                prepare?.setInt(3, (split[1]).toInt())
+                prepare?.setString(4, World.world.getGroupFix((split[0]).toInt(), (split[1]).toInt())!!["groupData"])
                 execute(prepare)
             }
         } catch (e: SQLException) {

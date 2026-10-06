@@ -207,7 +207,7 @@ class World private constructor() : Scripted<SWorld> {
         // Atomically get or load map
         return _maps.computeIfAbsent(id) { mapID ->
             val data = getMapData(mapID)
-            if (!data.isPresent) throw IllegalStateException(String.format("no data found for map #%d", mapID))
+            if (!data.isPresent) throw IllegalStateException(("no data found for map #%d").format( mapID))
             GameMap(mapsData[mapID]!!)
         }
     }

@@ -25,10 +25,10 @@ class DropData(dataSource: HikariDataSource?) : FunctionDAO<World.Drop>(dataSour
         action = action.split(":")[0]
                     }
                     if (World.world.getObjTemplate(result.getInt("objectId")) != null && MT != null) {
-        MT?.addDrop(World.Drop(result.getInt("objectId"), percents, result.getInt("ceil"), Integer.parseInt(action), result.getInt("level"), condition))
+        MT?.addDrop(World.Drop(result.getInt("objectId"), percents, result.getInt("ceil"), (action).toInt(), result.getInt("level"), condition))
                     } else {
                         if (MT == null && result.getInt("monsterId") == 0) {
-        var drop: World.Drop = World.Drop(result.getInt("objectId"), percents, result.getInt("ceil"), Integer.parseInt(action), result.getInt("level"), condition)
+        var drop: World.Drop = World.Drop(result.getInt("objectId"), percents, result.getInt("ceil"), (action).toInt(), result.getInt("level"), condition)
         World.world.monstres.stream().filter(Objects::nonNull).forEach { monster -> monster.addDrop(drop) }
                         }
                     }

@@ -24,7 +24,7 @@ class Bandit(mobs: String, maps: String, time: Long) {
             for (mob in mobs.split(",")) {
                 var _mob: Int? = null
                 try {
-                    _mob = Integer.parseInt(mob)
+                    _mob = (mob).toInt()
                 } catch (e: Exception) {
                     log.error("unexpected error", e)
                 }
@@ -39,7 +39,7 @@ class Bandit(mobs: String, maps: String, time: Long) {
         if (!maps.equals("", ignoreCase = true)) {
             for (str in maps.split(",")) {
                 try {
-                    val id = Integer.parseInt(str)
+                    val id = (str).toInt()
                     val map = World.world.getMap(id)
                     if (map == null || map.mountPark != null)
                         continue

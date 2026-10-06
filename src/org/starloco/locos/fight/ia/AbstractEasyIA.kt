@@ -68,7 +68,7 @@ abstract class AbstractEasyIA(fight: Fight, fighter: Fighter, count: Byte) : Abs
     private fun getListSpellOf(fighter: Fighter, type: String): List<Spell.SortStats> {
         val spells = ArrayList<Spell.SortStats>()
 
-        for (spell in fighter.getMob()!!.spells.values) {
+        for (spell in fighter.mob!!.spells.values) {
             if (spells.contains(spell)) continue
             when (type) {
                 "ATTACK" -> if (spell.getSpell()!!.type == 0)

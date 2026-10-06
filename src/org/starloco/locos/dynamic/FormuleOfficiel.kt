@@ -21,13 +21,13 @@ object FormuleOfficiel {
             return 0
         if (`object` is Fighter) {
             val fighter = `object`
-            val player = fighter.getPlayer()!!
+            val player = fighter.player!!
 
             if (winners.contains(fighter)) {
                 if (lvlWinners <= 0)
                     return 0
 
-                val sagesse = fighter.getLvl() * 0.5 + fighter.getPlayer()!!.getTotalStats(true)
+                val sagesse = fighter.getLvl() * 0.5 + fighter.player!!.getTotalStats(true)
                     .getEffect(Constant.STATS_ADD_SAGE)
                 var nvGrpMonster = lvlMax.toDouble() / lvlMin.toDouble()
                 var bonus = 1.0
@@ -48,7 +48,7 @@ object FormuleOfficiel {
 
                 var sizeGroupe = 0
                 for (f in winners) {
-                    if (f.getPlayer() != null && !f.isInvocation()
+                    if (f.player != null && !f.isInvocation()
                         && f !is MobFighter && f !is CollectorFighter && f !is CloneFighter)
                         sizeGroupe++
                 }
@@ -84,7 +84,7 @@ object FormuleOfficiel {
 
                 var total = (((1 + (sagesse / 100)) * (1 + (challenge / 100)) * (1 + (star / 100))
                     * (bonus + rapport) * nvGrpMonster * (groupXp / sizeGroupe))
-                    * (if (player.level != 199) Config.rateXp else 1) * World.world.getConquestBonus(fighter.getPlayer())).toLong()
+                    * (if (player.level != 199) Config.rateXp else 1) * World.world.getConquestBonus(fighter.player)).toLong()
 
                 if (Config.modeHeroic && player.level < player.deadLevel) {
                     total *= 2
@@ -126,7 +126,7 @@ object FormuleOfficiel {
 
             var sizeGroupe = 0
             for (f in winners) {
-                if (f.getPlayer() != null && !f.isInvocation()
+                if (f.player != null && !f.isInvocation()
                     && f !is MobFighter && f !is CollectorFighter && f !is CloneFighter)
                     sizeGroupe++
             }

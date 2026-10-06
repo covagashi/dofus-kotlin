@@ -46,8 +46,8 @@ class IA18(fight: Fight, fighter: Fighter, count: Byte) : AbstractIA(fight, figh
         val fighters = this.fight.getTeam(id).values
 
         for (fighter in fighters) {
-            if (fighter.getMob() != null) {
-                if (fighter.getMob()!!.template!!.id == 1045) {
+            if (fighter.mob != null) {
+                if (fighter.mob!!.template!!.id == 1045) {
                     if (fighter.haveState(30)) {
                         fighter.setState(30, 0)
                         this.pair = true

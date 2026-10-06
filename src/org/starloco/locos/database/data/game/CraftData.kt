@@ -20,8 +20,8 @@ class CraftData(dataSource: HikariDataSource?) : FunctionDAO<Any>(dataSource, "c
         for (str: String in result.getString("craft").split(";")) {
         if (str.isEmpty()) continue
                         try {
-        var tID: Int = Integer.parseInt(str.split("*")[0])
-        var qua: Int = Integer.parseInt(str.split("*")[1])
+        var tID: Int = (str.split("*")[0]).toInt()
+        var qua: Int = (str.split("*")[1]).toInt()
         m.add(World.Couple(tID, qua))
         } catch (e: Exception) {
         log.error("unexpected error", e)

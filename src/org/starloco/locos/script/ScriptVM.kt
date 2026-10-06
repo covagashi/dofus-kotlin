@@ -233,6 +233,7 @@ protected constructor(name: String) {
         fun rawInt(v: Table, key: Long): Int = (v.rawget(key) as Long).toInt()
 
         @JvmStatic
+        @Suppress("UNCHECKED_CAST")
         fun <T> listFromLuaTable(t: Table): MutableList<T> {
             val out = ArrayList<T>()
 
@@ -245,6 +246,7 @@ protected constructor(name: String) {
         }
 
         @JvmStatic
+        @Suppress("UNCHECKED_CAST")
         fun <K, V> toPair(t: Table): Pair<K, V> =
             Pair(t.rawget(1L) as K, t.rawget(2L) as V)
 
@@ -348,7 +350,7 @@ protected constructor(name: String) {
         }
 
         @JvmStatic
-        fun scriptedValsTable(vals: Collection<out Scripted<*>>): Table =
+        fun scriptedValsTable(vals: Collection<Scripted<*>>): Table =
             scriptedValsTable(vals.stream())
 
         @JvmStatic

@@ -30,7 +30,7 @@ class SItem(userValue: GameObject) : DefaultUserdata<GameObject>(META_TABLE, use
             if (`val`.contains("#")) {
                 `val` = `val`.split("#")[3]
             }
-            return java.lang.Long.parseLong(`val`)
+            return (`val`).toLong()
         }
 
         @JvmStatic

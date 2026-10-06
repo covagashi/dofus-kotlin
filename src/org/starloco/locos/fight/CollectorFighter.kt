@@ -10,7 +10,7 @@ import java.util.stream.Stream
 
 class CollectorFighter(id: Int, f: Fight, collector: Collector) : Fighter(id, f) {
 
-    private val collector: Collector = collector
+    override val collector: Collector = collector
 
     override fun getPacketsName(): String {
         return collector.getFullName()
@@ -65,7 +65,4 @@ class CollectorFighter(id: Int, f: Fight, collector: Collector) : Fighter(id, f)
         return collector.getDrops()
     }
 
-    override fun getCollector(): Collector {
-        return collector
-    }
 }

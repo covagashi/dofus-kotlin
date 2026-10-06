@@ -557,7 +557,7 @@ class SPlayer(userValue: Player) : DefaultUserdata<Player>(META_TABLE, userValue
             val js = p.getMetierByID(jobID) ?: return false
             js.addXp(p, xpDelta.toLong())
 
-            SocketManager.GAME_SEND_JX_PACKET(p, Collections.singletonList(js))
+            SocketManager.GAME_SEND_JX_PACKET(p, listOf(js))
             return true
         }
         //endregion

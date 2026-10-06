@@ -116,7 +116,7 @@ class ConditionParser {
             return false
         var morph = -1
         try {
-            morph = Integer.parseInt((if (c.contains("==")) c.split("==")[1] else c.split("!=")[1]))
+            morph = ((if (c.contains("==")) c.split("==")[1] else c.split("!=")[1])).toInt()
         } catch (e: Exception) {
             log.error("unexpected error", e)
                 }
@@ -143,7 +143,7 @@ class ConditionParser {
             val k = s.split("==")
             val id: Int
             try {
-                id = Integer.parseInt(k[1])
+                id = (k[1]).toInt()
             } catch (e: Exception) {
                 log.error("unexpected error", e)
                 continue
@@ -156,7 +156,7 @@ class ConditionParser {
 
     //Avoir la quête en cours
     private fun haveQa(req: String, player: Player): Boolean {
-        val id = Integer.parseInt((if (req.contains("==")) req.split("==")[1] else req.split("!=")[1]))
+        val id = ((if (req.contains("==")) req.split("==")[1] else req.split("!=")[1])).toInt()
 
         val qp = player.getQuestProgress(id)
         if (qp == null)
@@ -167,7 +167,7 @@ class ConditionParser {
 
     // Etre a l'etape id. Elle ne doit pas être validé et celle d'avant doivent l'être.
     private fun haveQEt(req: String, player: Player): Boolean {
-        val id = Integer.parseInt((if (req.contains("==")) req.split("==")[1] else req.split("!=")[1]))
+        val id = ((if (req.contains("==")) req.split("==")[1] else req.split("!=")[1])).toInt()
 
         val oqp = player.getQuestProgressForCurrentStep(id)
 
@@ -178,12 +178,12 @@ class ConditionParser {
         if (req.contains("==")) {
             val split = req.split("==")[1]
             if (split.contains("&&")) {
-                val item = Integer.parseInt(split.split("&&")[0])
-                val time = Integer.parseInt(split.split("&&")[1])
-                val item2 = Integer.parseInt(split.split("&&")[2])
+                val item = (split.split("&&")[0]).toInt()
+                val time = (split.split("&&")[1]).toInt()
+                val item2 = (split.split("&&")[2]).toInt()
                 if (player.hasItemTemplate(item2, 1, false)
                         && player.hasItemTemplate(item, 1, false)) {
-                    val timeStamp = java.lang.Long.parseLong(player.getItemTemplate(item, 1)!!.txtStat[Constant.STATS_DATE])
+                    val timeStamp = player.getItemTemplate(item, 1)!!.txtStat[Constant.STATS_DATE]!!.toLong()
                     if (System.currentTimeMillis() - timeStamp <= time)
                         return true
                 }
@@ -197,10 +197,10 @@ class ConditionParser {
             val split = req.split("==")[1]
             if (split.contains(",")) {
                 val split2 = split.split(",")
-                val item = Integer.parseInt(split2[0])
-                val time = Integer.parseInt(split2[1]) * 60 * 1000
+                val item = (split2[0]).toInt()
+                val time = (split2[1]).toInt() * 60 * 1000
                 if (player.hasItemTemplate(item, 1, false)) {
-                    val timeStamp = java.lang.Long.parseLong(player.getItemTemplate(item, 1)!!.txtStat[Constant.STATS_DATE])
+                    val timeStamp = player.getItemTemplate(item, 1)!!.txtStat[Constant.STATS_DATE]!!.toLong()
                     if (System.currentTimeMillis() - timeStamp > time)
                         return true
                 }
@@ -225,7 +225,7 @@ class ConditionParser {
                 var txt = player.getItemTemplate(certificat, 1)!!.txtStat[Constant.STATS_DATE]!!
                 if (txt.contains("#"))
                     txt = txt.split("#")[3]
-                val timeStamp = java.lang.Long.parseLong(txt)
+                val timeStamp = (txt).toLong()
                 return System.currentTimeMillis() - timeStamp > 86400000
             } else
                 return true
@@ -237,7 +237,7 @@ class ConditionParser {
     private fun haveQE(req: String, player: Player?): Boolean {
         if (player == null)
             return false
-        val id = Integer.parseInt((if (req.contains("==")) req.split("==")[1] else req.split("!=")[1]))
+        val id = ((if (req.contains("==")) req.split("==")[1] else req.split("!=")[1])).toInt()
 
         val qp = player.getQuestProgress(id)
         if (qp == null)
@@ -247,7 +247,7 @@ class ConditionParser {
     }
 
     private fun haveQT(req: String, player: Player): Boolean {
-        val id = Integer.parseInt((if (req.contains("==")) req.split("==")[1] else req.split("!=")[1]))
+        val id = ((if (req.contains("==")) req.split("==")[1] else req.split("!=")[1])).toInt()
 
         val qp = player.getQuestProgress(id)
         if (qp == null)
@@ -265,14 +265,14 @@ class ConditionParser {
                 // fallthrough like the original Java switch (no break)
                 val cell = ArrayList<Int>()
                 for (i in "168,197,212,227,242,183,213,214,229,244,245,259".split(","))
-                    cell.add(Integer.parseInt(i))
+                    cell.add((i).toInt())
                 if (cell.contains(perso.curCell.cellId))
                     return true
             }
             8905 -> {
                 val cell = ArrayList<Int>()
                 for (i in "168,197,212,227,242,183,213,214,229,244,245,259".split(","))
-                    cell.add(Integer.parseInt(i))
+                    cell.add((i).toInt())
                 if (cell.contains(perso.curCell.cellId))
                     return true
             }
@@ -284,8 +284,8 @@ class ConditionParser {
         try {
             for (cond in condition.split("&&")) {
                 val split = cond.split("==")[1].split(",")
-                val id = Integer.parseInt(split[0])
-                val qua = Integer.parseInt(split[1])
+                val id = (split[0]).toInt()
+                val qua = (split[1]).toInt()
 
                 if (player.hasItemTemplate(id, qua, false)) {
                     player.removeItemByTemplateId(id, qua, false)
@@ -305,8 +305,8 @@ class ConditionParser {
         try {
             for (cond in condition.split("&&")) {
                 val split = cond.split("==")[1].split(",")
-                val id = Integer.parseInt(split[0])
-                val qua = Integer.parseInt(split[1])
+                val id = (split[0]).toInt()
+                val qua = (split[1]).toInt()
 
                 if (!player.hasItemTemplate(id, qua, false))
                     return false
@@ -346,10 +346,10 @@ class ConditionParser {
                         if (cur2.contains("!="))
                             continue
                         ContainsPO = false
-                        if (perso.hasItemTemplate(Integer.parseInt(cur2), 1, true)) {
-                            copyCond += "${Integer.parseInt(cur2)}==${Integer.parseInt(cur2)}"
+                        if (perso.hasItemTemplate((cur2).toInt(), 1, true)) {
+                            copyCond += "${(cur2).toInt()}==${(cur2).toInt()}"
                         } else {
-                            copyCond += "${Integer.parseInt(cur2)}==" + 0
+                            copyCond += "${(cur2).toInt()}==" + 0
                         }
                     }
                 }
@@ -372,10 +372,10 @@ class ConditionParser {
                         if (cur2.contains("=="))
                             continue
                         ContainsPO = false
-                        if (perso.hasItemTemplate(Integer.parseInt(cur2), 1, true)) {
-                            copyCond += "${Integer.parseInt(cur2)}!=${Integer.parseInt(cur2)}"
+                        if (perso.hasItemTemplate((cur2).toInt(), 1, true)) {
+                            copyCond += "${(cur2).toInt()}!=${(cur2).toInt()}"
                         } else {
-                            copyCond += "${Integer.parseInt(cur2)}!=" + 0
+                            copyCond += "${(cur2).toInt()}!=" + 0
                         }
                     }
                 }
@@ -402,10 +402,10 @@ class ConditionParser {
                         if (cur2.contains("!="))
                             continue
                         ContainsPO = false
-                        if (perso.hasItemTemplate(Integer.parseInt(cur2), 1, true)) {
-                            copyCond += "${Integer.parseInt(cur2)}==${Integer.parseInt(cur2)}"
+                        if (perso.hasItemTemplate((cur2).toInt(), 1, true)) {
+                            copyCond += "${(cur2).toInt()}==${(cur2).toInt()}"
                         } else {
-                            copyCond += "${Integer.parseInt(cur2)}==" + 0
+                            copyCond += "${(cur2).toInt()}==" + 0
                         }
                     }
                 }
@@ -428,10 +428,10 @@ class ConditionParser {
                         if (cur2.contains("=="))
                             continue
                         ContainsPO = false
-                        if (perso.hasItemTemplate(Integer.parseInt(cur2), 1, true)) {
-                            copyCond += "${Integer.parseInt(cur2)}!=${Integer.parseInt(cur2)}"
+                        if (perso.hasItemTemplate((cur2).toInt(), 1, true)) {
+                            copyCond += "${(cur2).toInt()}!=${(cur2).toInt()}"
                         } else {
-                            copyCond += "${Integer.parseInt(cur2)}!=" + 0
+                            copyCond += "${(cur2).toInt()}!=" + 0
                         }
                     }
                 }
@@ -445,10 +445,10 @@ class ConditionParser {
                         continue
                     if (cur.contains("!="))
                         continue
-                    if (perso.hasItemTemplate(Integer.parseInt(cur), 1, false))
-                        copyCond += "${Integer.parseInt(cur)}==${Integer.parseInt(cur)}"
+                    if (perso.hasItemTemplate((cur).toInt(), 1, false))
+                        copyCond += "${(cur).toInt()}==${(cur).toInt()}"
                     else
-                        copyCond += "${Integer.parseInt(cur)}==" + 0
+                        copyCond += "${(cur).toInt()}==" + 0
                 }
             }
             if (cond.contains("!=")) {
@@ -457,10 +457,10 @@ class ConditionParser {
                         continue
                     if (cur.contains("=="))
                         continue
-                    if (perso.hasItemTemplate(Integer.parseInt(cur), 1, false))
-                        copyCond += "${Integer.parseInt(cur)}!=${Integer.parseInt(cur)}"
+                    if (perso.hasItemTemplate((cur).toInt(), 1, false))
+                        copyCond += "${(cur).toInt()}!=${(cur).toInt()}"
                     else
-                        copyCond += "${Integer.parseInt(cur)}!=" + 0
+                        copyCond += "${(cur).toInt()}!=" + 0
                 }
             }
         }
@@ -496,7 +496,7 @@ class ConditionParser {
         var copyCond = ""
         if (cond.contains("==")) {
             val cur = cond.split("==")
-            if (perso.getMetierByID(Integer.parseInt(cur[1])) != null)
+            if (perso.getMetierByID((cur[1]).toInt()) != null)
                 copyCond = "1==1"
             else
                 copyCond = "1==0"
@@ -509,7 +509,7 @@ class ConditionParser {
                     if (!_cur[1].contains(","))
                         continue
                     val m = _cur[1].split(",")
-                    val js = perso.getMetierByID(Integer.parseInt(m[0]))
+                    val js = perso.getMetierByID((m[0]).toInt())
                     if (!copyCond.equals("", ignoreCase = true))
                         copyCond += "||"
                     if (js != null)
@@ -520,7 +520,7 @@ class ConditionParser {
             } else {
                 val cur = cond.split(">")
                 val m = cur[1].split(",")
-                val js = perso.getMetierByID(Integer.parseInt(m[0]))
+                val js = perso.getMetierByID((m[0]).toInt())
                 if (js != null)
                     copyCond = js.get_lvl().toString() + ">" + m[1]
                 else
@@ -532,7 +532,7 @@ class ConditionParser {
 
     fun haveJOB(cond: String, perso: Player): String {
         var copyCond = ""
-        if (perso.getMetierByID(Integer.parseInt(cond.split("==")[1])) != null)
+        if (perso.getMetierByID((cond.split("==")[1]).toInt()) != null)
             copyCond = "1==1"
         else
             copyCond = "0==1"

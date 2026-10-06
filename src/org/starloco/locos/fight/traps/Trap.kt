@@ -62,9 +62,9 @@ class Trap(
 
     fun refresh(f: Fighter) {
         val str2 = StringBuilder()
-        SocketManager.GAME_SEND_GA_PACKET(f.getPlayer()!!, 999, this.caster.id.toString() + "", "GDZ+" + this.cell.cellId + ";" + this.size + ";" + this.color)
+        SocketManager.GAME_SEND_GA_PACKET(f.player!!, 999, this.caster.id.toString() + "", "GDZ+" + this.cell.cellId + ";" + this.size + ";" + this.color)
         str2.append("GDC").append(this.cell.cellId).append(";Haaaaaaaaz3005;")
-        SocketManager.GAME_SEND_GA_PACKET(f.getPlayer()!!, 999, this.caster.id.toString() + "", str2.toString())
+        SocketManager.GAME_SEND_GA_PACKET(f.player!!, 999, this.caster.id.toString() + "", str2.toString())
     }
 
     fun onTrapped(target: Fighter) {

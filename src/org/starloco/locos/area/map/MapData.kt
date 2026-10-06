@@ -75,7 +75,7 @@ abstract class MapData(
 
         if (cellsData.cellCount() != cellCount()) {
             throw IllegalStateException(
-                String.format("Map #%d_%s: cellsData length doesn't match map cell count", id, date)
+                ("Map #%d_%s: cellsData length doesn't match map cell count").format( id, date)
             )
         }
 

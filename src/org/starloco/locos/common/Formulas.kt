@@ -400,7 +400,7 @@ class Formulas {
                         statC = caster.getTotalStats().getEffect(Constant.STATS_ADD_FORC).toFloat()
                     resfT = target.getTotalStats().getEffect(Constant.STATS_ADD_R_NEU).toFloat()
                     respT = target.getTotalStats().getEffect(Constant.STATS_ADD_RP_NEU).toFloat()
-                    if (caster.getPlayer() != null)//Si c'est un joueur
+                    if (caster.player != null)//Si c'est un joueur
                     {
                         respT += target.getTotalStats().getEffect(Constant.STATS_ADD_RP_PVP_NEU)
                         resfT += target.getTotalStats().getEffect(Constant.STATS_ADD_R_PVP_NEU)
@@ -416,7 +416,7 @@ class Formulas {
                     statC = caster.getTotalStats().getEffect(Constant.STATS_ADD_FORC).toFloat()
                     resfT = target.getTotalStats().getEffect(Constant.STATS_ADD_R_TER).toFloat()
                     respT = target.getTotalStats().getEffect(Constant.STATS_ADD_RP_TER).toFloat()
-                    if (caster.getPlayer() != null)//Si c'est un joueur
+                    if (caster.player != null)//Si c'est un joueur
                     {
                         respT += target.getTotalStats().getEffect(Constant.STATS_ADD_RP_PVP_TER)
                         resfT += target.getTotalStats().getEffect(Constant.STATS_ADD_R_PVP_TER)
@@ -430,7 +430,7 @@ class Formulas {
                     statC = caster.getTotalStats().getEffect(Constant.STATS_ADD_CHAN).toFloat()
                     resfT = target.getTotalStats().getEffect(Constant.STATS_ADD_R_EAU).toFloat()
                     respT = target.getTotalStats().getEffect(Constant.STATS_ADD_RP_EAU).toFloat()
-                    if (caster.getPlayer() != null)//Si c'est un joueur
+                    if (caster.player != null)//Si c'est un joueur
                     {
                         respT += target.getTotalStats().getEffect(Constant.STATS_ADD_RP_PVP_EAU)
                         resfT += target.getTotalStats().getEffect(Constant.STATS_ADD_R_PVP_EAU)
@@ -442,7 +442,7 @@ class Formulas {
                     statC = caster.getTotalStats().getEffect(Constant.STATS_ADD_INTE).toFloat()
                     resfT = target.getTotalStats().getEffect(Constant.STATS_ADD_R_FEU).toFloat()
                     respT = target.getTotalStats().getEffect(Constant.STATS_ADD_RP_FEU).toFloat()
-                    if (caster.getPlayer() != null)//Si c'est un joueur
+                    if (caster.player != null)//Si c'est un joueur
                     {
                         respT += target.getTotalStats().getEffect(Constant.STATS_ADD_RP_PVP_FEU)
                         resfT += target.getTotalStats().getEffect(Constant.STATS_ADD_R_PVP_FEU)
@@ -454,7 +454,7 @@ class Formulas {
                     statC = caster.getTotalStats().getEffect(Constant.STATS_ADD_AGIL).toFloat()
                     resfT = target.getTotalStats().getEffect(Constant.STATS_ADD_R_AIR).toFloat()
                     respT = target.getTotalStats().getEffect(Constant.STATS_ADD_RP_AIR).toFloat()
-                    if (caster.getPlayer() != null)//Si c'est un joueur
+                    if (caster.player != null)//Si c'est un joueur
                     {
                         respT += target.getTotalStats().getEffect(Constant.STATS_ADD_RP_PVP_AIR)
                         resfT += target.getTotalStats().getEffect(Constant.STATS_ADD_R_PVP_AIR)
@@ -470,9 +470,9 @@ class Formulas {
 
             if (statC < 0)
                 statC = 0f
-            if (caster.getPlayer() != null && isCaC) {
-                val ArmeType = caster.getPlayer()!!.getObjetByPos(1)!!.template!!.type
-                j = Constant.getWeaponBonusByClass(ArmeType, caster.getPlayer()!!.classe).toFloat()
+            if (caster.player != null && isCaC) {
+                val ArmeType = caster.player!!.getObjetByPos(1)!!.template!!.type
+                j = Constant.getWeaponBonusByClass(ArmeType, caster.player!!.classe).toFloat()
                 if ((caster.getSpellValueBool(392)) && ArmeType == 2)//ARC
                     i = caster.getMaitriseDmg(392).toFloat()
                 else if ((caster.getSpellValueBool(390)) && ArmeType == 4)//BATON
@@ -588,11 +588,11 @@ class Formulas {
             }
 
             if (num < 1) num = 0f
-            if (target.getPlayer() != null) // 10% of dommages substract to the max pdv
+            if (target.player != null) // 10% of dommages substract to the max pdv
                 target.removePdvMax(floor(num / 10.toDouble()).toInt())
 
             // The level of the mob help the damage
-//        if (caster.getPlayer() == null && !caster.isCollector())
+//        if (caster.player == null && !caster.isCollector())
 //            return (int) (num * Math.ceil((caster.getLvl() * 0.5) / 100));
             return num.toInt()
         }
@@ -615,7 +615,7 @@ class Formulas {
                 resP += target.getTotalStats().get(resInfo.percentElemPvP)
             }
 
-            if (target.getPlayer() != null) {
+            if (target.player != null) {
                 // CAP 50% Players
                 resP = Math.min(resP, 50)
             }
@@ -697,16 +697,16 @@ class Formulas {
 
         @JvmStatic
         fun getGuildXpWin(perso: Fighter, xpWin: AtomicReference<Long>): Long {
-            if (perso.getPlayer() == null)
+            if (perso.player == null)
                 return 0
-            if (perso.getPlayer()!!.guildMember == null)
+            if (perso.player!!.guildMember == null)
                 return 0
 
-            val gm = perso.getPlayer()!!.guildMember
+            val gm = perso.player!!.guildMember
 
             val xp = xpWin.get().toDouble()
             val Lvl = perso.getLvl().toDouble()
-            val LvlGuild = perso.getPlayer()!!.getGuild()!!.lvl.toDouble()
+            val LvlGuild = perso.player!!.getGuild()!!.lvl.toDouble()
             val pXpGive = gm!!.xpGive.toDouble() / 100
 
             val maxP = xp * pXpGive * 0.10 //Le maximum donné à la guilde est 10% du montant prélevé sur l'xp du combat
@@ -729,16 +729,16 @@ class Formulas {
 
         @JvmStatic
         fun getMountXpWin(perso: Fighter, xpWin: AtomicReference<Long>): Long {
-            if (perso.getPlayer() == null)
+            if (perso.player == null)
                 return 0
-            if (perso.getPlayer()!!.mount == null)
+            if (perso.player!!.mount == null)
                 return 0
 
-            val diff = abs(perso.getLvl() - perso.getPlayer()!!.mount!!.level)
+            val diff = abs(perso.getLvl() - perso.player!!.mount!!.level)
 
             var coeff = 0.0
             val xp = xpWin.get().toDouble()
-            val pToMount = perso.getPlayer()!!.mountXpGive.toDouble() / 100 + 0.2
+            val pToMount = perso.player!!.mountXpGive.toDouble() / 100 + 0.2
 
             if (diff >= 0 && diff <= 9)
                 coeff = 0.1
@@ -1066,11 +1066,11 @@ class Formulas {
         //region Formulas fight honor
         @JvmStatic
         fun calculHonorWin(winners: ArrayList<Fighter>?, loosers: ArrayList<Fighter>?, current: Fighter, prism: Boolean): Int {
-            val player = current.getPlayer()
+            val player = current.player
             if (player == null || winners == null || loosers == null) return 0
-            if (prism && loosers.size == 1 && loosers[0].getPrism() != null) return 0
+            if (prism && loosers.size == 1 && loosers[0].prism != null) return 0
 
-            val factor = Config.rateHonor * World.world.getConquestBonus(current.getPlayer())
+            val factor = Config.rateHonor * World.world.getConquestBonus(current.player)
             // [0] = winners, [1] loosers;
             val levelsTotalDivide = intArrayOf(countFightersLevel(winners), countFightersLevel(loosers))
             val levelsTotal = intArrayOf(countFightersLevel(winners) * winners.size, countFightersLevel(loosers) * loosers.size)
@@ -1125,13 +1125,13 @@ class Formulas {
 
         private fun countFightersLevel(fighters: ArrayList<Fighter>): Int {
             var total = 0
-            for (fighter in fighters) if (fighter != null && fighter.getPlayer() != null) total += fighter.getLvl()
+            for (fighter in fighters) if (fighter != null && fighter.player != null) total += fighter.getLvl()
             return if (fighters.size == 0) total else total / fighters.size
         }
 
         private fun countFightersGrade(fighters: ArrayList<Fighter>): Int {
             var total = 0
-            for (fighter in fighters) if (fighter != null && fighter.getPlayer() != null) total += fighter.getPlayer()!!.getGrade()
+            for (fighter in fighters) if (fighter != null && fighter.player != null) total += fighter.player!!.getGrade()
             return total / fighters.size
         }
         //endregion
@@ -1142,8 +1142,8 @@ class Formulas {
             var esquiveC = (if (type == 'a') caster.getTotalStatsLessBuff()!!.getEffect(Constant.STATS_ADD_ADODGE) else caster.getTotalStatsLessBuff()!!.getEffect(Constant.STATS_ADD_MDODGE)).toFloat()
             var esquiveT = (if (type == 'a') target.getTotalStats().getEffect(Constant.STATS_ADD_ADODGE) else target.getTotalStats().getEffect(Constant.STATS_ADD_MDODGE)).toFloat()
             var ptsMax = (if (type == 'a') target.getTotalStatsLessBuff()!!.getEffect(Constant.STATS_ADD_PA) else target.getTotalStatsLessBuff()!!.getEffect(Constant.STATS_ADD_PM)).toFloat()
-            if (target.getMob() != null)
-                ptsMax = (if (type == 'a') target.getMob()!!.pa else target.getMob()!!.pm).toFloat()
+            if (target.mob != null)
+                ptsMax = (if (type == 'a') target.mob!!.pa else target.mob!!.pm).toFloat()
             var loose = 0
 
             for (i in 0 until value) {

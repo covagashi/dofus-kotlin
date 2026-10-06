@@ -8,7 +8,7 @@ class AsyncMessageEvent<T>(private val executor: Executor) : AbstractEventMessag
 
     constructor() : this(Executors.newCachedThreadPool())
 
-    override fun publish(message: T) {
-        executor.execute { doPublish(message) }
+    override fun publish(parameterObject: T) {
+        executor.execute { doPublish(parameterObject) }
     }
 }

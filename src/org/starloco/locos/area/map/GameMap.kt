@@ -64,7 +64,7 @@ class GameMap(@JvmField val data: ScriptMapData) {
                     val max = infos[2].toInt()
 
                     val mgs = Optional.ofNullable(World.world.getMonstre(idMonster))
-                        .map { it.grades }.map { it.values }.orElse(Collections.emptyList()).stream()
+                        .map { it.grades }.map { it.values }.orElse(mutableListOf<MonsterGrade>()).stream()
                         .filter { mg -> mg.level >= min && mg.level <= max }
                         .map { it.grade }
                         .collect(Collectors.toList())

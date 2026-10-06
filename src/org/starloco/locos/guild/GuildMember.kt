@@ -62,7 +62,7 @@ class GuildMember internal constructor(
     internal val hoursFromLastCo: Int
         get() {
             val split = this.lastCo.split("~")
-            val localDate = LocalDate(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]))
+            val localDate = LocalDate((split[0]).toInt(), (split[1]).toInt(), (split[2]).toInt())
             return Days.daysBetween(localDate, LocalDate()).days * 24
         }
 

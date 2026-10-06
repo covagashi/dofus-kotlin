@@ -10,8 +10,7 @@ import java.util.stream.Stream
 
 class PrismFighter(id: Int, fight: Fight, prism: Prism) : Fighter(id, fight) {
 
-    @JvmField
-    val prism: Prism = prism
+    override val prism: Prism = prism
 
     override fun getPacketsName(): String {
         return (if (prism.alignment == 1) 1111 else 1112).toString()
@@ -61,7 +60,4 @@ class PrismFighter(id: Int, fight: Fight, prism: Prism) : Fighter(id, fight) {
         return Optional.empty()
     }
 
-    override fun getPrism(): Prism {
-        return prism
-    }
 }

@@ -77,9 +77,7 @@ open class MobFighter(id: Int, f: Fight, val mobGrade: MonsterGrade) : Fighter(i
         return mobGrade.scripted() as Any
     }
 
-    override fun getMob(): MonsterGrade {
-        return mobGrade
-    }
+    override val mob: MonsterGrade get() = mobGrade
 
     companion object {
         const val ENUTROF_CHEST_ID = 285

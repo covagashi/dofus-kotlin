@@ -28,11 +28,11 @@ class GangsterData(dataSource: HikariDataSource?) : FunctionDAO<Bandit>(dataSour
     override fun delete(entity: Bandit) {
         throw NotImplementedException()
     }
-    override fun update(obj: Bandit) {
+    override fun update(entity: Bandit) {
         var p: PreparedStatement? = null
         try {
-        p = getPreparedStatement("UPDATE " + getTableName() + " SET `time` = ? WHERE `mobs` = '" + obj.parseMobs() + "';")
-        p?.setLong(1, obj.time)
+        p = getPreparedStatement("UPDATE " + getTableName() + " SET `time` = ? WHERE `mobs` = '" + entity.parseMobs() + "';")
+        p?.setLong(1, entity.time)
         execute(p)
         } catch (e: SQLException) {
         super.sendError(e)

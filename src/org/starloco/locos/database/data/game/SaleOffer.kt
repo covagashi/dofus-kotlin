@@ -21,7 +21,7 @@ class SaleOffer(
         sj.add(itemTemplate.id.toString())
         sj.add(itemTemplate.strTemplate)
         sj.add(if (currency.isItem()) currency.item().id.toString() else "")
-        sj.add(java.lang.Long.toString(unitPrice))
+        sj.add((unitPrice).toString())
         sj.add("") // Unknown
         sj.add("") // Unknown
 
@@ -49,14 +49,14 @@ class SaleOffer(
                 return when (n) {
                     1 -> KAMAS
                     2 -> POINTS
-                    else -> throw RuntimeException(String.format("unknown non-item currency #%d", n))
+                    else -> throw RuntimeException(("unknown non-item currency #%d").format( n))
                 }
             }
 
             @JvmStatic
             fun itemCurrency(templateID: Int): Currency {
                 val t = World.world.getObjTemplate(templateID)
-                    ?: throw IllegalArgumentException(String.format("unknown item template #%d", templateID))
+                    ?: throw IllegalArgumentException(("unknown item template #%d").format( templateID))
                 return Currency(t)
             }
         }

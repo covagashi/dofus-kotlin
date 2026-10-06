@@ -320,7 +320,7 @@ class MonsterGroup {
                             .map { it.grade }.collect(Collectors.toList()))
                     )
                 } catch (e: NullPointerException) {
-                    throw NullPointerException(String.format("Monster #%d Grade for levels %d or %d does not exist", idMonster, min, max))
+                    throw NullPointerException(("Monster #%d Grade for levels %d or %d does not exist").format( idMonster, min, max))
                 }
             }
             return out

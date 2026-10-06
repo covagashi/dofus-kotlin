@@ -35,8 +35,8 @@ class SoulStone : GameObject {
             val split = m.split("|")
             for (s in split) {
                 try {
-                    val id = Integer.parseInt(s.split(",")[0])
-                    val level = Integer.parseInt(s.split(",")[1])
+                    val id = (s.split(",")[0]).toInt()
+                    val level = (s.split(",")[1]).toInt()
                     val couple = Pair(id, level)
                     this.monsters.add(couple)
                 } catch (e: Exception) {

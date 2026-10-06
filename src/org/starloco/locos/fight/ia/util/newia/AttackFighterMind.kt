@@ -15,7 +15,7 @@ import java.util.LinkedList
 class AttackFighterMind(ia: AbstractEasyIA) : FighterMind(ia) {
 
     init {
-        val attackInvocation = ia.getFighter().getMob()!!.template!!.id == 676
+        val attackInvocation = ia.getFighter().mob!!.template!!.id == 676
 
         for (target in (if (attackInvocation) this.getInvocations() else this.getEnemies(true))) {
             val cas = FighterCase(target, null, LinkedList())

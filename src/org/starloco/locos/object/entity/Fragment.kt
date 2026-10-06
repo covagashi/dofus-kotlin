@@ -23,7 +23,7 @@ class Fragment : GameObject {
         if (runes.isNotEmpty()) {
             for (rune in runes.split(";")) {
                 val split = rune.split(":")
-                this.runes.add(Couple(Integer.parseInt(split[0]), Integer.parseInt(split[1])))
+                this.runes.add(Couple((split[0]).toInt(), (split[1]).toInt()))
             }
         }
     }

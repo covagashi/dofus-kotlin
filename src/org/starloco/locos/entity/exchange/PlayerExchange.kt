@@ -90,17 +90,17 @@ open class PlayerExchange(player1: Player, player2: Player) : Exchange(player1, 
     }
 
     @Synchronized
-    override fun toogleOk(guid: Int): Boolean {
-        val i = (if (this.player1.id == guid) 1 else 2).toByte()
+    override fun toogleOk(id: Int): Boolean {
+        val i = (if (this.player1.id == id) 1 else 2).toByte()
         if (this.isPodsOK(i)) {
             if (i.toInt() == 1) {
                 ok1 = !ok1
-                SocketManager.GAME_SEND_EXCHANGE_OK(this.player1.gameClient!!, ok1, guid)
-                SocketManager.GAME_SEND_EXCHANGE_OK(this.player2.gameClient!!, ok1, guid)
+                SocketManager.GAME_SEND_EXCHANGE_OK(this.player1.gameClient!!, ok1, id)
+                SocketManager.GAME_SEND_EXCHANGE_OK(this.player2.gameClient!!, ok1, id)
             } else if (i.toInt() == 2) {
                 ok2 = !ok2
-                SocketManager.GAME_SEND_EXCHANGE_OK(this.player1.gameClient!!, ok2, guid)
-                SocketManager.GAME_SEND_EXCHANGE_OK(this.player2.gameClient!!, ok2, guid)
+                SocketManager.GAME_SEND_EXCHANGE_OK(this.player1.gameClient!!, ok2, id)
+                SocketManager.GAME_SEND_EXCHANGE_OK(this.player2.gameClient!!, ok2, id)
             }
             return ok1 && ok2
         }

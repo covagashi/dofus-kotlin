@@ -15,11 +15,11 @@ class QuestProgressData(dataSource: HikariDataSource?) : FunctionDAO<QuestProgre
         throw NotImplementedException()
     }
 
-    override fun load(accountId: Int): QuestProgress? {
-        val account = World.world.getAccount(accountId)
+    override fun load(id: Int): QuestProgress? {
+        val account = World.world.getAccount(id)
         Objects.requireNonNull(account)
         try {
-            getData("SELECT * FROM " + getTableName() + " WHERE `account_id` = " + accountId + ";") { result ->
+            getData("SELECT * FROM " + getTableName() + " WHERE `account_id` = " + id + ";") { result ->
                 while (result.next()) {
                     val pId = result.getInt("player_id")
                     val qId = result.getInt("quest_id")
@@ -27,7 +27,7 @@ class QuestProgressData(dataSource: HikariDataSource?) : FunctionDAO<QuestProgre
                     val completedObjectives = result.getString("completed_objectives").split("|")
                         .filter { s -> s.isNotEmpty() }.map { it.toInt() }.toMutableSet()
                     val finished = result.getBoolean("finished")
-                    val qp = QuestProgress(accountId, pId, qId, sId, completedObjectives, finished)
+                    val qp = QuestProgress(id, pId, qId, sId, completedObjectives, finished)
                     account!!.addQuestProgression(qp)
                 }
             }

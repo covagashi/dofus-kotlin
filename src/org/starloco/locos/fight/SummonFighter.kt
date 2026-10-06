@@ -14,17 +14,17 @@ class SummonFighter(id: Int, f: Fight, mobGrade: MonsterGrade, @JvmField var sum
         // Summons from player have a bonus
         val stats = HashMap(super.getBaseStats().effects)
 
-//        if (mobID == 264 && caster.getMob() != null)
+//        if (mobID == 264 && caster.mob != null)
 //            pdvMax = 425;
-//        if (mobID == 114 && caster.getMob() != null)
+//        if (mobID == 114 && caster.mob != null)
 //            pdvMax = 35;
-//        if (mobID == 115 && caster.getMob() != null)
+//        if (mobID == 115 && caster.mob != null)
 //            pdvMax = 90;
-//        if (mobID == 262 && caster.getPlayer() != null)
+//        if (mobID == 262 && caster.player != null)
 //            pdvMax = 225;
-//        if (mobID == 246 && caster.getPlayer() != null)
+//        if (mobID == 246 && caster.player != null)
 //            pdvMax = 80;
-//        if (mobID == 1108 && caster.getPlayer() != null)
+//        if (mobID == 1108 && caster.player != null)
 //            pdvMax = 490;
 
         // https://www.dofus.com/fr/forum/1003-divers/293131-calculer-vie-invoquations

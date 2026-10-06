@@ -783,7 +783,7 @@ class ObjectAction(private val type: String, private val args: String, private v
                                     for (j in 0 until i.toInt()) {
                                         do {
                                             templates0.clear()
-                                            World.world.objTemplates.stream().filter { t -> t.isAnEquipment(false, Arrays.asList(Constant.ITEM_TYPE_FAMILIER, Constant.ITEM_TYPE_CERTIF_MONTURE)) && t.level == Formulas.getRandomValue(minLvl, maxLvl) }.forEach { templates0.add(it) }
+                                            World.world.objTemplates.stream().filter { t -> t.isAnEquipment(false, listOf(Constant.ITEM_TYPE_FAMILIER, Constant.ITEM_TYPE_CERTIF_MONTURE)) && t.level == Formulas.getRandomValue(minLvl, maxLvl) }.forEach { templates0.add(it) }
                                         } while (templates0.size == 0)
                                         objects.add(templates0[Formulas.getRandomValue(0, templates0.size - 1)])
                                     }
@@ -847,7 +847,7 @@ class ObjectAction(private val type: String, private val args: String, private v
                     38 -> { // Coffre dragondinde
                         if (player0.fight != null) return
                         templates = ArrayList()
-                        val acceptedMount = Arrays.asList(7808, 7810, 7811, 7812, 7813, 7814, 7815, 7816, 7817, 7818, 7819, 7820, 7821, 7822)
+                        val acceptedMount = listOf(7808, 7810, 7811, 7812, 7813, 7814, 7815, 7816, 7817, 7818, 7819, 7820, 7821, 7822)
                         World.world.objTemplates.stream().filter { t -> t.type == Constant.ITEM_TYPE_CERTIF_MONTURE && acceptedMount.contains(t.id) }.forEach { templates.add(it) }
                         template = templates[Formulas.random.nextInt(templates.size)]
 

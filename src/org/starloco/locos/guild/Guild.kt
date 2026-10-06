@@ -88,7 +88,7 @@ class Guild {
     fun haveTenMembers(): Boolean = this.id == 1 || this.id == 2 || this.members.size >= 10
 
     fun getPlayers(): List<Player> {
-        //return this.members.stream().filter(guildMember -> guildMember.getPlayer() != null).map(GuildMember::getPlayer).collect(Collectors.toList());
+        //return this.members.stream().filter(guildMember -> guildMember.player != null).map(GuildMember::getPlayer).collect(Collectors.toList());
         val a = ArrayList<Player>()
         for (gm in this.members.values)
             gm.player?.let { a.add(it) }
@@ -123,7 +123,7 @@ class Guild {
 
     private fun decompileSpell(spells: String) {
         for (split in spells.split("|".toRegex()))
-            this.spells[Integer.parseInt(split.split(";")[0])] = World.world.getSort(Integer.parseInt(split.split(";")[0]))!!.getStatsByLevel(Integer.parseInt(split.split(";")[1]))
+            this.spells[(split.split(";")[0]).toInt()] = World.world.getSort((split.split(";")[0]).toInt())!!.getStatsByLevel((split.split(";")[1]).toInt())
     }
 
     fun compileSpell(): String {
@@ -145,7 +145,7 @@ class Guild {
 
     private fun decompileStats(statsStr: String) {
         for (split in statsStr.split("|".toRegex()))
-            this.stats[Integer.parseInt(split.split(";")[0])] = Integer.parseInt(split.split(";")[1])
+            this.stats[(split.split(";")[0]).toInt()] = (split.split(";")[1]).toInt()
     }
 
     fun compileStats(): String {

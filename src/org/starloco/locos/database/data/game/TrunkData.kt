@@ -56,13 +56,13 @@ class TrunkData(dataSource: HikariDataSource?) : FunctionDAO<Trunk>(dataSource, 
     override fun delete(entity: Trunk) {
         throw NotImplementedException()
     }
-    override fun update(t: Trunk) {
+    override fun update(entity: Trunk) {
         var p: PreparedStatement? = null
         try {
         p = getPreparedStatement("UPDATE " + getTableName() + " SET `kamas`=?, `object`=? WHERE `id`=?")
-        p?.setLong(1, t.kamas)
-        p?.setString(2, t.parseTrunkObjetsToDB())
-        p?.setInt(3, t.id)
+        p?.setLong(1, entity.kamas)
+        p?.setString(2, entity.parseTrunkObjetsToDB())
+        p?.setInt(3, entity.id)
         execute(p)
         } catch (e: SQLException) {
         super.sendError(e)

@@ -43,7 +43,7 @@ class IAHandler {
         @JvmStatic
         fun select(fight: Fight, fighter: Fighter) {
             var ia: IA = Blank(fight, fighter)
-            val monsterGrade: MonsterGrade? = fighter.getMob()
+            val monsterGrade: MonsterGrade? = fighter.mob
 
             if (monsterGrade == null) {
                 if (fighter is CloneFighter)

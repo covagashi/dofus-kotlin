@@ -694,7 +694,7 @@ class PathFinding {
         fun getCellListFromAreaString(map: GameMap?, cellID: Int, castCellID: Int, zoneStr: String, PONum: Int, isCC: Boolean): List<GameCase> {
             var cellID = cellID
             if (map == null || map.getCase(cellID) == null)
-                return Collections.emptyList()
+                return emptyList()
 
             val cases = ArrayList<GameCase>()
 
@@ -913,7 +913,7 @@ class PathFinding {
             val path = getShortestPathBetween(map, start, dest, distMax) ?: return null
             var pathstr = ""
             var curCaseID = start
-            var curDir = ' '
+            var curDir = '\u0000'
             for (c in path) {
                 val d = getDirBetweenTwoCase(curCaseID, c.cellId, map, true)
                 if (d.code == 0)
@@ -938,7 +938,7 @@ class PathFinding {
         @JvmStatic
         fun checkLoS(map: GameMap, cell1: Int, cell2: Int,
                      fighter: Fighter?, isPeur: Boolean): Boolean {
-            if (fighter != null && fighter.getPlayer() != null) // on ne neverifie pas (en plus du client) pour les joueurs
+            if (fighter != null && fighter.player != null) // on ne neverifie pas (en plus du client) pour les joueurs
                 return true
             val cellsToConsider = getLoSBotheringIDCases(map, cell1, cell2, true) ?: return true
             for (cellID in cellsToConsider) {
@@ -1011,7 +1011,7 @@ class PathFinding {
                 compteur++
             }
             if (getDistanceBetween(map, consideredCell1, consideredCell2) == 2) {
-                dir = ' '
+                dir = '\u0000'
                 diffX = (getCellXCoord(map, consideredCell1)
                         - getCellXCoord(map, consideredCell2))
                 diffY = (getCellYCoord(map, consideredCell1)

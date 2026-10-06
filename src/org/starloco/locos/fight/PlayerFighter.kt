@@ -13,8 +13,7 @@ import java.util.stream.Stream
 
 class PlayerFighter(f: Fight, player: Player) : Fighter(player.id, f) {
 
-    @JvmField
-    val player: Player = player
+    override val player: Player = player
 
 
     override fun getPacketsName(): String {
@@ -58,8 +57,8 @@ class PlayerFighter(f: Fight, player: Player) : Fighter(player.id, f) {
         return player.getSpells().stream().filter { s -> s.spellID == id }.findFirst()
     }
 
-    override fun criticalStrikeModifier(porcCC: Int, spellID: Int): Int {
-        var porcCC = porcCC
+    override fun criticalStrikeModifier(baseCC: Int, spellID: Int): Int {
+        var porcCC = baseCC
         var agi = getTotalStats().getEffect(Constant.STATS_ADD_AGIL)
         if (agi < 0)
             agi = 0
@@ -140,7 +139,4 @@ class PlayerFighter(f: Fight, player: Player) : Fighter(player.id, f) {
         return player.scripted()
     }
 
-    override fun getPlayer(): Player {
-        return player
-    }
 }

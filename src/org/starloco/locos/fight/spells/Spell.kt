@@ -90,14 +90,14 @@ class Spell(
                 ccET = effectTargets.split(":")[1]
             for (num in nET.split(";")) {
                 try {
-                    this.effectTargets.add(Integer.parseInt(num))
+                    this.effectTargets.add((num).toInt())
                 } catch (e: Exception) {
                     this.effectTargets.add(0)
                 }
             }
             for (num in ccET.split(";")) {
                 try {
-                    effectTargetsCC.add(Integer.parseInt(num))
+                    effectTargetsCC.add((num).toInt())
                 } catch (e: Exception) {
                     effectTargetsCC.add(0)
                 }
@@ -109,13 +109,13 @@ class Spell(
         if (invalidState != null && invalidState.isNotEmpty()) {
             this.invalidStates = ArrayList()
             for (state in invalidState.split(",")) {
-                this.invalidStates!!.add(java.lang.Byte.parseByte(state))
+                this.invalidStates!!.add((state).toByte())
             }
         }
         if (neededState != null && neededState.isNotEmpty()) {
             this.neededStates = ArrayList()
             for (state in neededState.split(",")) {
-                this.neededStates!!.add(java.lang.Byte.parseByte(state))
+                this.neededStates!!.add((state).toByte())
             }
         }
     }
@@ -152,7 +152,7 @@ class Spell(
                 try {
                     if (e == "-1")
                         continue
-                    val id = Integer.parseInt(a.split(";", limit = 2)[0])
+                    val id = (a.split(";", limit = 2)[0]).toInt()
                     val args = a.split(";", limit = 2)[1]
                     effets.add(SpellEffect(id, args, spellID, level))
                 } catch (f: Exception) {

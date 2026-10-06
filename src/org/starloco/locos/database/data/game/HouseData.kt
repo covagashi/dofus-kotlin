@@ -46,17 +46,17 @@ class HouseData(dataSource: HikariDataSource?) : FunctionDAO<House>(dataSource, 
     override fun delete(entity: House) {
         throw NotImplementedException()
     }
-    override fun update(h: House) {
+    override fun update(entity: House) {
         var p: PreparedStatement? = null
         try {
         p = getPreparedStatement("UPDATE " + getTableName() + " SET `owner_id` = ?,`sale` = ?,`guild_id` = ?,`access` = ?,`key` = ?,`guild_rights` = ? WHERE id = ?")
-        p?.setInt(1, h.ownerId)
-        p?.setInt(2, h.sale)
-        p?.setInt(3, h.guildId)
-        p?.setInt(4, h.access)
-        p?.setString(5, h.key)
-        p?.setInt(6, h.guildRights)
-        p?.setInt(7, h.id)
+        p?.setInt(1, entity.ownerId)
+        p?.setInt(2, entity.sale)
+        p?.setInt(3, entity.guildId)
+        p?.setInt(4, entity.access)
+        p?.setString(5, entity.key)
+        p?.setInt(6, entity.guildRights)
+        p?.setInt(7, entity.id)
         execute(p)
         } catch (e: SQLException) {
         super.sendError(e)

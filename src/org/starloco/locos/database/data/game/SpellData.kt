@@ -86,25 +86,25 @@ class SpellData(dataSource: HikariDataSource?) : FunctionDAO<Spell>(dataSource, 
             var PACOST = 6
 
             try {
-                PACOST = Integer.parseInt(stat[2].trim())
+                PACOST = (stat[2].trim()).toInt()
             } catch (ignored: NumberFormatException) {
             }
 
-            val POm = Integer.parseInt(stat[3].trim())
-            val POM = Integer.parseInt(stat[4].trim())
-            val TCC = Integer.parseInt(stat[5].trim())
-            val TEC = Integer.parseInt(stat[6].trim())
+            val POm = (stat[3].trim()).toInt()
+            val POM = (stat[4].trim()).toInt()
+            val TCC = (stat[5].trim()).toInt()
+            val TEC = (stat[6].trim()).toInt()
 
             val line = stat[7].trim().equals("true", ignoreCase = true)
             val LDV = stat[8].trim().equals("true", ignoreCase = true)
             val emptyCell = stat[9].trim().equals("true", ignoreCase = true)
             val MODPO = stat[10].trim().equals("true", ignoreCase = true)
 
-            val MaxByTurn = Integer.parseInt(stat[12].trim())
-            val MaxByTarget = Integer.parseInt(stat[13].trim())
-            val CoolDown = Integer.parseInt(stat[14].trim())
+            val MaxByTurn = (stat[12].trim()).toInt()
+            val MaxByTarget = (stat[13].trim()).toInt()
+            val CoolDown = (stat[14].trim()).toInt()
             val type = stat[15].trim()
-            val level = Integer.parseInt(stat[stat.size - 2].trim())
+            val level = (stat[stat.size - 2].trim()).toInt()
             val endTurn = stat[19].trim().equals("true", ignoreCase = true)
 
             return SortStats(id, lvl, PACOST, POm, POM, TCC, TEC, line, LDV, emptyCell, MODPO, MaxByTurn, MaxByTarget, CoolDown, level, endTurn, effets, CCeffets, type)

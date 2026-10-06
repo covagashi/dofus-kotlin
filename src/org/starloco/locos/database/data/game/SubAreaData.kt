@@ -35,14 +35,14 @@ class SubAreaData(dataSource: HikariDataSource?) : FunctionDAO<SubArea>(dataSour
     override fun delete(entity: SubArea) {
         throw NotImplementedException()
     }
-    override fun update(subarea: SubArea) {
+    override fun update(entity: SubArea) {
         var p: PreparedStatement? = null
         try {
         p = getPreparedStatement("UPDATE " + getTableName() + " SET `alignement` = ?, `prisme` = ?, `conquistable` = ? WHERE `id` = ?")
-        p?.setInt(1, subarea.alignment)
-        p?.setInt(2, subarea.prism?.id ?: 0)
-        p?.setInt(3, if (subarea.conquerable) 0 else 1)
-        p?.setInt(4, subarea.id)
+        p?.setInt(1, entity.alignment)
+        p?.setInt(2, entity.prism?.id ?: 0)
+        p?.setInt(3, if (entity.conquerable) 0 else 1)
+        p?.setInt(4, entity.id)
         execute(p)
         } catch (e: SQLException) {
         super.sendError(e)

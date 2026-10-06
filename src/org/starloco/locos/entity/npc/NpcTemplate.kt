@@ -89,7 +89,7 @@ class NpcTemplate(v: Table) {
             val t = o as Table
             val itemID = ScriptVM.rawInt(t, "item")
             val item = World.world.getObjTemplate(itemID)
-                ?: throw IllegalArgumentException(String.format("unknown item template #%d", itemID))
+                ?: throw IllegalArgumentException(("unknown item template #%d").format( itemID))
 
             val price = ScriptVM.rawOptionalInt(t, "price", item.price)
             var currencyID = ScriptVM.rawOptionalInt(t, "currency", 0)
@@ -113,7 +113,7 @@ class NpcTemplate(v: Table) {
 
         val ret = DataScriptVM.getInstance()!!.call(extraClip, scriptVal, player.scripted())
         if (ret == null || ret.isEmpty() || ret[0] == null) return -1
-        if (ret.size > 1) throw RuntimeException(String.format("unexpected count(%d) in extraClip", ret.size))
+        if (ret.size > 1) throw RuntimeException(("unexpected count(%d) in extraClip").format( ret.size))
 
         return Conversions.integerValueOf(ret[0]).toInt()
     }
@@ -121,7 +121,7 @@ class NpcTemplate(v: Table) {
     fun barterOutcome(player: Player, objects: List<Couple<Int, Int>>): Couple<Int, Int>? {
         if (this.legacy != null) {
             val out = this.legacy.checkGetObjects(objects)!!
-            if (out.size != 1) throw RuntimeException(String.format("unexpected count(%d) in legacy barterOutcome", out.size))
+            if (out.size != 1) throw RuntimeException(("unexpected count(%d) in legacy barterOutcome").format( out.size))
             return out[0]
         }
 
@@ -136,7 +136,7 @@ class NpcTemplate(v: Table) {
 
         val ret = DataScriptVM.getInstance()!!.call(barterOutcome, scriptVal, player.scripted(), offer)
         if (ret == null || ret.isEmpty() || ret[0] == null) return null
-        if (ret.size > 1) throw RuntimeException(String.format("unexpected count(%d) in barterOutcome", ret.size))
+        if (ret.size > 1) throw RuntimeException(("unexpected count(%d) in barterOutcome").format( ret.size))
 
         return ScriptVM.ItemStackFromLua(ret[0] as Table)
     }

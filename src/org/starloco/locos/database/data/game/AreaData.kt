@@ -34,13 +34,13 @@ class AreaData(dataSource: HikariDataSource?) : FunctionDAO<Area>(dataSource, "a
     override fun delete(entity: Area) {
         throw NotImplementedException()
 	}
-    override fun update(area: Area) {
+    override fun update(entity: Area) {
         var p: PreparedStatement? = null
 		try {
         p = getPreparedStatement("UPDATE " + getTableName() + " SET `alignement` = ?, `Prisme` = ? WHERE id = ?")
-        p?.setInt(1, area.alignement)
-        p?.setInt(2, area.prismId)
-        p?.setInt(3, area.id)
+        p?.setInt(1, entity.alignement)
+        p?.setInt(2, entity.prismId)
+        p?.setInt(3, entity.id)
         execute(p)
         } catch (e: SQLException) {
         super.sendError(e)

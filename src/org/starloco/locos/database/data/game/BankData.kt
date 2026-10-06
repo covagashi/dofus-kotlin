@@ -45,13 +45,13 @@ class BankData(dataSource: HikariDataSource?) : FunctionDAO<Account>(dataSource,
     override fun delete(entity: Account) {
         throw NotImplementedException()
     }
-    override fun update(acc: Account) {
+    override fun update(entity: Account) {
         var p: PreparedStatement? = null
         try {
         p = getPreparedStatement("UPDATE " + getTableName() + " SET `kamas` = ?, `items` = ? WHERE `id` = ?")
-        p?.setLong(1, acc.getBankKamas())
-        p?.setString(2, acc.parseBankObjectsToDB())
-        p?.setInt(3, acc.id)
+        p?.setLong(1, entity.getBankKamas())
+        p?.setString(2, entity.parseBankObjectsToDB())
+        p?.setInt(3, entity.id)
         execute(p)
         } catch (e: SQLException) {
         super.sendError(e)

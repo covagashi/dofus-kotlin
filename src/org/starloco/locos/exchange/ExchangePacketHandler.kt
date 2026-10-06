@@ -56,7 +56,7 @@ internal object ExchangePacketHandler {
                 'W' -> //Waiting
                     when (packet[1]) {
                         'A' -> { //Add
-                            val id = Integer.parseInt(packet.substring(2))
+                            val id = (packet.substring(2)).toInt()
                             val account = World.world.ensureAccountLoaded(id)
 
                             if (account == null) {
@@ -71,7 +71,7 @@ internal object ExchangePacketHandler {
                         }
 
                         'K' -> { //Kick
-                            val id = Integer.parseInt(packet.substring(2))
+                            val id = (packet.substring(2)).toInt()
                             DatabaseManager.get(PlayerData::class.java).updateLogged(id, 0)
                             DatabaseManager.get(AccountData::class.java).setLogged(id, 0)
                             val account = World.world.ensureAccountLoaded(id)

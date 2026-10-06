@@ -41,7 +41,7 @@ class Function private constructor() {
         if (fight == null || fighter == null)
             return 0
         var SS: SortStats? = null
-        for(entry in  fighter.getMob()!!.spells.entries) {
+        for(entry in  fighter.mob!!.spells.entries) {
             var a: SortStats? = entry.value
             if(a!!.spellID == 1039)
                 SS = a
@@ -118,7 +118,7 @@ class Function private constructor() {
 
     fun hasMobInFight(fight: Fight, id: Int): Boolean {
         for(fighter in  fight.getFighters(7))
-            if(fighter.getMob() != null && !fighter.isDead && fighter.getMob()!!.template != null && fighter.getMob()!!.template.id == id)
+            if(fighter.mob != null && !fighter.isDead && fighter.mob!!.template != null && fighter.mob!!.template.id == id)
                 return true
         return false
     }
@@ -127,7 +127,7 @@ class Function private constructor() {
         if (fight == null || fighter == null)
             return 0
         var SS: SortStats? = null
-        for(entry in  fighter.getMob()!!.spells.entries)
+        for(entry in  fighter.mob!!.spells.entries)
         {
             var a: SortStats? = entry.value
             if(a!!.spellID == 1041)
@@ -141,7 +141,7 @@ class Function private constructor() {
         return 0
     }
     fun findSpell(fighter: Fighter, id: Int): SortStats? {
-        for(spell in  fighter.getMob()!!.spells.values) {
+        for(spell in  fighter.mob!!.spells.values) {
             if(spell != null && spell.spellID == id)
                 return spell
         }
@@ -267,7 +267,7 @@ class Function private constructor() {
 
         if(target == null)
             return 0
-        for (S in  fighter.getMob()!!.spells.entries)
+        for (S in  fighter.mob!!.spells.entries)
         {
             var cellID: Int = PathFinding.getCaseBetweenEnemy(target.cell!!.getId(), fight.map, fight)
             var effet4: Boolean = false
@@ -616,13 +616,13 @@ class Function private constructor() {
     {
         if (fight == null || fighter == null)
             return null
-        if (fighter.getMob() == null)
+        if (fighter.mob == null)
             return null
         if (fight.map == null)
             return null
         if (fight.map!!.getCase(nearestCell) == null)
             return null
-        for (SS in  fighter.getMob()!!.spells.entries) {
+        for (SS in  fighter.mob!!.spells.entries) {
             if (!fight.canCastSpell1(fighter, SS.value!!, fight.map!!.getCase(nearestCell)!!, -1))
                 continue
             for (SE in  SS.value!!.effects)
@@ -636,7 +636,7 @@ class Function private constructor() {
     {
         if (fight == null || fighter == null)
             return null
-        if (fighter.getMob() == null)
+        if (fighter.mob == null)
             return null
         if (fight.map == null)
             return null
@@ -697,7 +697,7 @@ class Function private constructor() {
                         var infl: Int = 0
                         if (f is CollectorFighter)
                         {
-                            for (ss in  World.world.getGuild(f.getCollector().guildId)!!.spells.entries)
+                            for (ss in  World.world.getGuild(f.collector.guildId)!!.spells.entries)
                             {
                                 if (ss.value == null)
                                     continue
@@ -712,7 +712,7 @@ class Function private constructor() {
                         }
                         else
                         {
-                            for (ss in  f.getMob()!!.spells.entries)
+                            for (ss in  f.mob!!.spells.entries)
                             {
                                 if (infl < calculInfluenceHeal(ss.value!!)
                                         && calculInfluenceHeal(ss.value!!) != 0
@@ -784,7 +784,7 @@ class Function private constructor() {
                         var infl: Int = 0
                         if (f is CollectorFighter)
                         {
-                            for (ss in  World.world.getGuild(f.getCollector().guildId)!!.spells.entries)
+                            for (ss in  World.world.getGuild(f.collector.guildId)!!.spells.entries)
                             {
                                 if (ss.value == null)
                                     continue
@@ -799,7 +799,7 @@ class Function private constructor() {
                         }
                         else
                         {
-                            for (ss in  f.getMob()!!.spells.entries)
+                            for (ss in  f.mob!!.spells.entries)
                             {
                                 if (infl < calculInfluenceHeal(ss.value!!)
                                         && calculInfluenceHeal(ss.value!!) != 0
@@ -857,7 +857,7 @@ class Function private constructor() {
         var ss: SortStats? = null
         if (F is CollectorFighter)
         {
-            for (SS in  World.world.getGuild(F.getCollector().guildId)!!.spells.entries)
+            for (SS in  World.world.getGuild(F.collector.guildId)!!.spells.entries)
             {
                 if (SS.value == null)
                     continue
@@ -872,7 +872,7 @@ class Function private constructor() {
         }
         else
         {
-            for (SS in  F.getMob()!!.spells.entries)
+            for (SS in  F.mob!!.spells.entries)
             {
                 var inf: Int = calculInfluence(SS.value!!, F, T)
                 if (infl < inf
@@ -929,7 +929,7 @@ class Function private constructor() {
         var ss: SortStats? = null
         if (F is CollectorFighter)
         {
-            for (SS in  World.world.getGuild(F.getCollector().guildId)!!.spells.entries)
+            for (SS in  World.world.getGuild(F.collector.guildId)!!.spells.entries)
             {
                 if (SS.value == null)
                     continue
@@ -944,7 +944,7 @@ class Function private constructor() {
         }
         else
         {
-            for (SS in  F.getMob()!!.spells.entries)
+            for (SS in  F.mob!!.spells.entries)
             {
                 if (SS.value == null)
                     continue
@@ -1336,7 +1336,7 @@ when (SE.effectID) {
             var curInfl: Int = 0
             var Infl1: Int = 0
             var Infl2: Int = 0
-            var PA: Int = F.getMob()!!.pa
+            var PA: Int = F.mob!!.pa
             var usedPA = intArrayOf(0, 0)
             if (!fight.canCastSpell1(F, SS, T.cell!!, launch))
                 continue
@@ -1713,7 +1713,7 @@ when (SE.effectID) {
             return null
         var influence: Int = -1500000
         var ss: SortStats? = null
-        var spells: Collection<SortStats?> = (if (caster is CollectorFighter) World.world.getGuild(caster.getCollector().guildId)!!.spells.values else caster.getMob()!!.spells.values)
+        var spells: Collection<SortStats?> = (if (caster is CollectorFighter) World.world.getGuild(caster.collector.guildId)!!.spells.values else caster.mob!!.spells.values)
 
         for (tmp in  spells) {
             var i: Int = calculInfluence(tmp!!, caster, target)
@@ -1731,7 +1731,7 @@ when (SE.effectID) {
         var influence: Int = 0
         var ss: SortStats? = null
 
-        var spells: Collection<SortStats?> = (if (caster is CollectorFighter) World.world.getGuild(caster.getCollector().guildId)!!.spells.values else caster.getMob()!!.spells.values)
+        var spells: Collection<SortStats?> = (if (caster is CollectorFighter) World.world.getGuild(caster.collector.guildId)!!.spells.values else caster.mob!!.spells.values)
         for (tmp in  spells) {
             if (influence < calculInfluenceHeal(tmp!!) && calculInfluenceHeal(tmp!!) != 0) {
                 influence = calculInfluenceHeal(tmp!!)
@@ -1744,7 +1744,7 @@ when (SE.effectID) {
     fun getSpellByPo(caster: Fighter, po: Int): SortStats? {
         var spell: SortStats? = null
         var maxPo: Int = 0
-        for (tmp in  caster.getMob()!!.spells.values) {
+        for (tmp in  caster.mob!!.spells.values) {
             if (tmp != null && tmp.maxPO > maxPo && tmp.maxPO <= po) {
                 spell = tmp
                 maxPo = tmp.maxPO
