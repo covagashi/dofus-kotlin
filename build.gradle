@@ -1,4 +1,7 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '2.1.21'
+}
 
 group 'org.starloco.locos'
 // Get version from git tag, fallback to git commit hash
@@ -7,27 +10,32 @@ if (version == 'HEAD') {
     version 'git rev-parse --short HEAD'.execute().getText().trim()
 }
 
-// Make sure we compile in UTF-8 mode
-compileJava.options.encoding = 'UTF-8'
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    compilerOptions {
+        freeCompilerArgs.add('-Xjvm-default=all')
+
+    }
+}
+
 sourceSets {
     main {
-        java {
-            srcDirs 'src'
-        }
-        resources {
-            srcDirs "src/resources/"
-        }
+        java.srcDirs = ['src']
+        kotlin.srcDirs = ['src']
+        resources.srcDirs = ['src/resources']
     }
 }
 
@@ -36,9 +44,26 @@ repositories {
 }
 
 dependencies {
-    implementation 'redis.clients:jedis:5.1.2'
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation group: 'org.reflections', name: 'reflections', version: '0.10.2'
+    // Lua 5.3 VM — last published release of kroepke/luna (repo used a hand-built 0.4.2-SNAPSHOT)
+    implementation 'org.classdump.luna:luna-all-shaded:0.4.1'
+
+    implementation 'org.reflections:reflections:0.10.2'
+    implementation 'com.zaxxer:HikariCP:6.2.1'
+    implementation 'org.apache.mina:mina-core:2.2.8'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.2'
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    implementation 'ch.qos.logback:logback-classic:1.2.13'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+
+    implementation 'joda-time:joda-time:2.12.7'
+    implementation 'commons-lang:commons-lang:2.6'
+    implementation 'org.yaml:snakeyaml:1.33'
+    implementation 'org.fusesource.jansi:jansi:2.4.1'
+    implementation 'org.mariuszgromada.math:MathParser.org-mXparser:5.2.1'
 }
 
 jar {

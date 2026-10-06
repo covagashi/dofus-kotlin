@@ -1,5 +1,5 @@
-# StarLoco - Game
-The most advanced public 1.39 dofus emulator written in Java 21.
+# dofus-kotlin
+Dofus 1.39 game server written in Kotlin (JVM 21). Kotlin rewrite of [StarLoco-Game](https://github.com/StarLoco/StarLoco-Game) — no Java sources, no committed jar dependencies, Gradle-managed builds.
 
 ## Summary
 - Requirements
