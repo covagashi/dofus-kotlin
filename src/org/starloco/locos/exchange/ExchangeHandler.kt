@@ -4,6 +4,9 @@ import org.apache.mina.core.buffer.IoBuffer
 import org.apache.mina.core.service.IoHandlerAdapter
 import org.apache.mina.core.session.IoSession
 import org.starloco.locos.kernel.Config
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(ExchangeHandler::class.java)
 
 class ExchangeHandler : IoHandlerAdapter() {
 
@@ -26,8 +29,8 @@ class ExchangeHandler : IoHandlerAdapter() {
     }
 
     override fun exceptionCaught(session: IoSession, cause: Throwable) {
-        cause.printStackTrace()
-    }
+        log.error("unexpected error", cause)
+                }
 
     companion object {
         @JvmStatic

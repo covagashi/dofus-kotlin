@@ -28,6 +28,9 @@ import org.starloco.locos.`object`.entity.SoulStone;
 
 import java.util.*;
 import java.util.Map.Entry;
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Action::class.java)
 
 open class Action {
 
@@ -203,7 +206,7 @@ open class Action {
                         return true;
                     player.learnSpell(sID, 1, true, true, true);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -259,7 +262,7 @@ open class Action {
                     }
                 } catch (e: Exception) {
                     // Pas ok, mais il y a trop de dialogue de PNJ bugg� pour laisser cette erreur flood.
-                    // e.printStackTrace();
+                    // log.error("unexpected error", e)
                     return true;
                 }
                 
@@ -271,7 +274,7 @@ open class Action {
                     if (player.curMap.id == verifMapID)
                         player.teleport(newMapID.toInt(), newCellID);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     return true;
                 }
                 
@@ -294,7 +297,7 @@ open class Action {
                             SocketManager.GAME_SEND_STATS_PACKET(player);
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -331,7 +334,7 @@ open class Action {
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -477,7 +480,7 @@ open class Action {
 					 * SocketManager.GAME_SEND_Im_PACKET(perso, "12"); } }
 					 */
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -500,7 +503,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                     if (messID > 0)
                         SocketManager.GAME_SEND_Im_PACKET(player, "0" + messID.toString() + ";" + number);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     return true;
                 }
                 
@@ -514,7 +517,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                         return true;
                     player.learnSpell(sID, 1, true, true, true);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -537,7 +540,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                         SocketManager.GAME_SEND_STATS_PACKET(player);
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -549,7 +552,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                         return true;
                     player.modifAlignement(newAlign.toInt());
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -570,7 +573,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                     if (delObj)
                         player.removeItem(itemID, 1, true, true);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -619,7 +622,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                     player.statsParcho.effects.clear();
                     SocketManager.GAME_SEND_STATS_PACKET(player);
                 } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                         GameServer.a();
                     }
                 } else {
@@ -666,7 +669,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -701,7 +704,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -713,7 +716,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                         player.getMetierByID(JobID)!!.addXp(player, XpValue);
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -741,7 +744,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                     player.addSpellPoint(pts);
                     SocketManager.GAME_SEND_STATS_PACKET(player);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -758,7 +761,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                     player.energy = EnergyTotal;
                     SocketManager.GAME_SEND_STATS_PACKET(player);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -772,7 +775,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                     player.exp = TotalXp;
                     SocketManager.GAME_SEND_STATS_PACKET(player);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -797,7 +800,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                     SocketManager.GAME_SEND_ERASE_ON_MAP_TO_MAP(player.curMap, player.id);
                     SocketManager.GAME_SEND_ADD_PLAYER_TO_MAP(player.curMap, player);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -818,7 +821,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                     var mapId1: Int = (args.split(":", limit = 2)[1]).toInt()
                     if (player.curMap.id != mapId1)
                         return true;
-                    for (MobAndLevel in  args.split(":", limit = 2)[0].split("\\|")) {
+                    for (MobAndLevel in  args.split(":", limit = 2)[0].split("|")) {
                         var monsterID: Int = -1
                         var monsterLevel: Int = -1
                         var MobOrLevel: List<String> = MobAndLevel.split(",")
@@ -836,7 +839,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                     var group: MonsterGroup = MonsterGroup(player.curMap.nextObjectId, map, player.curCell.getId(), ValidMobGroup)
                     player.curMap.startFightVersusMonstres(player, group); // Si bug startfight, voir "//Respawn d'un groupe fix" dans fight.java
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -850,7 +853,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                         return true;
                     player.unlearnSpell(player, sID, 1, AncLevel, true, true);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -916,7 +919,7 @@ Constant.STATS_ADD_INTE -> {messID = 14;
                             - player.capital);
                     SocketManager.GAME_SEND_STATS_PACKET(player);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -1001,7 +1004,7 @@ var tempP: Player? = null
                 if (player.fight != null)
                     return true;
                 try {
-                    for (MobAndLevel in  args.split("\\|")) {
+                    for (MobAndLevel in  args.split("|")) {
                         var monsterID: Int = -1
                         var lvlMin: Int = -1
                         var lvlMax: Int = -1
@@ -1022,7 +1025,7 @@ var tempP: Player? = null
                     var group: MonsterGroup = MonsterGroup(player.curMap.nextObjectId, map, player.curCell.getId(), ValidMobGroup1)
                     player.curMap.startFightVersusProtectors(player, group);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -1033,7 +1036,8 @@ var tempP: Player? = null
                     try {
                         park.getEtable().stream().filter(Objects::nonNull).forEach({ mount -> mount.checkBaby(player, park) });
                         park.getListOfRaising().stream().filter({ integer -> World.world.getMountById(integer) != null }).forEach({ integer -> World.world.getMountById(integer)!!.checkBaby(player, park) });
-                    } catch (e: Exception) { e.printStackTrace(); }
+                    } catch (e: Exception) { log.error("unexpected error", e)
+                 }
                     player.openMountPark(park);
                 }
                 
@@ -1229,7 +1233,7 @@ var tempP: Player? = null
                     if (target!!.fight == null)
                         SocketManager.GAME_SEND_ALTER_GM_PACKET(player.curMap, player);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -1347,7 +1351,7 @@ var tempP: Player? = null
                         SocketManager.GAME_SEND_Im_PACKET(player, "14|43");
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 return true;
@@ -1378,7 +1382,7 @@ var tempP: Player? = null
                         SocketManager.GAME_SEND_Im_PACKET(player, "14|43");
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 return true;
@@ -1421,7 +1425,7 @@ var tempP: Player? = null
                         SocketManager.GAME_SEND_Im_PACKET(player, "14|43");
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 return true;
@@ -1470,7 +1474,7 @@ var tempP: Player? = null
                         SocketManager.GAME_SEND_Im_PACKET(player, "14|43");
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 return true;
@@ -1513,7 +1517,7 @@ var tempP: Player? = null
                         SocketManager.GAME_SEND_Im_PACKET(player, "14|43");
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 return true;
@@ -1550,7 +1554,7 @@ var tempP: Player? = null
                         SocketManager.GAME_SEND_Im_PACKET(player, "14|43");
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -1613,7 +1617,7 @@ var tempP: Player? = null
                     SocketManager.GAME_SEND_MESSAGE(player, player.getLang().trans("other.action.apply.shop", pts, ptsTotal));
                     return true;
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -1638,7 +1642,7 @@ var tempP: Player? = null
                         SocketManager.GAME_SEND_Im_PACKET(player, "14|43");
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -1651,7 +1655,7 @@ var tempP: Player? = null
                         || pMap == 10134 || pMap == 10135 || pMap == 10136
                         || pMap == 10137 || pMap == 10138) {
                     try {
-                        for (MobAndLevel in  args.split("\\|")) {
+                        for (MobAndLevel in  args.split("|")) {
                             var monsterID: Int = -1
                             var monsterLevel: Int = -1
                             var MobOrLevel: List<String> = MobAndLevel.split(",")
@@ -1669,7 +1673,7 @@ var tempP: Player? = null
                         var group: MonsterGroup = MonsterGroup(player.curMap.nextObjectId, player.curMap, player.curCell.getId(), ValidMobGroup2)
                         player.curMap.startFightVersusMonstres(player, group);// Si bug startfight, voir "//Respawn d'un groupe fix" dans fight.java
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                         GameServer.a();
                     }
                 } else {
@@ -1714,7 +1718,7 @@ var tempP: Player? = null
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 
@@ -2000,7 +2004,7 @@ var tempP: Player? = null
                     try {
                         type111 = args.toInt();
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                     }
                     if (type111 == 1) {
                         var newObjAdded11: GameObject? = World.world.getObjTemplate(7890)!!.createNewItem(1, false)
@@ -2080,7 +2084,7 @@ var tempP: Player? = null
                             }
                         }
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                     }
                     when (type3) {
 1 -> {if (player.hasItemTemplate(2433, 10, false)) {
@@ -2614,7 +2618,7 @@ var tempP: Player? = null
                             }
                             ok = ok1 && ok2;
                         } catch (e: Exception) {
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                         }
                         if(ok) {
                             if (!statsReplace1.isEmpty()) {
@@ -2649,14 +2653,14 @@ var tempP: Player? = null
 
                     player.teleport(mapId, cellId);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
 982 -> {try {
                     player.setFuneral();
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -2710,7 +2714,7 @@ var tempP: Player? = null
                         SocketManager.GAME_SEND_Ow_PACKET(player);
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -2751,7 +2755,7 @@ var tempP: Player? = null
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -2796,7 +2800,7 @@ var tempP: Player? = null
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -2834,7 +2838,7 @@ var tempP: Player? = null
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -2851,7 +2855,7 @@ var tempP: Player? = null
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -2895,7 +2899,7 @@ var tempP: Player? = null
                         return true;
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -2914,7 +2918,7 @@ var tempP: Player? = null
                     SocketManager.GAME_SEND_Ow_PACKET(player);
                     return true;
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -2954,7 +2958,7 @@ var tempP: Player? = null
                     }
                     return false;
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -2975,7 +2979,7 @@ var tempP: Player? = null
 }
 996 -> {var curMap: GameMap = player.curMap
                 var mapSecure: ArrayList<Int> = ArrayList<Int>()
-                for (i in  args.split("\\,"))
+                for (i in  args.split(","))
                     mapSecure.add(i.toInt());
 
                 if (!mapSecure.contains((curMap.id as Int))) {
@@ -3034,7 +3038,7 @@ var tempP: Player? = null
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     GameServer.a();
                 }
                 

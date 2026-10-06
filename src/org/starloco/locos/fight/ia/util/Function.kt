@@ -19,6 +19,9 @@ import org.starloco.locos.kernel.Constant
 
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Function::class.java)
 
 /**
  * Created by Locos on 04/10/2015.
@@ -216,8 +219,8 @@ class Function private constructor() {
         }
         catch (e: Exception)
         {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
         //Cr�ation d'une GameAction
         var GA: GameAction = GameAction(0, 1, "")
         GA.args = pathstr
@@ -507,8 +510,8 @@ class Function private constructor() {
         }
         catch (e: Exception)
         {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
         //Cr�ation d'une GameAction
         var GA: GameAction = GameAction(0, 1, "")
         GA.args = pathstr
@@ -1032,8 +1035,8 @@ class Function private constructor() {
         }
         catch (e: Exception)
         {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
         //Cr�ation d'une GameAction
         var GA: GameAction = GameAction(0, 1, "")
         GA.args = pathstr
@@ -1123,8 +1126,8 @@ class Function private constructor() {
         }
         catch (e: Exception)
         {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
         //Cr�ation d'une GameAction
         var GA: GameAction = GameAction(0, 1, "")
         GA.args = pathstr
@@ -1451,8 +1454,8 @@ when (SE.effectID) {
             }
             catch (e: Exception)
             {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
         }
         if (nbTarget > 0 && CellF != -1)
             return CellF + nbTarget * 1000
@@ -1623,8 +1626,8 @@ when (SE.effectID) {
             if (curCell != cell.getId())
                 str.append(CryptManager.cellID_To_Code(curCell))
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
 
         var GA: GameAction = GameAction(0, 1, "")
         GA.args = str.toString()
@@ -1653,8 +1656,8 @@ when (SE.effectID) {
             if (curCell != cell.getId())
                 str.append(CryptManager.cellID_To_Code(curCell))
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
 
         var pathRef: AtomicReference<String> = AtomicReference(str.toString())
         var nStep: Int = PathFinding.isValidPath(fight.map!!, fighter.cell!!.getId(), pathRef, fight, null, -1)

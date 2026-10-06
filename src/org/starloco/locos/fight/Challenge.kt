@@ -9,6 +9,9 @@ import org.starloco.locos.fight.spells.SpellEffect
 import org.starloco.locos.game.GameClient
 import java.util.ArrayList
 import java.util.Collections
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Challenge::class.java)
 
 class Challenge(private val fight: Fight, private val Type: Int, private val xpWin: Int, private val dropWin: Int) {
 
@@ -496,8 +499,8 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                         }
                         showCibleToFight()
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                        log.error("unexpected error", e)
+                }
                 }
             }
             10 -> {
@@ -524,8 +527,8 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                         if (_cible != null)
                             showCibleToFight()
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                        log.error("unexpected error", e)
+                }
                 }
             }
             25 -> {
@@ -665,7 +668,7 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
                     }
                     showCibleToFight()
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
             38 -> {

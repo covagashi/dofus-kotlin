@@ -27,6 +27,9 @@ import org.starloco.locos.other.Action
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.Collections
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(ObjectAction::class.java)
 
 class ObjectAction(private val type: String, private val args: String, private val cond: String) {
     private var send = true
@@ -73,7 +76,7 @@ class ObjectAction(private val type: String, private val args: String, private v
         var templates: MutableList<ObjectTemplate?> = ArrayList()
         try {
             for (type in this.type.split(";")) {
-                val split = args.split("\\|".toRegex(), 2).toTypedArray()
+                val split = args.split("|".toRegex(), 2).toTypedArray()
                 if (this.args.isNotEmpty() && split.size > turn)
                     arg = split[turn]
 
@@ -563,7 +566,7 @@ class ObjectAction(private val type: String, private val args: String, private v
                             return
                         }
 
-                        val prism = Prism(World.world.getNextIDPrisme(), alignement.toByte(), 1, map0.id, cellId1, player.get_honor(), -1)
+                        val prism = Prism(World.world.getNextIDPrisme(), alignement.toByte(), 1, map0.id, cellId1, player.honor, -1)
                         subArea.alignment = alignement
                         subArea.prism = prism
 
@@ -870,8 +873,8 @@ class ObjectAction(private val type: String, private val args: String, private v
                 turn++
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
 
         var effect = this.haveEffect(World.world.getGameObject(objet)!!.template!!.id, World.world.getGameObject(objet)!!, player)
         if (effect)

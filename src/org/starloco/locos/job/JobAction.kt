@@ -17,6 +17,9 @@ import org.starloco.locos.util.RandomStats;
 
 import java.util.*;
 import java.util.Map.Entry;
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(JobAction::class.java)
 
 open class JobAction {
 
@@ -1185,7 +1188,7 @@ else -> {var type: Int = `object`!!.template!!.type
                         effect.args = newArgs;
                         effect.effectID =(statId);
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                     }
                 }
             } else if (lvlQuaStatsRune > 0 && lvlElementRune == 0) {
@@ -1485,10 +1488,10 @@ else -> {var type: Int = `object`!!.template!!.type
                     value = min;
                 } catch (e: Exception) {
                     value = Formulas.getRandomJet(null, null, jet);
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
             var statX: Int = 1
             if (statID == 125 || statID == 158 || statID == 174) {
@@ -1561,11 +1564,11 @@ else -> {var type: Int = `object`!!.template!!.type
                     if (max != 0)
                         value = max;
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     value = Formulas.getRandomJet(null, null, jet);
                 }
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
             var statX: Int = 1
             if (statID == 125 || statID == 158 || statID == 174) {
@@ -1704,7 +1707,7 @@ else -> {var type: Int = `object`!!.template!!.type
                     if (max != 0)
                         qua = max;
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     qua = Formulas.getRandomJet(null, null, jet);
                 }
             } catch (e: Exception) {
@@ -2691,11 +2694,11 @@ Constant.STATS_REM_PA, Constant.STATS_REM_PM, Constant.STATS_REM_AGIL, Constant.
 
     private fun getPWR(rune: Rune?, jet: String, type: Byte): Float {
         var weight: Float = if (rune == null) 1f else Rune.getRuneByCharacteristicAndByWeight(rune!!.characteristic)!!.weight
-        System.out.println("getPWR = Weight: " + weight.toString() + " | Type: " + type.toString() + " | Jet: " + jet);
+        log.debug("getPWR = Weight: " + weight.toString() + " | Type: " + type.toString() + " | Jet: " + jet);
         when (type.toInt()) {
 0 -> {return weight * Formulas.getMinJet(jet.split("#")[4]);
 }
-1 -> {return weight * jet.split("\\+").let { it[it.size - 1] }.toShort().toFloat();
+1 -> {return weight * jet.split("+").let { it[it.size - 1] }.toShort().toFloat();
 }
 2 -> {return weight * Formulas.getMaxJet(jet.split("#")[4]);
         

@@ -22,6 +22,9 @@ import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Formulas::class.java)
 
 class Formulas {
     companion object {
@@ -74,10 +77,10 @@ class Formulas {
         fun getMinJet(jet: String): Int {
             try {
                 val des = jet.split("d")[0].toInt()
-                val add = jet.split("d")[1].split("\\+")[1].toInt()
+                val add = jet.split("d")[1].split("+")[1].toInt()
                 return des + add
             } catch (e: NumberFormatException) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 return -1
             }
         }
@@ -87,15 +90,15 @@ class Formulas {
             var num = 0
             try {
                 val des = jet.split("d")[0].toInt()
-                val faces = jet.split("d")[1].split("\\+")[0].toInt()
-                val add = jet.split("d")[1].split("\\+")[1].toInt()
+                val faces = jet.split("d")[1].split("+")[0].toInt()
+                val add = jet.split("d")[1].split("+")[1].toInt()
                 for (a in 0 until des) {
                     num += faces
                 }
                 num += add
                 return num
             } catch (e: NumberFormatException) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 return -1
             }
         }
@@ -113,8 +116,8 @@ class Formulas {
             try {
                 var num = 0
                 val des = jet.split("d")[0].toInt()
-                val faces = jet.split("d")[1].split("\\+")[0].toInt()
-                val add = jet.split("d")[1].split("\\+")[1].toInt()
+                val faces = jet.split("d")[1].split("+")[0].toInt()
+                val add = jet.split("d")[1].split("+")[1].toInt()
                 if (faces == 0 && add == 0) {
                     num = getRandomValue(0, des)
                 } else {
@@ -125,7 +128,7 @@ class Formulas {
                 num += add
                 return num
             } catch (e: NumberFormatException) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 return -1
             }
         }
@@ -136,13 +139,13 @@ class Formulas {
             try {
                 var num = 0
                 val des = jet.split("d")[0].toInt()
-                val faces = jet.split("d")[1].split("\\+")[0].toInt()
-                val add = jet.split("d")[1].split("\\+")[1].toInt()
+                val faces = jet.split("d")[1].split("+")[0].toInt()
+                val add = jet.split("d")[1].split("+")[1].toInt()
                 num += ((1 + faces) / 2) * des//on calcule moyenne
                 num += add
                 return num
             } catch (e: NumberFormatException) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 return 0
             }
         }
@@ -1006,7 +1009,7 @@ class Formulas {
             val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             val date = formatter.format(time)
 
-            val split = date.split("\\s")
+            val split = date.split(Regex("\\s"))
 
             val split0 = split[0].split("-")
             hexDate += Integer.toHexString(split0[0].toInt()) + "#"

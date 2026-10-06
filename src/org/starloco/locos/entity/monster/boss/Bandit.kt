@@ -8,6 +8,9 @@ import org.starloco.locos.entity.monster.Monster
 import org.starloco.locos.game.world.World
 import org.starloco.locos.util.TimerWaiter
 import java.util.ArrayList
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Bandit::class.java)
 
 class Bandit(mobs: String, maps: String, time: Long) {
 
@@ -23,7 +26,7 @@ class Bandit(mobs: String, maps: String, time: Long) {
                 try {
                     _mob = Integer.parseInt(mob)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
                 if (_mob == null)
                     continue
@@ -42,7 +45,7 @@ class Bandit(mobs: String, maps: String, time: Long) {
                         continue
                     this.maps.add(map)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
         }
@@ -100,7 +103,7 @@ class Bandit(mobs: String, maps: String, time: Long) {
                 map.spawnNewGroup(false, map.randomFreeCellId, groupData.toString(), "")
                 DatabaseManager.get(GangsterData::class.java).update(bandit)
             } catch (e: Exception) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 TimerWaiter.addNext({ pop(bandit, actuel) }, 60000)
             }
         }

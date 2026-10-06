@@ -2,6 +2,9 @@ package org.starloco.locos.api
 
 import org.starloco.locos.annotation.Handler
 import org.starloco.locos.invoker.EventDispatcherInvoker
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(AbstractEventMessageDispatcher::class.java)
 
 abstract class AbstractEventMessageDispatcher<T> {
 
@@ -15,7 +18,7 @@ abstract class AbstractEventMessageDispatcher<T> {
                 try {
                     invoker.methods.invoke(invoker.handler, message)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
         }

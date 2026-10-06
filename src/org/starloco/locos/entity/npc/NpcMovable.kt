@@ -3,6 +3,9 @@ package org.starloco.locos.entity.npc
 import org.starloco.locos.common.PathFinding
 import org.starloco.locos.common.SocketManager
 import org.starloco.locos.game.world.World
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(NpcMovable::class.java)
 
 class NpcMovable(id: Int, cellid: Int, orientation: Byte, private val mapId: Int, template: Int) :
     Npc(id, cellid, orientation, template) {
@@ -42,7 +45,7 @@ class NpcMovable(id: Int, cellid: Int, orientation: Byte, private val mapId: Int
             val pathStr: String = try {
                 PathFinding.getShortestStringPathBetween(map, this.cellId, oldCell, 25)
             } catch (e: Exception) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 return
             } ?: return
 

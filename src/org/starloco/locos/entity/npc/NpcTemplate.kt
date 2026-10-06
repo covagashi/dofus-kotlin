@@ -13,6 +13,9 @@ import org.starloco.locos.script.DataScriptVM
 import org.starloco.locos.script.ScriptVM
 import java.util.Objects
 import java.util.stream.Collectors
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(NpcTemplate::class.java)
 
 class NpcTemplate(v: Table) {
     val id: Int
@@ -145,13 +148,13 @@ class NpcTemplate(v: Table) {
         private var exchanges: List<Couple<ArrayList<Couple<Int, Int>>, ArrayList<Couple<Int, Int>>>>? = null
 
         init {
-            if (questions.split("\\|").size > 1) {
-                for (question in questions.split("\\|")) {
+            if (questions.split("|").size > 1) {
+                for (question in questions.split("|")) {
                     try {
                         initQuestions[question.split(",")[0].toInt()] = question.split(",")[1].toInt()
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                        World.world.logger.error("#1# Erreur sur une question id sur le PNJ d'id : $npcID")
+                        log.error("unexpected error", e)
+                World.world.logger.error("#1# Erreur sur une question id sur le PNJ d'id : $npcID")
                     }
                 }
             } else {
@@ -166,8 +169,8 @@ class NpcTemplate(v: Table) {
                         if (template != null)
                             this.sales.add(SaleOffer(template, template.price.toLong()))
                     } catch (e: NumberFormatException) {
-                        e.printStackTrace()
-                        World.world.logger.error("#2# Erreur sur un item en vente sur le PNJ d'id : $npcID")
+                        log.error("unexpected error", e)
+                World.world.logger.error("#2# Erreur sur un item en vente sur le PNJ d'id : $npcID")
                     }
                 }
             }
@@ -176,28 +179,28 @@ class NpcTemplate(v: Table) {
                 try {
                     val ex = ArrayList<Couple<ArrayList<Couple<Int, Int>>, ArrayList<Couple<Int, Int>>>>()
                     this.exchanges = ex
-                    for (data in exchanges.split("\\~")) {
+                    for (data in exchanges.split("~")) {
                         val gives = ArrayList<Couple<Int, Int>>()
                         val gets = ArrayList<Couple<Int, Int>>()
 
-                        var split = data.split("\\|")
+                        var split = data.split("|")
                         val give = split[1]
                         val get = split[0]
 
-                        for (obj in give.split("\\,")) {
-                            split = obj.split("\\:")
+                        for (obj in give.split(",")) {
+                            split = obj.split(":")
                             gives.add(Couple(split[0].toInt(), split[1].toInt()))
                         }
 
-                        for (obj in get.split("\\,")) {
-                            split = obj.split("\\:")
+                        for (obj in get.split(",")) {
+                            split = obj.split(":")
                             gets.add(Couple(split[0].toInt(), split[1].toInt()))
                         }
                         ex.add(Couple(gets, gives))
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
-                    World.world.logger.error("#3# Erreur sur l'exchanges sur le PNJ d'id : $npcID")
+                    log.error("unexpected error", e)
+                World.world.logger.error("#3# Erreur sur l'exchanges sur le PNJ d'id : $npcID")
                 }
             }
         }

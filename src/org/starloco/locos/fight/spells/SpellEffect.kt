@@ -19,6 +19,9 @@ import org.starloco.locos.util.TimerWaiter;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(SpellEffect::class.java)
 
 open class SpellEffect : Cloneable {
 
@@ -248,7 +251,7 @@ else -> {var stat: Int = 0
 										} else//Dommage
 											finalDommage = finalDommage * coefDom;
 									} catch (e: Exception) {
-										e.printStackTrace();
+										log.error("unexpected error", e)
 									}
 									
 }
@@ -292,7 +295,7 @@ else -> {var stat: Int = 0
 									try {
 										max = Integer.parseInt(buff.args.split(";")[1]);
 									} catch (e: Exception) {
-										e.printStackTrace();
+										log.error("unexpected error", e)
 										continue;
 									}
 
@@ -382,8 +385,8 @@ else -> {
 					modi = perso!!.getValueOfClassObject(spell, 284);
 				else if (effectID >= 91 && effectID <= 100)
 					modi = perso!!.getValueOfClassObject(spell, 283);
-				var jeta: String = jet.split("\\+")[0]
-				var bonus: Int = Integer.parseInt(jet.split("\\+")[1]) + modi
+				var jeta: String = jet.split("+")[0]
+				var bonus: Int = Integer.parseInt(jet.split("+")[1]) + modi
 				jet = jeta + "+" + bonus;
 			}
 		}
@@ -2066,7 +2069,7 @@ else -> {
 						try {
 							add = Integer.parseInt(SE.args.split(";")[2]);
 						} catch (e: Exception) {
-							e.printStackTrace();
+							log.error("unexpected error", e)
 						}
 						if (add <= 0)
 							continue;
@@ -2125,7 +2128,7 @@ else -> {
 						try {
 							add = Integer.parseInt(SE.args.split(";")[2]);
 						} catch (e: Exception) {
-							e.printStackTrace();
+							log.error("unexpected error", e)
 						}
 						if (add <= 0)
 							continue;
@@ -2192,7 +2195,7 @@ else -> {
 						try {
 							add = Integer.parseInt(SE.args.split(";")[2]);
 						} catch (e: Exception) {
-							e.printStackTrace();
+							log.error("unexpected error", e)
 						}
 						if (add <= 0)
 							continue;
@@ -2259,7 +2262,7 @@ else -> {
 							try {
 								add = Integer.parseInt(SE.args.split(";")[2]);
 							} catch (e: Exception) {
-								e.printStackTrace();
+								log.error("unexpected error", e)
 							}
 							if (add <= 0)
 								continue;
@@ -2331,7 +2334,7 @@ else -> {
 						try {
 							add = Integer.parseInt(SE.args.split(";")[2]);
 						} catch (e: Exception) {
-							e.printStackTrace();
+							log.error("unexpected error", e)
 						}
 						if (add <= 0)
 							continue;
@@ -2393,7 +2396,7 @@ else -> {
 						try {
 							add = Integer.parseInt(SE.args.split(";")[2]);
 						} catch (e: Exception) {
-							e.printStackTrace();
+							log.error("unexpected error", e)
 						}
 						if (add <= 0)
 							continue;
@@ -2462,7 +2465,7 @@ else -> {
 						try {
 							add = Integer.parseInt(SE.args.split(";")[2]);
 						} catch (e: Exception) {
-							e.printStackTrace();
+							log.error("unexpected error", e)
 						}
 						if (add <= 0)
 							continue;
@@ -2523,7 +2526,7 @@ else -> {
 						try {
 							add = Integer.parseInt(SE.args.split(";")[2]);
 						} catch (e: Exception) {
-							e.printStackTrace();
+							log.error("unexpected error", e)
 						}
 						if (add <= 0)
 							continue;
@@ -2591,7 +2594,7 @@ else -> {
 						try {
 							add = Integer.parseInt(SE.args.split(";")[2]);
 						} catch (e: Exception) {
-							e.printStackTrace();
+							log.error("unexpected error", e)
 						}
 						if (add <= 0)
 							continue;
@@ -2648,7 +2651,7 @@ else -> {
 						try {
 							add = Integer.parseInt(SE.args.split(";")[2]);
 						} catch (e: Exception) {
-							e.printStackTrace();
+							log.error("unexpected error", e)
 						}
 						if (add <= 0)
 							continue;
@@ -2742,7 +2745,7 @@ else -> {
 		try {
 			vale = Integer.parseInt(args.split(";")[1]);//Niveau de sort max
 		} catch (e: Exception) {
-			e.printStackTrace();
+			log.error("unexpected error", e)
 		}
 		if (vale == -1)
 			return;
@@ -3245,7 +3248,7 @@ else -> {
 		try {
 			id = Integer.parseInt(args.split(";")[2]);
 		} catch (e: Exception) {
-			e.printStackTrace();
+			log.error("unexpected error", e)
 		}
 
 		for (target in  targets) {
@@ -3408,7 +3411,7 @@ else -> {
 		try {
 			value = Integer.parseInt(args.split(";")[1]);
 		} catch (e: Exception) {
-			e.printStackTrace();
+			log.error("unexpected error", e)
 		}
 		if (value == -1)
 			return;
@@ -3595,7 +3598,7 @@ else -> {
 				level = (levels).toInt();
 			}
 		} catch (e: Exception) {
-			e.printStackTrace();
+			log.error("unexpected error", e)
 		}
 
 var MG: MonsterGrade? = null
@@ -3609,7 +3612,7 @@ var MG: MonsterGrade? = null
 			}
 			MG = MG.getCopy();
 		} catch (e1: Exception) {
-			e1.printStackTrace();
+			log.error("unexpected error", e1)
 		}
 
 		if (id == -1 || level == -1 || MG == null)
@@ -3668,7 +3671,7 @@ var MG: MonsterGrade? = null
 			monster = Integer.parseInt(args.split(";")[0]);
 			level = Integer.parseInt(args.split(";")[1]);
 		} catch (e: Exception) {
-			e.printStackTrace();
+			log.error("unexpected error", e)
 		}
 
 		lateinit var monsterGrade: MonsterGrade
@@ -3676,7 +3679,7 @@ var MG: MonsterGrade? = null
 		try {
 			monsterGrade = World.world.getMonstre(monster)!!.getGradeByLevel(level!!)!!.getCopy();
 		} catch (e: Exception) {
-			e.printStackTrace();
+			log.error("unexpected error", e)
 			return;
 		}
 
@@ -4314,7 +4317,7 @@ var MG: MonsterGrade? = null
 		try {
 			id = Integer.parseInt(args.split(";")[2]);
 		} catch (e: Exception) {
-			e.printStackTrace();
+			log.error("unexpected error", e)
 		}
 		if (id == -1)
 			return;

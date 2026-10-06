@@ -471,8 +471,8 @@ class World private constructor() : Scripted<SWorld> {
                                 try {
                                     subArea = _subAreas[sub.toInt()]
                                 } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
+                                    logger.error("unexpected error", e)
+                }
                                 if (subArea == null)
                                     continue
                                 for (Map in subArea.getMaps()) {
@@ -512,7 +512,7 @@ class World private constructor() : Scripted<SWorld> {
 
                 mapPossible.clear()
             } catch (e: Exception) {
-                e.printStackTrace()
+                logger.error("unexpected error", e)
                 mapPossible.clear()
                 logger.error("An error occurred when the server try to put extra-monster caused by : " + e.message)
             }
@@ -942,7 +942,7 @@ class World private constructor() : Scripted<SWorld> {
                 txtStat[Constant.STATS_DATE] = stats.substring(3) + ""
                 return GameObject(id, template, qua, Constant.ITEM_POS_NO_EQUIPED, Stats(false, null), ArrayList(), HashMap(), txtStat, puit)
             } catch (e: Exception) {
-                e.printStackTrace()
+                logger.error("unexpected error", e)
                 return GameObject(id, template, qua, pos, stats, 0)
             }
         } else {

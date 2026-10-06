@@ -8,6 +8,9 @@ import java.io.FileInputStream
 import java.io.FileWriter
 import java.io.IOException
 import java.util.Properties
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Config::class.java)
 
 class Config {
 
@@ -315,7 +318,7 @@ class Config {
                 try {
                     Thread.sleep(1000)
                 } catch (e: InterruptedException) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
             verify(name)

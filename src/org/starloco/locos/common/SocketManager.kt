@@ -37,6 +37,9 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.starloco.locos.util.Predicates;
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(SocketManager::class.java)
 
 object SocketManager {
 
@@ -164,8 +167,8 @@ object SocketManager {
             packet.append(perso.encodeItemASK());
             send(out, packet.toString());
         } catch (e: Exception) {
-            e.printStackTrace();
-            System.out.println("Error occured : " + e.message);
+            log.error("unexpected error", e)
+            log.error("Error occured : " + e.message);
         }
     }
 

@@ -16,6 +16,9 @@ import org.starloco.locos.game.world.World
 import org.starloco.locos.kernel.Constant
 import org.starloco.locos.`object`.GameObject
 import org.starloco.locos.util.TimerWaiter
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Mount::class.java)
 
 class Mount {
 
@@ -168,16 +171,16 @@ class Mount {
                 if (gameObject != null)
                     this.objects[gameObject.guid] = gameObject
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
         }
 
         for (str in capacitys.split(",", limit = 2))
             try {
                 this.capacitys.add(str.toInt())
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
     }
 
     @Synchronized

@@ -15,6 +15,9 @@ import org.starloco.locos.`object`.entity.SoulStone
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.HashMap
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(ObjectTemplate::class.java)
 
 class ObjectTemplate(
     var id: Int,
@@ -62,8 +65,8 @@ class ObjectTemplate(
                 bonusCC = Integer.parseInt(infos[5])
                 isTwoHanded = infos[6] == "1"
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
         }
     }
 
@@ -96,8 +99,8 @@ class ObjectTemplate(
             bonusCC = Integer.parseInt(infos[5])
             isTwoHanded = infos[6] == "1"
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
     }
 
     fun addAction(A: ObjectAction) {
@@ -376,12 +379,12 @@ class ObjectTemplate(
                         if (max != 0)
                             value = max
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                        value = Formulas.getRandomJet(null, null, jet)
+                        log.error("unexpected error", e)
+                value = Formulas.getRandomJet(null, null, jet)
                     }
                 }
             } catch (e: Exception) {
-               System.err.println("$statsTemplate : $s : ${e.message}")
+               log.error("$statsTemplate : $s : ${e.message}")
             }
             itemStats.addOneStat(statID, value)
         }

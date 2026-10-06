@@ -8,6 +8,9 @@ import java.util.ArrayList
 import java.util.Optional
 import java.util.stream.Collectors
 import java.util.stream.Stream
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(SoulStone::class.java)
 
 class SoulStone : GameObject {
 
@@ -29,7 +32,7 @@ class SoulStone : GameObject {
 
     private fun stringToStats(m: String) {
         if (!m.equals("", ignoreCase = true)) {
-            val split = m.split("\\|")
+            val split = m.split("|")
             for (s in split) {
                 try {
                     val id = Integer.parseInt(s.split(",")[0])
@@ -37,7 +40,7 @@ class SoulStone : GameObject {
                     val couple = Pair(id, level)
                     this.monsters.add(couple)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
         }

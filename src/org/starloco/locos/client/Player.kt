@@ -74,6 +74,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.starloco.locos.kernel.Constant.INCARNAM_SUPERAREA;
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Player::class.java)
 
 open class Player : Scripted<SPlayer>, Actor {
 
@@ -437,7 +440,7 @@ open class Player : Scripted<SPlayer>, Actor {
             if(split.size >= 5)
                 this.deadLevel = split[4].toShort();
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
         this.totalKills = totalKills;
         this.deathCount = deathCount;
@@ -479,7 +482,7 @@ open class Player : Scripted<SPlayer>, Actor {
                     try {
                         this.zaaps.add((str).toInt());
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                     }
                 }
             }
@@ -493,11 +496,11 @@ open class Player : Scripted<SPlayer>, Actor {
                         if (!stat.equals("", ignoreCase = true))
                             this.statsParcho.addOneStat((stat.split(",")[0]).toInt(), (stat.split(",")[1]).toInt());
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
 
             if (!storeObjets.equals("")) {
-                for (storeObjets in  storeObjets.split("\\|")) {
+                for (storeObjets in  storeObjets.split("|")) {
                     var infos = storeObjets.split(",")
                     var guid: Int = 0
                     var price: Int = 0
@@ -505,7 +508,7 @@ open class Player : Scripted<SPlayer>, Actor {
                         guid = (infos[0]).toInt();
                         price = (infos[1]).toInt();
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                         continue;
                     }
 
@@ -536,7 +539,7 @@ open class Player : Scripted<SPlayer>, Actor {
                         var SM: JobStat = metiers.get(learnJob(m))!!
                         SM.addXp(this, xp);
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                     }
                 }
             }
@@ -545,7 +548,7 @@ open class Player : Scripted<SPlayer>, Actor {
             else if (this.energy == -1)
                 setFuneral();
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -556,7 +559,7 @@ open class Player : Scripted<SPlayer>, Actor {
                 stuff = stuff.substring(0, stuff.length - 1);
             DatabaseManager.get(ObjectData::class.java).loads(stuff.replace("|", ","));
         }
-        for (item in  stuff.split("\\|")) {
+        for (item in  stuff.split("|")) {
             if (item.equals(""))
                 continue;
             var infos = item.split(":")
@@ -565,7 +568,7 @@ open class Player : Scripted<SPlayer>, Actor {
             try {
                 guid = (infos[0]).toInt();
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
                 continue;
             }
 
@@ -663,9 +666,6 @@ open class Player : Scripted<SPlayer>, Actor {
     }
 
     fun isDead(): Byte = dead
-    fun get_honor(): Int = honor
-    fun is_showWings(): Boolean = showWings
-    fun is_showFriendConnection(): Boolean = showFriendConnection
 
     fun getGroup(): Group {
         return Group.byId(this.groupId)!!
@@ -1066,7 +1066,7 @@ else -> {turn = 30;
                     learnSpell(id, lvl, false, true, false);
                 sortsPlaces.put(id, position);
             } catch (e1: NumberFormatException) {
-                e1.printStackTrace();
+                log.error("unexpected error", e1)
             }
         }
     }
@@ -1520,7 +1520,7 @@ else -> {turn = 30;
                 this.donjon = fullMorph.get("donjon").equals("1");
                 this.useCac = false;
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
         }
 
@@ -1808,7 +1808,7 @@ else -> {turn = 30;
             try {
                 client.parsePacket("GI");
             } catch (e: InterruptedException) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
         }
     }
@@ -2230,7 +2230,7 @@ else -> {turn = 30;
             else
                 SocketManager.GAME_SEND_EMOTICONE_TO_FIGHT(fight!!, 7, this.id, id);
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -2867,7 +2867,7 @@ else -> {return;
             cellID = (GA.args!!.split(";")[0]).toInt();
             skillID = (GA.args!!.split(";")[1]).toInt();
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
         if (cellID == -1 || skillID == -1)
@@ -2891,7 +2891,7 @@ else -> {return;
         try {
             cellID = (GA.args!!.split(";")[0]).toInt();
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
         if (cellID == -1 || this.curMap == null)
             return;
@@ -3476,7 +3476,7 @@ else -> {return str;
         try {
             this.teleport(this.savePos.first, this.savePos.second, true);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -5032,7 +5032,7 @@ else -> {return str;
             enteredOnEnnemyFaction = 0;
             warpToSavePos();
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -5641,32 +5641,6 @@ else -> {mapID = 8534;
         position.ifPresent(itemShortcuts::remove);
         return position;
     }
-
-    //region Java-compat accessors (used by GameClient.java — drop after its migration)
-    fun get_canaux(): String = canaux
-    fun get_orientation(): Int = orientation
-    fun set_orientation(v: Int) { orientation = v }
-    fun isSitted(): Boolean = sitted
-    fun isSpec(): Boolean = spec
-    fun isChangeName(): Boolean = changeName
-    fun isShowSeller(): Boolean = seeSeller
-    fun setShowSeller(v: Boolean) { seeSeller = v }
-    fun isAway(): Boolean = away
-    fun getItems(): MutableMap<Int,GameObject> = objects
-    fun getIsCraftingType(): ArrayList<Int> = craftingType
-    fun getInvitation(): Int = inviting
-    fun setInvitation(v: Int) { inviting = v }
-    fun isOnMount(): Boolean = onMount
-    fun getStalk(): Stalk? = stalk
-    fun getisOK(): Int = isOK
-    fun setLivreArtisant(v: Boolean) { livreArti = v }
-    fun getBlockMovement(): Boolean = isBlocked
-    fun getInHouse(): House? = curHouse
-    fun isInvisible(): Boolean = isInvisible
-    fun get_savestat(): Int = savestat
-    fun set_savestat(v: Int) { savestat = v }
-    fun setMountGiveXp(v: Int) { mountXpGive = v }
-    //endregion
 
     fun sendItemShortcuts() {
         itemShortcuts.entries.stream()

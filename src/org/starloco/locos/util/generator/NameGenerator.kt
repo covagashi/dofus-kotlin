@@ -5,6 +5,9 @@ import java.io.IOException
 import java.io.InputStreamReader
 import java.util.ArrayList
 import java.util.Objects
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(NameGenerator::class.java)
 
 /**
  * This class is released under GNU general public license
@@ -56,8 +59,8 @@ class NameGenerator(fileName: String) {
         try {
             refresh(fileName)
         } catch (e: IOException) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
     }
 
     /**

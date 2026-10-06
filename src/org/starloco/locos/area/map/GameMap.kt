@@ -42,6 +42,9 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
 import java.util.stream.Stream
+import org.slf4j.LoggerFactory
+
+private val logger = LoggerFactory.getLogger(GameMap::class.java)
 
 class GameMap(@JvmField val data: ScriptMapData) {
 
@@ -177,8 +180,8 @@ class GameMap(@JvmField val data: ScriptMapData) {
                         SocketManager.GAME_SEND_Rp_PACKET(p, park)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                logger.error("unexpected error", e)
+                }
         }
 
         @JvmStatic
@@ -206,7 +209,7 @@ class GameMap(@JvmField val data: ScriptMapData) {
                 }
                 durabilityMax = infos[2].toInt()
             } catch (e: Exception) {
-                e.printStackTrace()
+                logger.error("unexpected error", e)
                 return 0
             }
 
@@ -1267,8 +1270,8 @@ class GameMap(@JvmField val data: ScriptMapData) {
                         try {
                             pathstr = PathFinding.getShortestStringPathBetween(this, group.cellId, nextCell!!.cellId, 0)
                         } catch (e: Exception) {
-                            e.printStackTrace()
-                            return
+                            logger.error("unexpected error", e)
+                return
                         }
                         if (pathstr == null)
                             return
@@ -1290,8 +1293,8 @@ class GameMap(@JvmField val data: ScriptMapData) {
                         try {
                             pathstr = PathFinding.getShortestStringPathBetween(this, group.cellId, cell, 0)
                         } catch (e: Exception) {
-                            e.printStackTrace()
-                            return
+                            logger.error("unexpected error", e)
+                return
                         }
                         if (pathstr == null)
                             return
@@ -1312,8 +1315,8 @@ class GameMap(@JvmField val data: ScriptMapData) {
                     try {
                         pathstr = PathFinding.getShortestStringPathBetween(this, group.cellId, cell, 0)
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                        return
+                        logger.error("unexpected error", e)
+                return
                     }
                     if (pathstr == null)
                         return

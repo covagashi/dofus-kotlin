@@ -10,6 +10,9 @@ import org.starloco.locos.kernel.Config
 import org.starloco.locos.kernel.Main
 import java.text.SimpleDateFormat
 import java.util.Date
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(ExchangePacketHandler::class.java)
 
 internal object ExchangePacketHandler {
 
@@ -95,7 +98,7 @@ internal object ExchangePacketHandler {
                     }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
     }
 }

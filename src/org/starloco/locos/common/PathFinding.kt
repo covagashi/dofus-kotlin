@@ -16,6 +16,9 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.abs
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(PathFinding::class.java)
 
 class PathFinding {
     companion object {
@@ -170,8 +173,8 @@ class PathFinding {
                             if (!perso.thisCases.contains(lastPos))
                                 perso.thisCases.add(lastPos)
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                        log.error("unexpected error", e)
+                }
 
                     if (lastPos < 0) {
                         nSteps.set(nSteps.get() + 1)

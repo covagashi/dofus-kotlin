@@ -5,6 +5,9 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(TimerWaiter::class.java)
 
 object TimerWaiter {
 
@@ -41,8 +44,8 @@ object TimerWaiter {
         try {
             run.run()
         } catch (e: Exception) {
-            e.printStackTrace()
-            System.err.println(e.cause?.message)
+            log.error("unexpected error", e)
+                log.error("{}", e.cause?.message)
         }
     }
 }

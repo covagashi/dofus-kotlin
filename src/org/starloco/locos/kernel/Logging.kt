@@ -6,6 +6,9 @@ import java.io.FileWriter
 import java.io.IOException
 import java.util.ArrayList
 import java.util.Calendar
+import org.slf4j.LoggerFactory
+
+private val logger = LoggerFactory.getLogger(Logging::class.java)
 
 object Logging {
     @JvmField
@@ -25,8 +28,8 @@ object Logging {
             try {
                 log.buffer.close()
             } catch (e: IOException) {
-                e.printStackTrace()
-            }
+                logger.error("unexpected error", e)
+                }
         }
         this.logs.clear()
     }
@@ -39,7 +42,7 @@ object Logging {
                 try {
                     log.write(arg0)
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    logger.error("unexpected error", e)
                 }
                 return
             }
@@ -53,8 +56,8 @@ object Logging {
             this.logs.add(Log(name, date))
             this.write(name, arg0)
         } catch (e: IOException) {
-            e.printStackTrace()
-        }
+            logger.error("unexpected error", e)
+                }
     }
 
     class Log(val name: String, date: String) {

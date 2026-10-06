@@ -6,6 +6,9 @@ import org.starloco.locos.database.data.FunctionDAO
 import org.starloco.locos.game.world.World
 import java.sql.SQLException
 import java.util.ArrayList
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(CraftData::class.java)
 
 class CraftData(dataSource: HikariDataSource?) : FunctionDAO<Any>(dataSource, "crafts") {
     override fun loadFully() {
@@ -17,12 +20,12 @@ class CraftData(dataSource: HikariDataSource?) : FunctionDAO<Any>(dataSource, "c
         for (str: String in result.getString("craft").split(";")) {
         if (str.isEmpty()) continue
                         try {
-        var tID: Int = Integer.parseInt(str.split("\\*")[0])
-        var qua: Int = Integer.parseInt(str.split("\\*")[1])
+        var tID: Int = Integer.parseInt(str.split("*")[0])
+        var qua: Int = Integer.parseInt(str.split("*")[1])
         m.add(World.Couple(tID, qua))
         } catch (e: Exception) {
-        e.printStackTrace()
-        cont = false
+        log.error("unexpected error", e)
+                cont = false
                         }
                     }
                     if (!cont) // S'il y a eu une erreur de parsing, on ignore cette recette

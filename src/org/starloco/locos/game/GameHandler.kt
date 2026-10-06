@@ -80,8 +80,8 @@ class GameHandler : IoHandler {
                     arg1.message!!.startsWith("Connection reset by peer") || arg1.message!!.startsWith("Connection timed out"))
         )
             return
-        arg1.printStackTrace()
-        if (Config.debug)
+        logger.error("unexpected error", arg1)
+                if (Config.debug)
             World.world.logger.error("Exception connexion client : ", arg1)
         this.kick(arg0)
     }

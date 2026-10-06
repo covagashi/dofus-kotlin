@@ -70,20 +70,20 @@ class Monster(
         for (n in 0 until 12) {
             try {
                 //Grades
-                val split = thisGrades.split("\\|")
+                val split = thisGrades.split("|")
                 val grade = split[n]
                 val infos = grade.split("@")
                 val level = infos[0].toInt()
                 val resists = infos[1]
                 //Stats
-                val stats = thisStats.split("\\|")[n]
+                val stats = thisStats.split("|")[n]
                 //Spells
                 var spells = ""
                 if (!spellGuard || (!thisSpells.equals("||||", ignoreCase = true)
                         && !thisSpells.equals("", ignoreCase = true)
                         && !thisSpells.equals("-1", ignoreCase = true))
                 ) {
-                    spells = thisSpells.split("\\|")[n]
+                    spells = thisSpells.split("|")[n]
                     if (spells == "-1")
                         spells = ""
                 }
@@ -92,8 +92,8 @@ class Monster(
                 var init = 1
 
                 try {
-                    pdvmax = thisPdvs.split("\\|")[n].toInt()
-                    init = thisInit.split("\\|")[n].toInt()
+                    pdvmax = thisPdvs.split("|")[n].toInt()
+                    init = thisInit.split("|")[n].toInt()
                 } catch (e: Exception) {
                     World.world.logger.error("  > Error : Monster (id:$id, grade: $n : Life or initiative unreadable.", e)
                 }
@@ -103,11 +103,11 @@ class Monster(
                 var xp = 10
 
                 try {
-                    val pts = thisPoints.split("\\|")[n].split(";")
+                    val pts = thisPoints.split("|")[n].split(";")
                     try {
                         PA = pts[0].toInt()
                         PM = pts[1].toInt()
-                        xp = thisXp.split("\\|")[n].toInt()
+                        xp = thisXp.split("|")[n].toInt()
                     } catch (e: Exception) {
                         World.world.logger.error("  > Error : Monster (id:$id, grade: $n : PA, PM or experience unreadable.", e)
                     }

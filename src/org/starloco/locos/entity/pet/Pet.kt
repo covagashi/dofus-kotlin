@@ -51,7 +51,7 @@ class Pet(
             {
                 for (cut in this.statsUp.split(";"))//On coupe b2|41#49#62 puis 70|63#64
                 {
-                    val cut2 = cut.split("\\|")
+                    val cut2 = cut.split("|")
                     val statsID = (cut2[0]).toInt(16)
                     val ar = ArrayList<Int>()
 
@@ -68,7 +68,7 @@ class Pet(
             } else
             //Un seul stats
             {
-                val cut2 = this.statsUp.split("\\|") //On coupe b2 puis 41#49#62
+                val cut2 = this.statsUp.split("|") //On coupe b2 puis 41#49#62
                 val statsID = (cut2[0]).toInt(16)
                 val ar = ArrayList<Int>()
                 for (categ in cut2[1].split("#")) {
@@ -86,7 +86,7 @@ class Pet(
             {
                 for (cut in this.statsUp.split(";"))//On coupe
                 {
-                    val cut2 = cut.split("\\|")
+                    val cut2 = cut.split("|")
                     val statsID = (cut2[0]).toInt(16)
                     val ar = ArrayList<MutableMap<Int, Int>>()
                     for (soustotal in cut2[1].split("#")) {
@@ -109,7 +109,7 @@ class Pet(
             } else
             //Un seul stats 8a|64,50#65,50#68,50#72,50#96,50#97,40#99,40#179,40#182,10#181,10#180,1
             {
-                val cut2 = this.statsUp.split("\\|") //On coupe 8a puis 64,50#65,50#68,50#72,50#96,50#97,40#99,40#179,40#182,10#181,10#180,1
+                val cut2 = this.statsUp.split("|") //On coupe 8a puis 64,50#65,50#68,50#72,50#96,50#97,40#99,40#179,40#182,10#181,10#180,1
                 val statsID = (cut2[0]).toInt(16)
                 val ar = ArrayList<MutableMap<Int, Int>>()
                 for (categ in cut2[1].split("#")) {
@@ -188,7 +188,7 @@ class Pet(
     fun getJet(): String {
         if (!this.jet.contains("|"))
             return jet
-        val split = this.jet.split("\\|")
+        val split = this.jet.split("|")
         return split[Formulas.getRandomValue(1, split.size) - 1]
     }
 }

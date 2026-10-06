@@ -37,6 +37,9 @@ sourceSets {
         kotlin.srcDirs = ['src']
         resources.srcDirs = ['src/resources']
     }
+    test {
+        kotlin.srcDirs = ['test']
+    }
 }
 
 repositories {
@@ -64,6 +67,13 @@ dependencies {
     implementation 'org.yaml:snakeyaml:1.33'
     implementation 'org.fusesource.jansi:jansi:2.4.1'
     implementation 'org.mariuszgromada.math:MathParser.org-mXparser:5.2.1'
+
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5:2.1.21'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 jar {

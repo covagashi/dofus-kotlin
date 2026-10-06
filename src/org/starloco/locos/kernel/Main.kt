@@ -80,8 +80,8 @@ object Main {
                 )
             )
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            logger.error("unexpected error", e)
+                }
 
         Main.start()
     }
@@ -126,8 +126,8 @@ object Main {
                             try {
                                 updatable.update()
                             } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
+                                logger.error("unexpected error", e)
+                }
                     }
 
                     if (!Main.runnables.isEmpty()) {
@@ -137,8 +137,8 @@ object Main {
                                 val runnable = iterator.next()
                                 runnable?.run()
                             } catch (e: Exception) {
-                                e.printStackTrace()
-                            } finally {
+                                logger.error("unexpected error", e)
+                } finally {
                                 iterator.remove()
                             }
                         }
@@ -147,10 +147,10 @@ object Main {
                     try {
                         if (Config.isRunning) Thread.sleep(100)
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                        logger.error("unexpected error", e)
+                }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    logger.error("unexpected error", e)
                 }
             }
         } else {

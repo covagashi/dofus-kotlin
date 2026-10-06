@@ -11,6 +11,9 @@ import org.starloco.locos.`object`.GameObject
 import org.starloco.locos.other.Action
 import org.starloco.locos.quest.QuestProgress
 import java.util.ArrayList
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(ConditionParser::class.java)
 
 class ConditionParser {
 
@@ -103,8 +106,8 @@ class ConditionParser {
             val expression = Expression(req, *args.toTypedArray())
             return expression.calculate() == 1.0
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
         return false
     }
 
@@ -115,8 +118,8 @@ class ConditionParser {
         try {
             morph = Integer.parseInt((if (c.contains("==")) c.split("==")[1] else c.split("!=")[1]))
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
         return if (p.morphId == morph)
             c.contains("==")
         else
@@ -136,13 +139,13 @@ class ConditionParser {
     private fun havePj(c: String, p: Player): Boolean {
         if (c.equals("", ignoreCase = true))
             return false
-        for (s in c.split("\\|\\|")) {
+        for (s in c.split("||")) {
             val k = s.split("==")
             val id: Int
             try {
                 id = Integer.parseInt(k[1])
             } catch (e: Exception) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 continue
             }
             if (p.getMetierByID(id) != null)
@@ -293,8 +296,8 @@ class ConditionParser {
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
         return false
     }
 
@@ -309,8 +312,8 @@ class ConditionParser {
                     return false
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
         return true
     }
 
@@ -379,7 +382,7 @@ class ConditionParser {
                 copyCond += "&&"
             }
         } else if (cond.contains("||")) {
-            for (cur in cond.split("\\|\\|")) {
+            for (cur in cond.split("||")) {
                 if (cond.contains("==")) {
                     for (cur2 in cur.split("==")) {
                         if (cur2.contains("PO")) {
@@ -499,7 +502,7 @@ class ConditionParser {
                 copyCond = "1==0"
         } else if (cond.contains(">")) {
             if (cond.contains("||")) {
-                for (cur in cond.split("\\|\\|")) {
+                for (cur in cond.split("||")) {
                     if (!cur.contains(">"))
                         continue
                     val _cur = cur.split(">")

@@ -11,6 +11,9 @@ import org.starloco.locos.kernel.Constant
 import org.starloco.locos.kernel.Main
 import java.util.ArrayList
 import java.util.HashMap
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Spell::class.java)
 
 class Spell(
     val id: Int,
@@ -144,7 +147,7 @@ class Spell(
 
         private fun parseEffect(e: String): ArrayList<SpellEffect> {
             val effets = ArrayList<SpellEffect>()
-            val splt = e.split("\\|")
+            val splt = e.split("|")
             for (a in splt) {
                 try {
                     if (e == "-1")
@@ -153,8 +156,8 @@ class Spell(
                     val args = a.split(";", limit = 2)[1]
                     effets.add(SpellEffect(id, args, spellID, level))
                 } catch (f: Exception) {
-                    f.printStackTrace()
-                    Main.stop("parseEffect spell")
+                    log.error("unexpected error", f)
+                Main.stop("parseEffect spell")
                 }
             }
             return effets
@@ -311,7 +314,7 @@ class Spell(
                     SE.applyToFight(fight, perso, cell, cibles)
                     num++
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
         }

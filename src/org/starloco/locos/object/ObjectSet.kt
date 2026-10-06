@@ -4,6 +4,9 @@ import org.starloco.locos.client.other.Stats
 import org.starloco.locos.game.world.World
 
 import java.util.ArrayList
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(ObjectSet::class.java)
 
 class ObjectSet(val id: Int, items: String, bonuses: String) {
 
@@ -16,8 +19,8 @@ class ObjectSet(val id: Int, items: String, bonuses: String) {
                 val obj = World.world.getObjTemplate(str.trim().toInt()) ?: continue
                 this.itemTemplates.add(obj)
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
         }
 
         this.effects.add(Stats())
@@ -33,8 +36,8 @@ class ObjectSet(val id: Int, items: String, bonuses: String) {
                         //on ajoute a la stat
                         S.addOneStat(stat, value)
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                        log.error("unexpected error", e)
+                }
                 }
             }
             this.effects.add(S)

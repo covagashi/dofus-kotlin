@@ -11,6 +11,9 @@ import org.starloco.locos.game.world.World
 import org.starloco.locos.kernel.Config
 import java.util.ArrayList
 import java.util.Objects
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(WorldSave::class.java)
 
 class WorldSave private constructor(wait: Int) : Updatable<Void>(wait) {
 
@@ -83,18 +86,18 @@ class WorldSave private constructor(wait: Int) : Updatable<Void>(wait) {
                             try {
                                 (DatabaseManager.get(ObjectData::class.java) as ObjectData).update(obj)
                             } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
+                                log.error("unexpected error", e)
+                }
                         }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
 
                 /* end save of data */
                 World.world.logger.debug("The save has been doing successfully !")
                 SocketManager.GAME_SEND_Im_PACKET_TO_ALL("1165;")
             } catch (exception: Exception) {
-                exception.printStackTrace()
+                log.error("unexpected error", exception)
                 World.world.logger.error("Error when trying save of the world : " + exception.message)
                 if (trys < 10) {
                     World.world.logger.error("Fail of the save, num of try : " + (trys + 1) + ".")

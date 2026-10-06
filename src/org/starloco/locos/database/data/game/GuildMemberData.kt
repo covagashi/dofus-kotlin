@@ -7,6 +7,9 @@ import org.starloco.locos.database.data.FunctionDAO
 import org.starloco.locos.game.world.World
 import java.sql.PreparedStatement
 import java.sql.SQLException
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(GuildMemberData::class.java)
 
 class GuildMemberData(dataSource: HikariDataSource?) : FunctionDAO<Player>(dataSource, "guild_members") {
 
@@ -18,8 +21,8 @@ class GuildMemberData(dataSource: HikariDataSource?) : FunctionDAO<Player>(dataS
                         val g = World.world.getGuild(result.getInt("guild"))
                         g?.addMember(result.getInt("guid"), result.getInt("rank"), result.getByte("pxp"), result.getLong("xpdone"), result.getInt("rights"), result.getString("lastConnection").replace("-", "~"))
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                        log.error("unexpected error", e)
+                }
                 }
             }
         } catch (e: SQLException) {

@@ -116,7 +116,7 @@ class MountPark(
 
     private fun parseBreedObjects(objects: String) {
         if (objects.isNotEmpty()) {
-            for (obj in objects.split("\\|")) {
+            for (obj in objects.split("|")) {
                 val info = obj.split(";")
                 val cellId = info[0].toInt()
                 val objectId = info[1].toInt()
@@ -131,7 +131,7 @@ class MountPark(
 
     private fun parseDurabilityObjects(objects: String) {
         if (objects.isNotEmpty()) {
-            for (obj in objects.split("\\|")) {
+            for (obj in objects.split("|")) {
                 val info = obj.split(";")
                 val cellId = info[0].toInt()
                 val durability = info[1].toInt()

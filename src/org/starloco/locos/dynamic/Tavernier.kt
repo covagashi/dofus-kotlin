@@ -13,6 +13,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.ArrayList
 import java.util.Arrays
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Tavernier::class.java)
 
 class Tavernier : Updatable<Void?>(5 * 60_000) {
 
@@ -104,8 +107,8 @@ class Tavernier : Updatable<Void?>(5 * 60_000) {
                 return msg
             }
         } catch (e: IOException) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
         return msg
     }
 

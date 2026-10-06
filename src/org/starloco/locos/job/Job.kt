@@ -2,6 +2,9 @@ package org.starloco.locos.job
 
 import java.util.ArrayList
 import java.util.HashMap
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Job::class.java)
 
 class Job(val id: Int, tools: String, crafts: String, skills: String) {
 
@@ -15,12 +18,12 @@ class Job(val id: Int, tools: String, crafts: String, skills: String) {
                 try {
                     this.tools.add(str.toInt())
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
         }
         if (crafts != "") {
-            for (str in crafts.split("\\|")) {
+            for (str in crafts.split("|")) {
                 try {
                     val skID = str.split(";")[0].toInt()
                     val list = ArrayList<Int>()
@@ -28,12 +31,12 @@ class Job(val id: Int, tools: String, crafts: String, skills: String) {
                         list.add(str2.toInt())
                     this.crafts[skID] = list
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
         }
         if (skills != "") {
-            for (arg0 in skills.split("\\|")) {
+            for (arg0 in skills.split("|")) {
                 val io = arg0.split(";")[0]
                 val skill = arg0.split(";")[1]
                 val list = ArrayList<Int>()

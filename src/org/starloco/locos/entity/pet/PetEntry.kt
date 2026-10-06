@@ -10,6 +10,9 @@ import org.starloco.locos.kernel.Constant
 import org.starloco.locos.`object`.GameObject
 
 import java.text.SimpleDateFormat
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(PetEntry::class.java)
 
 class PetEntry(
     val objectId: Int,
@@ -37,7 +40,7 @@ class PetEntry(
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val date = formatter.format(this.lastEatDate)
 
-        val split = date.split("\\s")
+        val split = date.split(Regex("\\s"))
 
         val split0 = split[0].split("-")
         hexDate += Integer.toHexString(split0[0].toInt()) + "#"
@@ -313,8 +316,8 @@ class PetEntry(
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-            println("Error : " + e.message)
+            log.error("unexpected error", e)
+                log.error("Error : " + e.message)
         }
         SocketManager.GAME_SEND_UPDATE_OBJECT_DISPLAY_PACKET(p, obj)
         (DatabaseManager.get(ObjectData::class.java) as ObjectData).update(obj)

@@ -27,6 +27,9 @@ import java.util.Optional
 import java.util.StringJoiner
 import java.util.stream.Collectors
 import java.util.stream.Stream
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Fighter::class.java)
 
 abstract class Fighter protected constructor(val id: Int, val fight: Fight) : Comparable<Fighter>, Scripted<Any>, Actor, Cloneable {
 
@@ -370,7 +373,7 @@ abstract class Fighter protected constructor(val id: Int, val fight: Fight) : Co
         this.fightBuffs.add(effect)
 
         if (Config.debug)
-            println("- Ajout du Buff " + id + " sur le personnage fighter (" + this.id + ") val : " + value + " duration : " + duration + " debuff : " + debuff + " spellid : " + spellId + " args : " + args + " !")
+            log.debug("- Ajout du Buff " + id + " sur le personnage fighter (" + this.id + ") val : " + value + " duration : " + duration + " debuff : " + debuff + " spellid : " + spellId + " args : " + args + " !")
         when (spellId) {
             // Feca spells shields
             1, 4, 5, 6, 7, 14, 18, 20 -> {

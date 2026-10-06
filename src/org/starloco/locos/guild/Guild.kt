@@ -122,7 +122,7 @@ class Guild {
     }
 
     private fun decompileSpell(spells: String) {
-        for (split in spells.split("\\|".toRegex()))
+        for (split in spells.split("|".toRegex()))
             this.spells[Integer.parseInt(split.split(";")[0])] = World.world.getSort(Integer.parseInt(split.split(";")[0]))!!.getStatsByLevel(Integer.parseInt(split.split(";")[1]))
     }
 
@@ -144,7 +144,7 @@ class Guild {
     }
 
     private fun decompileStats(statsStr: String) {
-        for (split in statsStr.split("\\|".toRegex()))
+        for (split in statsStr.split("|".toRegex()))
             this.stats[Integer.parseInt(split.split(";")[0])] = Integer.parseInt(split.split(";")[1])
     }
 

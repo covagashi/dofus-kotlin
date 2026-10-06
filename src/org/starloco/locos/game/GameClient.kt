@@ -80,6 +80,8 @@ import org.starloco.locos.`object`.entity.SoulStone;
 import org.starloco.locos.util.TimerWaiter;
 import org.starloco.locos.util.generator.NameGenerator;
 
+private val log = LoggerFactory.getLogger(GameClient::class.java)
+
 open class GameClient {
 
     @get:JvmName("session")
@@ -154,7 +156,7 @@ open class GameClient {
                         return;
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     player.sendMessage(player.getLang().trans("game.gameclient.event.error"));
                 }
             }
@@ -237,7 +239,7 @@ open class GameClient {
                 
 }
 else -> {if(this.player != null)
-                    if(this.player.isChangeName())
+                    if(this.player.changeName)
                         this.changeName(packet);                
                 
 }
@@ -343,7 +345,7 @@ else -> {
     private fun createMimibiote(packet: String)
     {
         if(this.player.fight != null) return;
-        val datas: List<String> = packet.split("\\|")
+        val datas: List<String> = packet.split("|")
         if(datas.size < 3) return;
 
         var idItemToKeep: Int
@@ -386,7 +388,7 @@ else -> {
     private fun dissociateMimibiote(packet: String)
     {
         if(this.player.fight != null) return;
-        val datas: List<String> = packet.split("\\|")
+        val datas: List<String> = packet.split("|")
         if(datas.size < 2) return;
 
         var idItem: Int
@@ -425,7 +427,7 @@ else -> {
     }
 
     private fun addCharacter(packet: String) {
-        var infos: List<String> = packet.substring(2).split("\\|")
+        var infos: List<String> = packet.substring(2).split("|")
         if (DatabaseManager.get(PlayerData::class.java).exist(infos[0])) {
             SocketManager.GAME_SEND_NAME_ALREADY_EXIST(this);
             return;
@@ -503,12 +505,12 @@ else -> {
                 this.player.boostStat(stat, true);
             }
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
     private fun deleteCharacter(packet: String) {
-        var split: List<String> = packet.substring(2).split("\\|")
+        var split: List<String> = packet.substring(2).split("|")
         var GUID: Int = Integer.parseInt(split[0])
         var answer: String =if (split.size > 1) split[1] else ""
         if (this.account.getPlayers().containsKey(GUID) && !this.account.getPlayers()[GUID]!!.isOnline) {
@@ -556,7 +558,7 @@ else -> {
                     }
                     if (item == -1) item = id;
                 } else {
-                    System.err.println("ERROR BOUTIQUE TEMPLATE OBJECT NOT FOUND : " + id);
+                    log.error("ERROR BOUTIQUE TEMPLATE OBJECT NOT FOUND : " + id);
                 }
             }
             SocketManager.GAME_SEND_Ag_PACKET(this, item, data);
@@ -564,7 +566,7 @@ else -> {
     }
 
     private fun attributeGiftToCharacter(packet: String) {
-        var infos: List<String> = packet.split("\\|")
+        var infos: List<String> = packet.split("|")
 
         var template: Int = Integer.parseInt(infos[0])
         var player: Player = World.world.getPlayer(Integer.parseInt(infos[1])!!)!!
@@ -722,7 +724,7 @@ else -> {
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             SocketManager.GAME_SEND_ATTRIBUTE_FAILED(this);
             this.kick();
         }
@@ -815,10 +817,10 @@ else -> {
                     return;
                 }
                 timeLastChatMsg = System.currentTimeMillis();
-                if (!this.player.get_canaux().contains(packet[2] + ""))
+                if (!this.player.canaux.contains(packet[2] + ""))
                     return;
 
-                msg = packet.split("\\|", limit = 2)[1];
+                msg = packet.split("|", limit = 2)[1];
                 if (CommandPlayer.analyse(this.player, msg)) {
                     this.player.send("BN");
                     return;
@@ -827,7 +829,7 @@ else -> {
                     SocketManager.GAME_SEND_Im_PACKET(this.player, "184");
                     return;
                 }
-                if (this.player.isSpec() && this.player.fight != null) {
+                if (this.player.spec && this.player.fight != null) {
                     var team: Int = this.player.fight!!.getTeamId(this.player.id)
                     if (team == -1)
                         return;
@@ -846,7 +848,7 @@ else -> {
                     SocketManager.GAME_SEND_cMK_PACKET_TO_FIGHT(this.player.fight!!, 7, "", this.player.id, this.player.name, msg);
                 
 }
-'^' -> {msg = packet.split("\\|", limit = 2)[1];
+'^' -> {msg = packet.split("|", limit = 2)[1];
                 var x: Long = System.currentTimeMillis() - timeLastIncarnamMsg
                 if (x < 30000) {
                     x = (30000 - x) / 1000;//Chat antiflood
@@ -859,7 +861,7 @@ else -> {
                 }
 
                 timeLastIncarnamMsg = System.currentTimeMillis();
-                msg = packet.split("\\|", limit = 2)[1];
+                msg = packet.split("|", limit = 2)[1];
                 lastMsg = msg;
                 if (this.player.getObjetByPos(Constant.ITEM_POS_ROLEPLAY_BUFF) != null)
                     if (this.player.getObjetByPos(Constant.ITEM_POS_ROLEPLAY_BUFF)!!.template!!.id == 10844)
@@ -868,10 +870,10 @@ else -> {
 
                 
 }
-'#' -> {if (!this.player.get_canaux().contains(packet[2] + ""))
+'#' -> {if (!this.player.canaux.contains(packet[2] + ""))
                     return;
                 if (this.player.fight != null) {
-                    msg = packet.split("\\|", limit = 2)[1];
+                    msg = packet.split("|", limit = 2)[1];
                     var team: Int = this.player.fight!!.getTeamId(this.player.id)
                     if (team == -1)
                         return;
@@ -884,11 +886,11 @@ else -> {
                 }
                 
 }
-'$' -> {if (!this.player.get_canaux().contains(packet[2] + ""))
+'$' -> {if (!this.player.canaux.contains(packet[2] + ""))
                     return;
                 if (this.player.party == null)
                     return;
-                msg = packet.split("\\|", limit = 2)[1];
+                msg = packet.split("|", limit = 2)[1];
                 if (Logging.USE_LOG)
                     Logging.getInstance().write("PartyMessage", this.player.name + " > " + this.player.party + " > " + msg);
                 if (this.player.getObjetByPos(Constant.ITEM_POS_ROLEPLAY_BUFF) != null)
@@ -897,7 +899,7 @@ else -> {
                 SocketManager.GAME_SEND_cMK_PACKET_TO_GROUP(this.player.party!!, "$", this.player.id, this.player.name, msg);
                 
 }
-':' -> {if (!this.player.get_canaux().contains(packet[2] + ""))
+':' -> {if (!this.player.canaux.contains(packet[2] + ""))
                     return;
                 var l: Long
                 if (this.player.isMissingSubscription()) {
@@ -918,7 +920,7 @@ if (l < 50000) {
                         }
                     }
                     timeLastTradeMsg = System.currentTimeMillis();
-                    msg = packet.split("\\|", limit = 2)[1];
+                    msg = packet.split("|", limit = 2)[1];
                     if (Logging.USE_LOG)
                         Logging.getInstance().write("TradeMessage", this.player.name + " > " + msg);
                     if (this.player.getObjetByPos(Constant.ITEM_POS_ROLEPLAY_BUFF) != null)
@@ -930,13 +932,13 @@ if (l < 50000) {
 }
 '@' -> {if (this.player.getGroup() == null)
                     return;
-                msg = packet.split("\\|", limit = 2)[1];
+                msg = packet.split("|", limit = 2)[1];
                 if (Logging.USE_LOG)
                     Logging.getInstance().write("AdminMessage", this.player.name + " > " + msg);
                 SocketManager.GAME_SEND_cMK_PACKET_TO_ADMIN("@", this.player.id, this.player.name, msg);
                 
 }
-'?' -> {if (!this.player.get_canaux().contains(packet[2] + ""))
+'?' -> {if (!this.player.canaux.contains(packet[2] + ""))
                     return;
                 if (this.player.isMissingSubscription()) {
                     SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this.player.getGameClient()!!, 'S');
@@ -958,7 +960,7 @@ if (j < 40000) {
                         }
                     }
                     timeLastRecrutmentMsg = System.currentTimeMillis();
-                    msg = packet.split("\\|", limit = 2)[1];
+                    msg = packet.split("|", limit = 2)[1];
                     if (Logging.USE_LOG)
                         Logging.getInstance().write("RecruitmentMessage", this.player.name + " > " + msg);
                     if (this.player.getObjetByPos(Constant.ITEM_POS_ROLEPLAY_BUFF) != null)
@@ -968,11 +970,11 @@ if (j < 40000) {
                 }
                 
 }
-'%' -> {if (!this.player.get_canaux().contains(packet[2] + ""))
+'%' -> {if (!this.player.canaux.contains(packet[2] + ""))
                     return;
                 if (this.player.getGuild() == null)
                     return;
-                msg = packet.split("\\|", limit = 2)[1];
+                msg = packet.split("|", limit = 2)[1];
                 if (Logging.USE_LOG)
                     Logging.getInstance().write("GuildMessage", this.player.name + " > " + this.player.getGuild()!!.name + " > " + msg);
                 if (this.player.getObjetByPos(Constant.ITEM_POS_ROLEPLAY_BUFF) != null)
@@ -981,7 +983,7 @@ if (j < 40000) {
                 SocketManager.GAME_SEND_cMK_PACKET_TO_GUILD(this.player.getGuild()!!, "%", this.player.id, this.player.name, msg);
                 
 }
-'!' -> {if (!this.player.get_canaux().contains(packet[2] + ""))
+'!' -> {if (!this.player.canaux.contains(packet[2] + ""))
                     return;
                 if (this.player.isMissingSubscription()) {
                     SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this.player.getGameClient()!!, 'S');
@@ -1001,7 +1003,7 @@ if (k < 30000) {
                     return;
                 }
                 timeLastAlignMsg = System.currentTimeMillis();
-                msg = packet.split("\\|", limit = 2)[1];
+                msg = packet.split("|", limit = 2)[1];
                 if (Logging.USE_LOG)
                     Logging.getInstance().write("AlignMessage", this.player.name + " > " + msg);
                 if (this.player.getObjetByPos(Constant.ITEM_POS_ROLEPLAY_BUFF) != null)
@@ -1010,8 +1012,8 @@ if (k < 30000) {
                 SocketManager.GAME_SEND_cMK_PACKET_TO_ALIGN("!", this.player.id, this.player.name, msg, this.player);
                 
 }
-else -> {var nom: String = packet.substring(2).split("\\|")[0]
-                msg = packet.split("\\|", limit = 2)[1];
+else -> {var nom: String = packet.substring(2).split("|")[0]
+                msg = packet.split("|", limit = 2)[1];
                 if (!(nom.length <= 1)) {
                     var target: Player = World.world.getPlayerByName(nom)!!
                     if (target == null || target.getAccount() == null || target.getGameClient() == null) {
@@ -1026,7 +1028,7 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
                         SocketManager.GAME_SEND_Im_PACKET(this.player, "184");
                         return;
                     }
-                    if (this.player.getGroup() == null && target.isInvisible()) {
+                    if (this.player.getGroup() == null && target.isInvisible) {
                         SocketManager.GAME_SEND_CHAT_ERROR_PACKET(this, nom);
                         return;
                     }
@@ -1221,7 +1223,7 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
                     MapID = prism.map;
                     cellID = prism.cell;
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
 
                 if (FightID == -1 || MapID == -1 || cellID == -1)
@@ -1336,7 +1338,7 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
         if (action == null || action.getType() != ExchangeAction.TALKING_WITH)
             return;
 
-        var infos: List<String> = packet.substring(2).split("\\|")
+        var infos: List<String> = packet.substring(2).split("|")
 
         var data: NpcDialogActionData = ((this.player.exchangeAction as ExchangeAction<NpcDialogActionData>)).getValue()
         var npc: Npc = data.getNpc(player)!!
@@ -1460,7 +1462,7 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
         if (target.isDead().toInt() == 1 || checkExchangeAction == null || !(checkExchangeAction.getValue() is Int) || (checkExchangeAction.getType() != ExchangeAction.TRADING_WITH_PLAYER && checkExchangeAction.getType() != ExchangeAction.CRAFTING_SECURE_WITH))
             return;
 
-        var type: Int = this.player.getIsCraftingType().get(0)
+        var type: Int = this.player.craftingType.get(0)
         var newExchangeAction: ExchangeAction<*>? = null
         when (type){  1 -> {SocketManager.GAME_SEND_EXCHANGE_CONFIRM_OK(this, 1);
                 SocketManager.GAME_SEND_EXCHANGE_CONFIRM_OK(target.getGameClient()!!, 1);
@@ -1468,16 +1470,16 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
                 newExchangeAction = ExchangeAction<Any?>(ExchangeAction.TRADING_WITH_PLAYER, exchange)
                 this.player.exchangeAction = newExchangeAction;
                 target.exchangeAction = newExchangeAction;
-                this.player.getIsCraftingType().clear();
-                target.getIsCraftingType().clear();
+                this.player.craftingType.clear();
+                target.craftingType.clear();
                 
 }
-12, 13 -> {var player1: Player = (if (target.getIsCraftingType().get(0) == 12) target else this.player)
-                var player2: Player = (if (target.getIsCraftingType().get(0) == 13) target else this.player)
+12, 13 -> {var player1: Player = (if (target.craftingType.get(0) == 12) target else this.player)
+                var player2: Player = (if (target.craftingType.get(0) == 13) target else this.player)
 
                 var craftSecure: CraftSecure = CraftSecure(player1, player2)
-                SocketManager.GAME_SEND_ECK_PACKET(this, type, craftSecure.maxCase.toString() + ";" + this.player.getIsCraftingType().get(1));
-                SocketManager.GAME_SEND_ECK_PACKET(target.getGameClient()!!, target.getIsCraftingType().get(0), craftSecure.maxCase.toString() + ";" + this.player.getIsCraftingType().get(1));
+                SocketManager.GAME_SEND_ECK_PACKET(this, type, craftSecure.maxCase.toString() + ";" + this.player.craftingType.get(1));
+                SocketManager.GAME_SEND_ECK_PACKET(target.getGameClient()!!, target.craftingType.get(0), craftSecure.maxCase.toString() + ";" + this.player.craftingType.get(1));
 
                 newExchangeAction = ExchangeAction(ExchangeAction.CRAFTING_SECURE_WITH, craftSecure);
                 this.player.exchangeAction = newExchangeAction;
@@ -1488,7 +1490,7 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
     }
 
     private fun buy(packet: String) {
-        var infos: List<String> = packet.substring(2).split("\\|")
+        var infos: List<String> = packet.substring(2).split("|")
 
         var checkExchangeAction: ExchangeAction<*>? = this.player.exchangeAction
         if(checkExchangeAction == null || !(checkExchangeAction.getValue() is Int) || (checkExchangeAction.getType() != ExchangeAction.TRADING_WITH_OFFLINE_PLAYER && checkExchangeAction.getType() != ExchangeAction.TRADING_WITH_NPC)) return;
@@ -1505,7 +1507,7 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
                     itemID = Integer.valueOf(infos[0]);
                     qua = Integer.valueOf(infos[1]);
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                     return;
                 }
 
@@ -1595,14 +1597,14 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
                 player.addItem(offer.itemTemplate, qua,(npcTemplate.flags.toInt() and 0x1) != 0, true);
                 SocketManager.GAME_SEND_BUY_OK_PACKET(this);
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
                 SocketManager.GAME_SEND_BUY_ERROR_PACKET(this);
             }
         }
     }
 
     private fun bigStore(packet: String) {
-        if (this.player.fight != null || this.player.isAway())
+        if (this.player.fight != null || this.player.away)
             return;
 
         // Check current exchange action
@@ -1616,7 +1618,7 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
         var templateID: Int
         var catContent: List<Int>? = null
         when (packet[2]) {
-'B' -> {var info: List<String> = packet.substring(3).split("\\|")//ligneID|amount|price
+'B' -> {var info: List<String> = packet.substring(3).split("|")//ligneID|amount|price
                 var ligneID: Int = Integer.parseInt(info[0])
                 var amount: Int = Integer.parseInt(info[1])
                 var price: Int = Integer.parseInt(info[2])
@@ -1637,7 +1639,8 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
 
                 try {
                     Logging.getInstance().write("Object", "BuyHdv : " + player.name + " : achat de " + obj.template!!.name + "(" + obj.guid + ") x" + obj.quantity + " venant du compte " + name);
-                } catch (ex: Exception) { ex.printStackTrace(); }
+                } catch (ex: Exception) { log.error("unexpected error", ex)
+                 }
 
                 seller.map { it.currentPlayer }.ifPresent { p ->
                     SocketManager.GAME_SEND_Im_PACKET(p, "065;" + price + "~" + obj.template!!.id + "~" + obj.template!!.id + "~1");
@@ -1672,7 +1675,7 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
                 SocketManager.GAME_SEND_EHL_PACKET(this.player, categ, catContent);
                 
 }
-'S' -> {var infos: List<String> = packet.substring(3).split("\\|")//type | templateId
+'S' -> {var infos: List<String> = packet.substring(3).split("|")//type | templateId
                 var template: Int = Integer.parseInt(infos[1])
                 var category: Int = Integer.parseInt(infos[0])
 
@@ -1724,7 +1727,7 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
             var fragment: Fragment = Fragment("")
 
             for (couple in  ((value as BreakingObject)).objects) {
-                var obj: GameObject = this.player.getItems().get(couple.first)!!
+                var obj: GameObject = this.player.objects.get(couple.first)!!
 
                 if (obj == null || couple.second < 1 || obj.quantity < couple.second) {
                     this.player.send("Ea3");
@@ -1814,13 +1817,13 @@ else -> {var nom: String = packet.substring(2).split("\\|")[0]
         when (this.player.exchangeAction!!.getType()) {
 ExchangeAction.TRADING_WITH_ME -> {when (packet[2]) {
 'O' -> {if (packet[3] == '+') {
-                            var infos: List<String> = packet.substring(4).split("\\|")
+                            var infos: List<String> = packet.substring(4).split("|")
                             try {
                                 var guid: Int = Integer.parseInt(infos[0])
                                 var qua: Int = Integer.parseInt(infos[1])
                                 var price: Int = Integer.parseInt(infos[2])
 
-                                var obj: GameObject = this.player.getItems().get(guid)!!
+                                var obj: GameObject = this.player.objects.get(guid)!!
                                 if (obj == null)
                                     return;
                                 if (qua <= 0 || obj.isAttach)
@@ -1833,11 +1836,11 @@ ExchangeAction.TRADING_WITH_ME -> {when (packet[2]) {
                                 this.player.addInStore(obj.guid, price, qua);
                             } catch (e: NumberFormatException) {
                                 World.world.logger.error("Error Echange Store '" + packet + "' => " + e.message);
-                                e.printStackTrace();
+                                log.error("unexpected error", e)
                                 return;
                             }
                         } else {
-                            var infos: List<String> = packet.substring(4).split("\\|")
+                            var infos: List<String> = packet.substring(4).split("|")
                             try {
                                 var guid: Int = Integer.parseInt(infos[0])
                                 var qua: Int = Integer.parseInt(infos[1])
@@ -1856,7 +1859,7 @@ ExchangeAction.TRADING_WITH_ME -> {when (packet[2]) {
                                 this.player.removeFromStore(obj.guid, qua);
                             } catch (e: NumberFormatException) {
                                 World.world.logger.error("Error Echange Store '" + packet + "' => " + e.message);
-                                e.printStackTrace();
+                                log.error("unexpected error", e)
                                 return;
                             }
                         }
@@ -1875,7 +1878,7 @@ ExchangeAction.TRADING_WITH_COLLECTOR -> {var Collector: Collector = World.world
                             try {
                                 P_Kamas = Integer.parseInt(packet.substring(4)).toLong();
                             } catch (e: NumberFormatException) {
-                                e.printStackTrace();
+                                log.error("unexpected error", e)
                                 World.world.logger.error("Error Echange CC '" + packet + "' => " + e.message);
                             }
                             if (P_Kamas < 0)
@@ -1897,7 +1900,7 @@ ExchangeAction.TRADING_WITH_COLLECTOR -> {var Collector: Collector = World.world
 }
 'O' -> {if (packet[3] == '-') //On retire
                         {
-                            var infos: List<String> = packet.substring(4).split("\\|")
+                            var infos: List<String> = packet.substring(4).split("|")
                             var guid: Int = 0
                             var qua: Int = 0
                             try {
@@ -1933,7 +1936,7 @@ ExchangeAction.BREAKING_OBJECTS -> {val breakingObject: BreakingObject = ((this.
                         if (breakingObject.objects.size >= 8)
                             return;
 
-                        var infos: List<String> = packet.substring(4).split("\\|")
+                        var infos: List<String> = packet.substring(4).split("|")
 
                         try {
                             var id: Int = Integer.parseInt(infos[0])
@@ -1942,7 +1945,7 @@ ExchangeAction.BREAKING_OBJECTS -> {val breakingObject: BreakingObject = ((this.
                             if (!this.player.hasItemGuid(id))
                                 return;
 
-                            var obj: GameObject = this.player.getItems().get(id)!!
+                            var obj: GameObject = this.player.objects.get(id)!!
 
                             if (obj == null || obj.isAttach)
                                 return;
@@ -1956,11 +1959,11 @@ ExchangeAction.BREAKING_OBJECTS -> {val breakingObject: BreakingObject = ((this.
                             SocketManager.SEND_EMK_MOVE_ITEM(this, 'O', "+", id.toString() + "|" + breakingObject.addObject(id, qua));
                         } catch (e: NumberFormatException) {
                             World.world.logger.error("Error Echange CC '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
                     } else if (packet[3] == '-') {
-                        var infos: List<String> = packet.substring(4).split("\\|")
+                        var infos: List<String> = packet.substring(4).split("|")
                         try {
                             var id: Int = Integer.parseInt(infos[0])
                             var qua: Int = Integer.parseInt(infos[1])
@@ -1980,7 +1983,7 @@ ExchangeAction.BREAKING_OBJECTS -> {val breakingObject: BreakingObject = ((this.
                                 SocketManager.SEND_EMK_MOVE_ITEM(this, 'O', "+", id.toString() + "|" + quantity);
                         } catch (e: NumberFormatException) {
                             World.world.logger.error("Error Echange CC '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
                     }
@@ -2002,11 +2005,11 @@ ExchangeAction.IN_MOUNT -> {var mount: Mount = this.player.mount!!
 'O' -> {var id: Int = 0
                         var cant: Int = 0
                         try {
-                            id = Integer.parseInt(packet.substring(4).split("\\|")[0]);
-                            cant = Integer.parseInt(packet.substring(4).split("\\|")[1]);
+                            id = Integer.parseInt(packet.substring(4).split("|")[0]);
+                            cant = Integer.parseInt(packet.substring(4).split("|")[1]);
                         } catch (e: Exception) {
                             World.world.logger.error("Error Echange DD '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
                         if (id == 0 || cant <= 0)
@@ -2032,14 +2035,14 @@ ExchangeAction.IN_MOUNT -> {var mount: Mount = this.player.mount!!
 }
 ExchangeAction.TRADING_WITH_NPC_EXCHANGE -> {when (packet[2]) {
 'O' -> {if (packet[3] == '+') {
-                            var infos: List<String> = packet.substring(4).split("\\|")
+                            var infos: List<String> = packet.substring(4).split("|")
                             try {
                                 var guid: Int = Integer.parseInt(infos[0])
                                 var qua: Int = Integer.parseInt(infos[1])
                                 var quaInExch: Int = ((this.player.exchangeAction!!.getValue() as NpcExchange)).getQuaItem(guid, false)
 
                                 if (!this.player.hasItemGuid(guid)) return;
-                                var obj: GameObject = this.player.getItems().get(guid)!!
+                                var obj: GameObject = this.player.objects.get(guid)!!
                                 if (obj == null) return;
 
                                 if (qua > obj.quantity - quaInExch)
@@ -2052,11 +2055,11 @@ ExchangeAction.TRADING_WITH_NPC_EXCHANGE -> {when (packet[2]) {
                                 ((this.player.exchangeAction!!.getValue() as NpcExchange)).addItem(guid, qua);
                             } catch (e: NumberFormatException) {
                                 World.world.logger.error("Error Echange NPC '" + packet + "' => " + e.message);
-                                e.printStackTrace();
+                                log.error("unexpected error", e)
                                 return;
                             }
                         } else {
-                            var infos: List<String> = packet.substring(4).split("\\|")
+                            var infos: List<String> = packet.substring(4).split("|")
                             try {
                                 var guid: Int = Integer.parseInt(infos[0])
                                 var qua: Int = Integer.parseInt(infos[1])
@@ -2075,7 +2078,7 @@ ExchangeAction.TRADING_WITH_NPC_EXCHANGE -> {when (packet[2]) {
                                 ((this.player.exchangeAction!!.getValue() as NpcExchange)).removeItem(guid, qua);
                             } catch (e: NumberFormatException) {
                                 World.world.logger.error("Error Echange NPC '" + packet + "' => " + e.message);
-                                e.printStackTrace();
+                                log.error("unexpected error", e)
                                 return;
                             }
                         }
@@ -2088,7 +2091,7 @@ ExchangeAction.TRADING_WITH_NPC_EXCHANGE -> {when (packet[2]) {
                             ((this.player.exchangeAction!!.getValue() as NpcExchange)).setKamas(false, numb);
                         } catch (e: NumberFormatException) {
                             World.world.logger.error("Error Echange NPC '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
                         
@@ -2098,7 +2101,7 @@ ExchangeAction.TRADING_WITH_NPC_EXCHANGE -> {when (packet[2]) {
 }
 ExchangeAction.TRADING_WITH_NPC_PETS -> {when (packet[2]) {
 'O' -> {if (packet[3] == '+') {
-                            var infos: List<String> = packet.substring(4).split("\\|")
+                            var infos: List<String> = packet.substring(4).split("|")
                             try {
                                 var guid: Int = Integer.parseInt(infos[0])
                                 var qua: Int = Integer.parseInt(infos[1])
@@ -2106,7 +2109,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS -> {when (packet[2]) {
 
                                 if (!this.player.hasItemGuid(guid))
                                     return;
-                                var obj: GameObject = this.player.getItems().get(guid)!!
+                                var obj: GameObject = this.player.objects.get(guid)!!
                                 if (obj == null)
                                     return;
 
@@ -2119,11 +2122,11 @@ ExchangeAction.TRADING_WITH_NPC_PETS -> {when (packet[2]) {
                                 ((this.player.exchangeAction!!.getValue() as PlayerExchange.NpcExchangePets)).addItem(guid, qua);
                             } catch (e: NumberFormatException) {
                                 World.world.logger.error("Error Echange Pets '" + packet + "' => " + e.message);
-                                e.printStackTrace();
+                                log.error("unexpected error", e)
                                 return;
                             }
                         } else {
-                            var infos: List<String> = packet.substring(4).split("\\|")
+                            var infos: List<String> = packet.substring(4).split("|")
                             try {
                                 var guid: Int = Integer.parseInt(infos[0])
                                 var qua: Int = Integer.parseInt(infos[1])
@@ -2142,7 +2145,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS -> {when (packet[2]) {
                                 ((this.player.exchangeAction!!.getValue() as PlayerExchange.NpcExchangePets)).removeItem(guid, qua);
                             } catch (e: NumberFormatException) {
                                 World.world.logger.error("Error Echange Pets '" + packet + "' => " + e.message);
-                                e.printStackTrace();
+                                log.error("unexpected error", e)
                                 return;
                             }
                         }
@@ -2157,7 +2160,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS -> {when (packet[2]) {
                             ((this.player.exchangeAction!!.getValue() as PlayerExchange.NpcExchangePets)).setKamas(false, numb);
                         } catch (e: NumberFormatException) {
                             World.world.logger.error("Error Echange Pets '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
                         
@@ -2167,7 +2170,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS -> {when (packet[2]) {
 }
 ExchangeAction.TRADING_WITH_NPC_PETS_RESURRECTION -> {when (packet[2]) {
 'O' -> {if (packet[3] == '+') {
-                            var infos: List<String> = packet.substring(4).split("\\|")
+                            var infos: List<String> = packet.substring(4).split("|")
                             try {
 
                                 var guid: Int = Integer.parseInt(infos[0])
@@ -2189,11 +2192,11 @@ ExchangeAction.TRADING_WITH_NPC_PETS_RESURRECTION -> {when (packet[2]) {
                                 ((this.player.exchangeAction!!.getValue() as PlayerExchange.NpcRessurectPets)).addItem(guid, qua);
                             } catch (e: NumberFormatException) {
                                 World.world.logger.error("Error Echange RPets '" + packet + "' => " + e.message);
-                                e.printStackTrace();
+                                log.error("unexpected error", e)
                                 return;
                             }
                         } else {
-                            var infos: List<String> = packet.substring(4).split("\\|")
+                            var infos: List<String> = packet.substring(4).split("|")
                             try {
                                 var guid: Int = Integer.parseInt(infos[0])
                                 var qua: Int = Integer.parseInt(infos[1])
@@ -2212,7 +2215,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS_RESURRECTION -> {when (packet[2]) {
                                 ((this.player.exchangeAction!!.getValue() as PlayerExchange.NpcRessurectPets)).removeItem(guid, qua);
                             } catch (e: NumberFormatException) {
                                 World.world.logger.error("Error Echange RPets '" + packet + "' => " + e.message);
-                                e.printStackTrace();
+                                log.error("unexpected error", e)
                                 return;
                             }
                         }
@@ -2226,7 +2229,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS_RESURRECTION -> {when (packet[2]) {
                                 numb = this.player.kamas;
                             ((this.player.exchangeAction!!.getValue() as PlayerExchange.NpcRessurectPets)).setKamas(false, numb);
                         } catch (e: NumberFormatException) {
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
                         
@@ -2245,11 +2248,11 @@ ExchangeAction.AUCTION_HOUSE_SELLING -> {var exchangeAction: BigStoreActionData 
 '-' -> {var count: Int = 0
                         var lineId: Int = 0
                         try {
-                            lineId = Integer.parseInt(packet.substring(4).split("\\|")[0]);
-                            count = Integer.parseInt(packet.substring(4).split("\\|")[1]);
+                            lineId = Integer.parseInt(packet.substring(4).split("|")[0]);
+                            count = Integer.parseInt(packet.substring(4).split("|")[1]);
                         } catch (e: Exception) {
                             World.world.logger.error("Error Echange HDV '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
                         if (count <= 0)
@@ -2262,7 +2265,7 @@ ExchangeAction.AUCTION_HOUSE_SELLING -> {var exchangeAction: BigStoreActionData 
                         SocketManager.GAME_SEND_EXCHANGE_OTHER_MOVE_OK(this, '-', "", lineId.toString() + "");
                         
 }
-'+' -> {if (Integer.parseInt(packet.substring(4).split("\\|")[1]) > 127) {
+'+' -> {if (Integer.parseInt(packet.substring(4).split("|")[1]) > 127) {
                             SocketManager.GAME_SEND_MESSAGE(this.player, this.player.getLang().trans("game.gameclient.movemenitemorkamas.limit"));
                             return;
                         }
@@ -2272,23 +2275,23 @@ ExchangeAction.AUCTION_HOUSE_SELLING -> {var exchangeAction: BigStoreActionData 
                         var amount: Byte = 0
 
                         try {
-                            itmID = Integer.parseInt(packet.substring(4).split("\\|")[0]);
-                            amount = packet.substring(4).split("\\|")[1].toByte();
-                            price = Integer.parseInt(packet.substring(4).split("\\|")[2]);
+                            itmID = Integer.parseInt(packet.substring(4).split("|")[0]);
+                            amount = packet.substring(4).split("|")[1].toByte();
+                            price = Integer.parseInt(packet.substring(4).split("|")[2]);
                         } catch (e: Exception) {
                             World.world.logger.error("Error Echange HDV '" + packet + "' => " + e.message);
                             // Arrive quand price n'est pas dans le pacquet. C'est que le joueur ne veut pas mettre dans un hdv, mais dans autre chose ... Un paquet qui est MO+itmID|qt?
                             // Peeut-?tre apr?sa voir utilis? le concasseur ...
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             SocketManager.GAME_SEND_MESSAGE(this.player, "Une erreur s'est produite lors de la mise en vente de votre objet. Veuillez vous reconnectez pour corriger l'erreur. Personnage " + this.getPlayer().name + " et paquet " + packet + ".");
                             return;
                         }
 
                         if (amount <= 0 || price <= 0)
                             return;
-                        if (packet.substring(1).split("\\|")[2] == "0"
-                                || packet.substring(2).split("\\|")[2] == "0"
-                                || packet.substring(3).split("\\|")[2] == "0")
+                        if (packet.substring(1).split("|")[2] == "0"
+                                || packet.substring(2).split("|")[2] == "0"
+                                || packet.substring(3).split("|")[2] == "0")
                             return;
 
                         var taxe: Int = ((price * (curBigStore.taxe / 100)) as Int)
@@ -2360,7 +2363,7 @@ ExchangeAction.CRAFTING -> {var skillID: Int = (this.player.exchangeAction!!.get
 //                    for(String part : packet.split(";")) {
 //                        try {
 //                            char c = part.charAt(0);
-//                            String[] infos = part.substring(1).split("\\|");
+//                            String[] infos = part.substring(1).split("|");
 //                            int id = Integer.parseInt(infos[0]), quantity = 1;
 //                            try {
 //                                quantity = Integer.parseInt(infos[1]);
@@ -2371,7 +2374,7 @@ ExchangeAction.CRAFTING -> {var skillID: Int = (this.player.exchangeAction!!.get
 //                                if (!this.player.hasItemGuid(id))
 //                                    return;
 //
-//                                GameObject obj = this.player.getItems().get(id);
+//                                GameObject obj = this.player.objects.get(id);
 //
 //                                if (obj == null || obj.getObvijevanLook() != 0) {
 //                                    player.send("BN");
@@ -2385,7 +2388,7 @@ ExchangeAction.CRAFTING -> {var skillID: Int = (this.player.exchangeAction!!.get
 //                                ((JobAction) this.player.getExchangeAction().getValue()).addIngredient(this.player, id, -quantity);
 //                            }
 //                        } catch(Exception e) {
-//                            e.printStackTrace();
+//                            log.error("unexpected error", e)
 //                        }
 //                    }
 //                } else if (packet.charAt(2) == 'R') {
@@ -2410,7 +2413,7 @@ ExchangeAction.IN_BANK -> {when (packet[2]) {
                             kamas = Integer.parseInt(packet.substring(3)).toLong();
                         } catch (e: Exception) {
                             World.world.logger.error("Error Echange Banque '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
                         if (kamas.toInt() == 0)
@@ -2440,11 +2443,11 @@ ExchangeAction.IN_BANK -> {when (packet[2]) {
                         var guid: Int = 0
                         var qua: Int = 0
                         try {
-                            guid = Integer.parseInt(packet.substring(4).split("\\|")[0]);
-                            qua = Integer.parseInt(packet.substring(4).split("\\|")[1]);
+                            guid = Integer.parseInt(packet.substring(4).split("|")[0]);
+                            qua = Integer.parseInt(packet.substring(4).split("|")[1]);
                         } catch (e: Exception) {
                             World.world.logger.error("Error Echange Banque '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
 
@@ -2484,7 +2487,7 @@ ExchangeAction.IN_TRUNK -> {if (Main.tradeAsBlocked)
                             kamas = Integer.parseInt(packet.substring(3)).toLong();
                         } catch (e: Exception) {
                             World.world.logger.error("Error Echange Coffre '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
 
@@ -2516,11 +2519,11 @@ ExchangeAction.IN_TRUNK -> {if (Main.tradeAsBlocked)
 'O' -> {var guid: Int = 0
                         var qua: Int = 0
                         try {
-                            guid = Integer.parseInt(packet.substring(4).split("\\|")[0]);
-                            qua = Integer.parseInt(packet.substring(4).split("\\|")[1]);
+                            guid = Integer.parseInt(packet.substring(4).split("|")[0]);
+                            qua = Integer.parseInt(packet.substring(4).split("|")[1]);
                         } catch (e: Exception) {
                             World.world.logger.error("Error Echange Coffre '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
 
@@ -2542,8 +2545,8 @@ ExchangeAction.IN_TRUNK -> {if (Main.tradeAsBlocked)
 }
 ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when (packet[2]) {
 'O' -> {if (packet[3] == '+') {
-                            for(arg in  packet.substring(4).split("\\+")) {
-                                var infos: List<String> = arg.split("\\|")
+                            for(arg in  packet.substring(4).split("+")) {
+                                var infos: List<String> = arg.split("|")
                                 try {
                                     var guid: Int = Integer.parseInt(infos[0])
                                     var qua: Int = Integer.parseInt(infos[1])
@@ -2551,7 +2554,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 
                                     if (!this.player.hasItemGuid(guid))
                                         return;
-                                    var obj: GameObject = this.player.getItems().get(guid)!!
+                                    var obj: GameObject = this.player.objects.get(guid)!!
                                     if (obj == null)
                                         return;
                                     if (qua > obj.quantity - quaInExch)
@@ -2563,12 +2566,12 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                                     ((this.player.exchangeAction!!.getValue() as PlayerExchange)).addItem(guid, qua, this.player.id);
                                 } catch (e: NumberFormatException) {
                                     this.player.sendMessage("Error : PlayerExchange : " + packet + "\n" + e.message);
-                                    e.printStackTrace();
+                                    log.error("unexpected error", e)
                                     return;
                                 }
                             }
                         } else {
-                            var infos: List<String> = packet.substring(4).split("\\|")
+                            var infos: List<String> = packet.substring(4).split("|")
                             try {
                                 var guid: Int = Integer.parseInt(infos[0])
                                 var qua: Int = Integer.parseInt(infos[1])
@@ -2578,7 +2581,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                                 if (!this.player.hasItemGuid(guid))
                                     return;
 
-                                var obj: GameObject = this.player.getItems().get(guid)!!
+                                var obj: GameObject = this.player.objects.get(guid)!!
                                 if (obj == null)
                                     return;
                                 if (qua > ((this.player.exchangeAction!!.getValue() as PlayerExchange)).getQuaItem(guid, this.player.id))
@@ -2587,7 +2590,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                                 ((this.player.exchangeAction!!.getValue() as PlayerExchange)).removeItem(guid, qua, this.player.id);
                             } catch (e: NumberFormatException) {
                                 this.player.sendMessage("Error : PlayerExchange : " + packet + "\n" + e.message);
-                                e.printStackTrace();
+                                log.error("unexpected error", e)
                                 return;
                             }
                         }
@@ -2603,7 +2606,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                             ((this.player.exchangeAction!!.getValue() as PlayerExchange)).setKamas(this.player.id, numb);
                         } catch (e: NumberFormatException) {
                             World.world.logger.error("Error Echange PvP '" + packet + "' => " + e.message);
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                             return;
                         }
                         
@@ -2636,7 +2639,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
             if (((this.player.exchangeAction!!.getValue() as CraftSecure)).getNeeder() == this.player) {
                 var type: Byte = ((packet[0]).toString()).toByte()
                 when (packet[1]) {
-'O' -> {var split: List<String> = packet.substring(3).split("\\|")
+'O' -> {var split: List<String> = packet.substring(3).split("|")
                         var adding: Boolean = packet[2] == '+'
                         var guid: Int = Integer.parseInt(split[0])
                         var quantity: Int = Integer.parseInt(split[1])
@@ -2655,7 +2658,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
     private fun askOfflineExchange() {
         if(EventManager.isInEvent(this.player))
             return;
-        if (this.player.exchangeAction != null || this.player.fight != null || this.player.isAway())
+        if (this.player.exchangeAction != null || this.player.fight != null || this.player.away)
             return;
         if (this.player.parseStoreItemsList().isEmpty()) {
             SocketManager.GAME_SEND_Im_PACKET(this.player, "123");
@@ -2719,9 +2722,9 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
         }
         var orientation: Int = Formulas.getRandomValue(1, 3)
         this.player.kamas = this.player.kamas - taxe;
-        this.player.set_orientation(orientation);
+        this.player.orientation = orientation;
         var map: GameMap = this.player.curMap
-        this.player.setShowSeller(true);
+        this.player.seeSeller = true;
         World.world.addSeller(this.player);
         this.kick();
         map.players.stream().filter({ player -> player != null && player.isOnline }).forEach(SocketManager::GAME_SEND_MERCHANT_LIST);
@@ -2826,7 +2829,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 
                         mount = this.player.mount;
                         if(mount!!.objects.size == 0) {
-                            if(this.player.isOnMount())
+                            if(this.player.onMount)
                                 this.player.toogleOnMount();
 
                             if(!park.getEtable().contains(mount))
@@ -2900,9 +2903,9 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                     }
 
                     if(this.player.mount != null && this.player.mount!!.id == id) {
-                        if (this.player.isOnMount())
+                        if (this.player.onMount)
                             this.player.toogleOnMount();
-                        if(this.player.isOnMount())
+                        if(this.player.onMount)
                             return;
                         this.player.mount = null;
                     }
@@ -2939,7 +2942,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 
         if (packet.substring(2, 4).equals("13") && this.player.exchangeAction == null) { // Craft s?curis? : celui qui n'a pas le job ( this.player ) souhaite invit? player
             try {
-                var split: List<String> = packet.split("\\|")
+                var split: List<String> = packet.split("|")
                 var id: Int = Integer.parseInt(split[1])
                 var skill: Int = Integer.parseInt(split[2])
 
@@ -2953,7 +2956,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                     SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this, 'E');
                     return;
                 }
-                if (player.isAway() || this.player.isAway()) {
+                if (player.away || this.player.away) {
                     SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this, 'O');
                     return;
                 }
@@ -3010,20 +3013,20 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                 var exchangeAction1: ExchangeAction<Int> = ExchangeAction(ExchangeAction.CRAFTING_SECURE_WITH, this.player.id)
                 player.exchangeAction = exchangeAction1;
 
-                this.player.getIsCraftingType().add(13);
-                player.getIsCraftingType().add(12);
-                this.player.getIsCraftingType().add(skill);
-                player.getIsCraftingType().add(skill);
+                this.player.craftingType.add(13);
+                player.craftingType.add(12);
+                this.player.craftingType.add(skill);
+                player.craftingType.add(skill);
 
                 SocketManager.GAME_SEND_EXCHANGE_REQUEST_OK(this, this.player.id, id, 12);
                 SocketManager.GAME_SEND_EXCHANGE_REQUEST_OK(player.getGameClient()!!, this.player.id, id, 12);
             } catch (e: NumberFormatException) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
             return;
         } else if (packet.substring(2, 4).equals("12") && this.player.exchangeAction == null) { // Craft s?curis? : celui qui ? le job ( this.player ) souhaite invit? player
             try {
-                var split: List<String> = packet.split("\\|")
+                var split: List<String> = packet.split("|")
                 var id: Int = Integer.parseInt(split[1])
                 var skill: Int = Integer.parseInt(split[2])
 
@@ -3037,7 +3040,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                     SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this, 'E');
                     return;
                 }
-                if (player.isAway() || this.player.isAway()) {
+                if (player.away || this.player.away) {
                     SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this, 'O');
                     return;
                 }
@@ -3082,15 +3085,15 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                 exchangeAction = ExchangeAction(ExchangeAction.CRAFTING_SECURE_WITH, this.player.id);
                 player.exchangeAction = exchangeAction;
 
-                this.player.getIsCraftingType().add(12);
-                player.getIsCraftingType().add(13);
-                this.player.getIsCraftingType().add(skill);
-                player.getIsCraftingType().add(skill);
+                this.player.craftingType.add(12);
+                player.craftingType.add(13);
+                this.player.craftingType.add(skill);
+                player.craftingType.add(skill);
 
                 SocketManager.GAME_SEND_EXCHANGE_REQUEST_OK(this, this.player.id, id, 12);
                 SocketManager.GAME_SEND_EXCHANGE_REQUEST_OK(player.getGameClient()!!, this.player.id, id, 13);
             } catch (e: NumberFormatException) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
             return;
         } else if (packet.substring(2, 4).equals("11")) {//Ouverture HDV achat
@@ -3147,7 +3150,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
             }
             return;
         } else if(packet.substring(2, 4).equals("18")) {
-            var id: Int = Integer.parseInt(packet.split("\\|")[1])
+            var id: Int = Integer.parseInt(packet.split("|")[1])
             if (this.player.curMap.getNpc(id) != null) {
                 var ech: NpcExchange = NpcExchange(this.player, this.player.curMap.getNpc(id)!!.template)
                 var exchangeAction: ExchangeAction<NpcExchange> = ExchangeAction(ExchangeAction.TRADING_WITH_NPC_EXCHANGE, ech)
@@ -3183,7 +3186,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                         SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this, 'E');
                         return;
                     }
-                    if (target.isAway() || this.player.isAway() || target.exchangeAction != null || this.player.exchangeAction != null) {
+                    if (target.away || this.player.away || target.exchangeAction != null || this.player.exchangeAction != null) {
                         SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this, 'O');
                         return;
                     }
@@ -3198,13 +3201,13 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                     exchangeAction = ExchangeAction(ExchangeAction.TRADING_WITH_PLAYER, this.player.id);
                     target.exchangeAction = exchangeAction;
 
-                    this.player.getIsCraftingType().add(1);
-                    target.getIsCraftingType().add(1);
+                    this.player.craftingType.add(1);
+                    target.craftingType.add(1);
 
                     SocketManager.GAME_SEND_EXCHANGE_REQUEST_OK(this, this.player.id, id, 1);
                     SocketManager.GAME_SEND_EXCHANGE_REQUEST_OK(target.getGameClient()!!, this.player.id, id, 1);
                 } catch (e: NumberFormatException) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
                 
 }
@@ -3218,10 +3221,10 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                 }
                 
 }
-'4' -> {id = Integer.valueOf(packet.split("\\|")[1]);
+'4' -> {id = Integer.valueOf(packet.split("|")[1]);
 
                 var seller: Player = World.world.getPlayer(id)!!
-                if (seller == null || !seller.isShowSeller() || seller.curMap != this.player.curMap) return;
+                if (seller == null || !seller.seeSeller || seller.curMap != this.player.curMap) return;
 
                 var exchangeAction: ExchangeAction<Int> = ExchangeAction(ExchangeAction.TRADING_WITH_OFFLINE_PLAYER, id)
                 this.player.exchangeAction = exchangeAction;
@@ -3267,7 +3270,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 
     private fun sell(packet: String) {
         try {
-            var infos: List<String> = packet.substring(2).split("\\|")
+            var infos: List<String> = packet.substring(2).split("|")
             var id: Int = Integer.parseInt(infos[0])
             var quantity: Int = Integer.parseInt(infos[1])
 
@@ -3278,7 +3281,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 
             this.player.sellItem(id, quantity);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             SocketManager.GAME_SEND_SELL_ERROR_PACKET(this);
         }
     }
@@ -3392,7 +3395,7 @@ ExchangeAction.TRADING_WITH_NPC -> {player.send("EV");
                         player.getGameClient()!!.parsePacket("DC-1");
                         return;
                     } catch (e: InterruptedException) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                     }
                 }
                 
@@ -3402,7 +3405,7 @@ ExchangeAction.IN_MOUNT -> {player.send("EV");
 }
 ExchangeAction.IN_MOUNTPARK -> {player.send("EV");
                 var objects: ArrayList<GameObject> = ArrayList()
-                for(obj in  player.getItems().values) {
+                for(obj in  player.objects.values) {
                     var mount: Mount = World.world.getMountById(obj.stats.getEffect(995))!!
 
                     if(mount == null && obj.template!!.type == Constant.ITEM_TYPE_CERTIF_MONTURE)
@@ -3438,7 +3441,7 @@ ExchangeAction.TRADING_WITH_COLLECTOR -> {var collector: Collector = World.world
                 DatabaseManager.get(CollectorData::class.java).delete(collector);
                 
 }
-else -> {player.setLivreArtisant(false);
+else -> {player.livreArti = false;
                 player.send("EV");
                 
 }
@@ -3473,10 +3476,10 @@ else -> {player.setLivreArtisant(false);
             var dir: Int = Integer.parseInt(packet.substring(2))
             if (dir > 7 || dir < 0)
                 return;
-            this.player.set_orientation(dir);
+            this.player.orientation = dir;
             SocketManager.GAME_SEND_eD_PACKET_TO_MAP(this.player.curMap, this.player.id, dir);
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -3490,7 +3493,7 @@ else -> {player.setLivreArtisant(false);
             return;//Pas d'?mote en combat
         if (!this.player.emotes.contains(emote))
             return;
-        if (emote != 1 && emote != 19 && emote != 20 && this.player.isSitted())
+        if (emote != 1 && emote != 19 && emote != 20 && this.player.sitted)
             this.player.setSitted(false);
 
         when (emote) {
@@ -3501,7 +3504,7 @@ else -> {player.setLivreArtisant(false);
                     } }, 0, TimeUnit.MILLISECONDS);
                 }
                 emote = 20;
-                this.player.setSitted(!this.player.isSitted());
+                this.player.setSitted(!this.player.sitted);
                 
 }
 }
@@ -3721,7 +3724,7 @@ else -> {packet = packet.substring(2);
                     try {
                         key = Integer.parseInt(packet.substring(2).replace((0).toChar().toString(), ""));
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                     }
                     if (key == -1)
                         return;
@@ -3752,7 +3755,7 @@ else -> {packet = packet.substring(2);
 }
 }
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -3822,7 +3825,7 @@ else -> {if(c.code == 1030) {
         try {
             actionID = Integer.parseInt(packet.substring(2, 5));
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
         var nextGameActionID: Int = 0
@@ -3896,7 +3899,7 @@ gameTryCastSpell(packet);
                 var boy: Player = (this.player.curMap.getCase(282)!!.players.toTypedArray()[0] as Player)
                 var girl: Player = (this.player.curMap.getCase(297)!!.players.toTypedArray()[0] as Player)
 
-                if (girl.getisOK() > 0 && boy.getisOK() > 0)
+                if (girl.isOK > 0 && boy.isOK > 0)
                     World.world.wedding(girl, boy, 1);
                 else
                     World.world.priestRequest(boy, girl, if (this.player == boy) girl else boy);
@@ -3961,7 +3964,7 @@ gameTryCastSpell(packet);
         var path: String = GA.packet!!.substring(5)
 
         if (this.player.fight == null) {
-            if (this.player.getBlockMovement()) {
+            if (this.player.isBlocked) {
                 SocketManager.GAME_SEND_GA_PACKET(this, "", "0", "", "");
                 removeAction(GA);
                 return;
@@ -4035,7 +4038,7 @@ gameTryCastSpell(packet);
             path = pathRef.get();
             //Si le path est invalide
             if (result == -1000)
-                path = CryptManager.getHashedValueByInt(this.player.get_orientation()) + CryptManager.cellID_To_Code(this.player.curCell.getId());
+                path = CryptManager.getHashedValueByInt(this.player.orientation) + CryptManager.cellID_To_Code(this.player.curCell.getId());
 
             //On sauvegarde le path dans la variable
             GA.args = path;
@@ -4048,7 +4051,7 @@ gameTryCastSpell(packet);
 
                 //On definie la case et on ajoute le personnage sur la case
                 this.player.curCell = nextCell;
-                this.player.set_orientation(CryptManager.getIntByHashedValue(path[path.length - 3]));
+                this.player.orientation = CryptManager.getIntByHashedValue(path[path.length - 3]);
                 this.player.curCell.addPlayer(this.player);
                 if (!this.player.isGhost)
                     this.player.away = false;
@@ -4097,7 +4100,7 @@ gameTryCastSpell(packet);
                         this.player.fight!!.cast(this.player.fight!!.getFighterByPerso(this.player), {  -> this.player.fight!!.tryCastSpell(this.player.fight!!.getFighterByPerso(this.player), SS, cellId) }, SS);
             }
         } catch (e: NumberFormatException) {
-            System.err.println(packet + "\n" + e);
+            log.error(packet + "\n" + e);
         }
     }
 
@@ -4108,7 +4111,7 @@ gameTryCastSpell(packet);
             if (this.player.fight != null && this.player.fight!!.curAction.isEmpty())
                 this.player.fight!!.cast(this.player.fight!!.getFighterByPerso(this.player), {  -> this.player.fight!!.tryCaC(this.player, cell) }, null);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -4121,7 +4124,7 @@ gameTryCastSpell(packet);
             cellID = Integer.parseInt(packet.split(";")[0]);
             actionID = Integer.parseInt(packet.split(";")[1]);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
 
         if (walk) {
@@ -4141,7 +4144,7 @@ gameTryCastSpell(packet);
 
     private fun houseAction(packet: String) {
         var actionID: Int = Integer.parseInt(packet.substring(5))
-        var h: House = this.player.getInHouse()!!
+        var h: House = this.player.curHouse!!
         if (h == null)
             return;
         when (actionID){  81 -> {h.lock(this.player);
@@ -4165,7 +4168,7 @@ gameTryCastSpell(packet);
             var target: Player = World.world.getPlayer(guid)!!
             if (target == null)
                 return;
-            if(this.player.getStalk() != null && player.getStalk()!!.onPlayerTryToFight(player, target))
+            if(this.player.stalk != null && player.stalk!!.onPlayerTryToFight(player, target))
                 return;
             if (player.curMap.subArea != null && player.curMap.subArea!!.area!!.superArea == 3) {
                 if (((player.alignment != 0 && (!player.curMap.data.noAgro)) || target.deshonor > 0)) {
@@ -4186,7 +4189,7 @@ gameTryCastSpell(packet);
                 SocketManager.GAME_SEND_DUEL_Y_AWAY(this, this.player.id);
                 return;
             }
-            if (this.player.isAway() || this.player.fight != null ||this.player.isDead().toInt() == 1) {
+            if (this.player.away || this.player.fight != null ||this.player.isDead().toInt() == 1) {
                 SocketManager.GAME_SEND_DUEL_Y_AWAY(this, this.player.id);
                 return;
             }
@@ -4198,7 +4201,7 @@ gameTryCastSpell(packet);
                 SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this.player.getGameClient()!!, 'S');
                 return;
             }
-            if (target.isAway() || target.fight != null || target.curMap.id != this.player.curMap.id ||target.isDead().toInt() == 1 || target.exchangeAction != null || this.player.exchangeAction != null) {
+            if (target.away || target.fight != null || target.curMap.id != this.player.curMap.id ||target.isDead().toInt() == 1 || target.exchangeAction != null || this.player.exchangeAction != null) {
                 SocketManager.GAME_SEND_DUEL_E_AWAY(this, this.player.id);
                 return;
             }
@@ -4208,7 +4211,7 @@ gameTryCastSpell(packet);
             World.world.getPlayer(guid)!!.away = true;
             SocketManager.GAME_SEND_MAP_NEW_DUEL_TO_MAP(this.player.curMap, this.player.id, guid);
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -4219,7 +4222,7 @@ gameTryCastSpell(packet);
         try {
             guid = Integer.parseInt(packet.substring(5));
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
         if (this.player.duelId != guid || this.player.duelId == -1 ||this.player.isDead().toInt() == 1)
@@ -4248,7 +4251,7 @@ gameTryCastSpell(packet);
             this.player.away = false;
             this.player.duelId = -1;
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -4265,12 +4268,12 @@ gameTryCastSpell(packet);
                 if (F != null)
                     F.joinAsSpectator(this.player);
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
         } else {
             try {
                 var guid: Int = Integer.parseInt(infos[1])
-                if (this.player.isAway()) {
+                if (this.player.away) {
                     SocketManager.GAME_SEND_GA903_ERROR_PACKET(this, 'o', guid);
                     return;
                 }
@@ -4310,7 +4313,7 @@ gameTryCastSpell(packet);
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
         }
     }
@@ -4344,12 +4347,12 @@ gameTryCastSpell(packet);
             }
 
             this.clearAllPanels(target);
-            if(!this.player.is_showWings())
+            if(!this.player.showWings)
                 this.player.toggleWings('+');
             SocketManager.GAME_SEND_GA_PACKET_TO_MAP(this.player.curMap, "", 906, this.player.id, target.id.toString() + "");
             this.player.curMap.newFight(this.player, target, Constant.FIGHT_TYPE_AGRESSION);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -4359,7 +4362,7 @@ gameTryCastSpell(packet);
                 return;
             if (this.player.fight != null)
                 return;
-            if (this.player.exchangeAction != null ||this.player.isDead().toInt() == 1 || this.player.isAway())
+            if (this.player.exchangeAction != null ||this.player.isDead().toInt() == 1 || this.player.away)
                 return;
 
             var id: Int = Integer.parseInt(packet.substring(5))
@@ -4378,7 +4381,7 @@ gameTryCastSpell(packet);
             SocketManager.GAME_SEND_GA_PACKET_TO_MAP(this.player.curMap, "", 909, this.player.id, id.toString() + "");
             this.player.curMap.startFightVersusPercepteur(this.player, target);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -4401,7 +4404,7 @@ gameTryCastSpell(packet);
             SocketManager.SEND_GA_ACTION_TO_Map(this.player.curMap, "", 909, this.player.id.toString() + "", id.toString() + "");
             this.player.curMap.startFightVersusPrisme(this.player, prism);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -4450,7 +4453,7 @@ gameTryCastSpell(packet);
         try {
             cellID = Integer.parseInt(packet.substring(2));
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
         if (cellID == -1)
             return;
@@ -4521,17 +4524,17 @@ gameTryCastSpell(packet);
             this.player.refreshCraftSecure(false);
             this.player.afterFight = false;
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
     private fun actionAck(packet: String) {
         var id: Int = -1
-        var infos: List<String> = packet.substring(3).split("\\|")
+        var infos: List<String> = packet.substring(3).split("|")
         try {
             id = Integer.parseInt(infos[0]);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
         if (id == -1)
@@ -4562,7 +4565,7 @@ gameTryCastSpell(packet);
 
                         //On d?finie la case et on ajoute le personnage sur la case
                         this.player.curCell = nextCell;
-                        this.player.set_orientation(CryptManager.getIntByHashedValue(path[path.length - 3]));
+                        this.player.orientation = CryptManager.getIntByHashedValue(path[path.length - 3]);
                         this.player.curCell.addPlayer(this.player);
                         if (!this.player.isGhost)
                             this.player.away = false;
@@ -4595,7 +4598,7 @@ gameTryCastSpell(packet);
                     try {
                         newCellID = Integer.parseInt(infos[1]);
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                         return;
                     }
                     if (newCellID == -1)
@@ -4604,7 +4607,7 @@ gameTryCastSpell(packet);
                     var path: String = GA.args!!
                     this.player.curCell.removePlayer(this.player);
                     this.player.curCell = this.player.curMap.getCase(newCellID)!!;
-                    this.player.set_orientation(CryptManager.getIntByHashedValue(path[path.length - 3]));
+                    this.player.orientation = CryptManager.getIntByHashedValue(path[path.length - 3]);
                     this.player.curCell.addPlayer(this.player);
                     SocketManager.GAME_SEND_BN(this);
                     if (GA.tp) {
@@ -4630,7 +4633,7 @@ gameTryCastSpell(packet);
             var cell: Int = Integer.parseInt(packet.substring(2))
             this.player.fight!!.exchangePlace(this.player, cell);
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -4641,7 +4644,7 @@ gameTryCastSpell(packet);
             try {
                 id = Integer.parseInt(packet.substring(2));
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
         }
 
@@ -4805,10 +4808,10 @@ gameTryCastSpell(packet);
             SocketManager.GAME_SEND_gC_PACKET(this.player, "Ea");
             return;
         }
-        if (this.player.fight != null || this.player.isAway())
+        if (this.player.fight != null || this.player.away)
             return;
         try {
-            var infos: List<String> = packet.substring(2).split("\\|")
+            var infos: List<String> = packet.substring(2).split("|")
             //base 10 => 36
             var bgID: String = Integer.toString(Integer.parseInt(infos[0]), 36)
             var bgCol: String = Integer.toString(Integer.parseInt(infos[1]), 36)
@@ -4887,7 +4890,7 @@ gameTryCastSpell(packet);
             SocketManager.GAME_SEND_gC_PACKET(this.player, "K");
             SocketManager.GAME_SEND_gV_PACKET(this.player);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -4896,7 +4899,7 @@ gameTryCastSpell(packet);
             SocketManager.GAME_SEND_Im_PACKET(this.player, "1135");
             return;
         }
-        if (this.player.fight != null || this.player.isAway())
+        if (this.player.fight != null || this.player.away)
             return;
         var MapID: Int = Integer.parseInt(packet)
         var MP: MountPark = World.world.getMap(MapID).mountPark!!
@@ -4916,7 +4919,7 @@ gameTryCastSpell(packet);
 
     private fun removeTaxCollector(packet: String) {
         if (this.player.getGuild() == null || this.player.fight != null
-                || this.player.isAway())
+                || this.player.away)
             return;
         if (!this.player.guildMember!!.canDo(Constant.G_POSPERCO))
             return;//On peut le retirer si on a le droit de le poser
@@ -4946,7 +4949,7 @@ gameTryCastSpell(packet);
             return;
         }
 
-        if (this.player.fight != null || this.player.isAway())
+        if (this.player.fight != null || this.player.away)
             return;
         var HouseID: Int = Integer.parseInt(packet)
         var h: House = World.world.houses.get(HouseID)!!
@@ -4973,7 +4976,7 @@ gameTryCastSpell(packet);
         val guild: Guild = this.player.getGuild()!!
         val map: GameMap = this.player.curMap
 
-        if (guild == null || this.player.fight != null || this.player.isAway() || !this.player.guildMember!!.canDo(Constant.G_POSPERCO) || !guild.haveTenMembers())
+        if (guild == null || this.player.fight != null || this.player.away || !this.player.guildMember!!.canDo(Constant.G_POSPERCO) || !guild.haveTenMembers())
             return;
         if (this.player.isMissingSubscription()) {
             SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this.player.getGameClient()!!, 'S');
@@ -5083,7 +5086,7 @@ gameTryCastSpell(packet);
                     SocketManager.GAME_SEND_gJ_PACKET(this.player, "Eu");
                     return;
                 }
-                if (P.isAway()) {
+                if (P.away) {
                     SocketManager.GAME_SEND_gJ_PACKET(this.player, "Eo");
                     return;
                 }
@@ -5100,31 +5103,31 @@ gameTryCastSpell(packet);
                     SocketManager.GAME_SEND_Im_PACKET(this.player, "155;" + (40 + this.player.getGuild()!!.lvl));
                     return;
                 }
-                this.player.setInvitation(P.id);
-                P.setInvitation(this.player.id);
+                this.player.inviting = P.id;
+                P.inviting = this.player.id;
 
                 SocketManager.GAME_SEND_gJ_PACKET(this.player, "R" + packet.substring(1));
                 SocketManager.GAME_SEND_gJ_PACKET(P, "r" + this.player.id.toString() + "|" + this.player.name + "|" + this.player.getGuild()!!.name);
                 
 }
-'E' -> {if (packet.substring(1).equals(this.player.getInvitation().toString(), ignoreCase = true)) {
-                    var p: Player? = World.world.getPlayer(this.player.getInvitation())
+'E' -> {if (packet.substring(1).equals(this.player.inviting.toString(), ignoreCase = true)) {
+                    var p: Player? = World.world.getPlayer(this.player.inviting)
                     if (p == null)
                         return;//Pas cens? arriver
                     SocketManager.GAME_SEND_gJ_PACKET(p!!, "Ec");
                 }
                 
 }
-'K' -> {if (packet.substring(1).equals(this.player.getInvitation().toString(), ignoreCase = true)) {
-                    var p: Player? = World.world.getPlayer(this.player.getInvitation())
+'K' -> {if (packet.substring(1).equals(this.player.inviting.toString(), ignoreCase = true)) {
+                    var p: Player? = World.world.getPlayer(this.player.inviting)
                     if (p == null)
                         return;//Pas cens? arriver
                     var G: Guild = p.getGuild()!!
                     var GM: GuildMember = G.addNewMember(this.player)
                     DatabaseManager.get(GuildMemberData::class.java).update(this.player);
                     this.player.guildMember = GM;
-                    this.player.setInvitation(-1);
-                    p.setInvitation(-1);
+                    this.player.inviting = -1;
+                    p.inviting = -1;
                     //Packet
                     SocketManager.GAME_SEND_gJ_PACKET(p, "Ka" + this.player.name);
                     SocketManager.GAME_SEND_gS_PACKET(this.player, GM);
@@ -5212,7 +5215,7 @@ gameTryCastSpell(packet);
         if (this.player.getGuild() == null)
             return; //Si le this.playernnage envoyeur n'a m?me pas de guilde
 
-        var infos: List<String> = packet.split("\\|")
+        var infos: List<String> = packet.split("|")
 
         var guid: Int = Integer.parseInt(infos[0])
         var rank: Int = Integer.parseInt(infos[1])
@@ -5307,7 +5310,7 @@ gameTryCastSpell(packet);
         try {
             id = Integer.parseInt(CollectorID);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
 
@@ -5316,7 +5319,7 @@ gameTryCastSpell(packet);
 
         if(collector != null) {
             when (packet[0]) {
-'J' -> {if (player.fight == null && !player.isAway() && !player.isInPrison()) {
+'J' -> {if (player.fight == null && !player.away && !player.isInPrison()) {
                         if (collector.defenseFight.size >= World.world.getMap(collector.map).maxTeam)
                             return;//Plus de place
                         collector.addDefenseFight(player);
@@ -5488,7 +5491,7 @@ else -> {packet = packet.substring(2);
      */
     private fun parseJobOption(packet: String) {
         when (packet[1]) {
-'O' -> {var infos: List<String> = packet.substring(2).split("\\|")
+'O' -> {var infos: List<String> = packet.substring(2).split("|")
                 var pos: Int = Integer.parseInt(infos[0])
                 var option: Int = Integer.parseInt(infos[1])
                 var slots: Int = Integer.parseInt(infos[2])
@@ -5523,7 +5526,7 @@ else -> {packet = packet.substring(2);
         var packet = packet
         when (packet[2]) {
 '0' -> {packet = packet.substring(4);
-                if (this.player.get_savestat() > 0) {
+                if (this.player.savestat > 0) {
                     try {
                         var code: Int = 0
                         code = Integer.parseInt(packet);
@@ -5531,18 +5534,18 @@ else -> {packet = packet.substring(2);
                             return;
                         if (this.player.capital < code)
                             code = this.player.capital;
-                        this.player.boostStatFixedCount(this.player.get_savestat(), code);
+                        this.player.boostStatFixedCount(this.player.savestat, code);
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                     } finally {
-                        this.player.set_savestat(0);
+                        this.player.savestat = 0;
                         SocketManager.GAME_SEND_KODE(this.player, "V");
                     }
                 } else if (this.player.exchangeAction != null && this.player.exchangeAction!!.getType() == ExchangeAction.IN_TRUNK) {
                     Trunk.open(this.player, packet, false);
                 } else {
-                    if (this.player.getInHouse() != null) {
-                        this.player.getInHouse()!!.open(this.player, packet, false);
+                    if (this.player.curHouse != null) {
+                        this.player.curHouse!!.open(this.player, packet, false);
                     }
                 }
                 
@@ -5600,7 +5603,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
 
     private fun destroyObject(packet: String) {
 
-        var infos: List<String> = packet.substring(2).split("\\|")
+        var infos: List<String> = packet.substring(2).split("|")
         try {
             var guid: Int = Integer.parseInt(infos[0])
             var qua: Int = 1
@@ -5608,9 +5611,9 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
                 qua = Integer.parseInt(infos[1]);
             } catch (ignored: Exception) {}
 
-            var obj: GameObject = this.player.getItems().get(guid)!!
+            var obj: GameObject = this.player.objects.get(guid)!!
             if (obj == null || !this.player.hasItemGuid(guid) || qua <= 0
-                    || this.player.fight != null || this.player.isAway()) {
+                    || this.player.fight != null || this.player.away) {
                 //SocketManager.GAME_SEND_DELETE_OBJECT_FAILED_PACKET(this);
                 return;
             }
@@ -5631,7 +5634,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
             SocketManager.GAME_SEND_STATS_PACKET(this.player);
             SocketManager.GAME_SEND_Ow_PACKET(this.player);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             SocketManager.GAME_SEND_DELETE_OBJECT_FAILED_PACKET(this);
         }
     }
@@ -5640,15 +5643,15 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
         var guid: Int = -1
         var qua: Int = -1
         try {
-            guid = Integer.parseInt(packet.substring(2).split("\\|")[0]);
-            qua = Integer.parseInt(packet.split("\\|")[1]);
+            guid = Integer.parseInt(packet.substring(2).split("|")[0]);
+            qua = Integer.parseInt(packet.split("|")[1]);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
         if (guid == -1 || qua <= 0 || !this.player.hasItemGuid(guid)
-                || this.player.fight != null || this.player.isAway())
+                || this.player.fight != null || this.player.away)
             return;
-        var obj: GameObject = this.player.getItems().get(guid)!!
+        var obj: GameObject = this.player.objects.get(guid)!!
 
         if(obj.isAttach) return;
 
@@ -5689,7 +5692,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
     }
 
     @Synchronized fun movementObject(packet: String) {
-        var infos: List<String> = packet.substring(2).split("" + (0x0A as Char))[0].split("\\|")
+        var infos: List<String> = packet.substring(2).split("" + (0x0A as Char))[0].split("|")
         try {
             var quantity: Int = 1
             var id: Int = Integer.parseInt(infos[0])
@@ -5698,7 +5701,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
                 quantity = Integer.parseInt(infos[2]);
             } catch (ignored: Exception) {}
 
-            var obj: GameObject = this.player.getItems().get(id)!!
+            var obj: GameObject = this.player.objects.get(id)!!
             if (obj == null || player.exchangeAction != null)
                 return;
             if (this.player.fight != null)
@@ -6099,7 +6102,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
                     SocketManager.GAME_SEND_ON_EQUIP_ITEM(this.player.curMap, this.player);
 
                 //Si familier
-                if (position == Constant.ITEM_POS_FAMILIER && this.player.isOnMount())
+                if (position == Constant.ITEM_POS_FAMILIER && this.player.onMount)
                     this.player.toogleOnMount();
                 //Verif pour les thisils de m�tier
                 if (position == Constant.ITEM_POS_NO_EQUIPED && this.player.getObjetByPos(Constant.ITEM_POS_ARME) == null)
@@ -6132,7 +6135,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
             if(equipBack)
                 this.movementObject(packet);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             SocketManager.GAME_SEND_DELETE_OBJECT_FAILED_PACKET(this);
         }
     }
@@ -6168,7 +6171,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
         var quantity: Int = 1
         var target: Player? = null
         try {
-            var infos: List<String> = packet.substring(2).split("\\|")
+            var infos: List<String> = packet.substring(2).split("|")
             guid = Integer.parseInt(infos[0]);
             quantity =if (infos.size > 3) Integer.parseInt(infos[3]) else 1;
 
@@ -6183,17 +6186,17 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
                 // ok
             }
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
         //Si le joueur n'a pas l'objet
         if (World.world.getPlayer(targetGuid) != null)
             target = World.world.getPlayer(targetGuid);
-        if (!this.player.hasItemGuid(guid) || this.player.isAway())
+        if (!this.player.hasItemGuid(guid) || this.player.away)
             return;
-        if (target != null && target.isAway())
+        if (target != null && target.away)
             return;
-        var obj: GameObject = this.player.getItems().get(guid)!!
+        var obj: GameObject = this.player.objects.get(guid)!!
         if (obj == null)
             return;
         var T: ObjectTemplate = obj.template!!
@@ -6219,15 +6222,15 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
         var guid: Int = -1
         var pos: Int = -1
         try {
-            guid = Integer.parseInt(packet.substring(2).split("\\|")[0]);
-            pos = Integer.parseInt(packet.split("\\|")[1]);
+            guid = Integer.parseInt(packet.substring(2).split("|")[0]);
+            pos = Integer.parseInt(packet.split("|")[1]);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
         if ((guid == -1) || (!this.player.hasItemGuid(guid)))
             return;
-        var obj: GameObject = this.player.getItems().get(guid)!!
+        var obj: GameObject = this.player.objects.get(guid)!!
         var idOBVI: Int = DatabaseManager.get(ObvijevanData::class.java).load(obj.guid).getFirst()
 
         if (idOBVI == -1) {
@@ -6273,17 +6276,17 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
         var pos: Int = -1
         var victime: Int = -1
         try {
-            guid = Integer.parseInt(packet.substring(2).split("\\|")[0]);
-            pos = Integer.parseInt(packet.split("\\|")[1]);
-            victime = Integer.parseInt(packet.split("\\|")[2]);
+            guid = Integer.parseInt(packet.substring(2).split("|")[0]);
+            pos = Integer.parseInt(packet.split("|")[1]);
+            victime = Integer.parseInt(packet.split("|")[2]);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
 
         if ((guid == -1) || (!this.player.hasItemGuid(guid)))
             return;
-        var obj: GameObject = this.player.getItems().get(guid)!!
+        var obj: GameObject = this.player.objects.get(guid)!!
         var objVictime: GameObject = World.world.getGameObject(victime)!!
         obj.obvijevanNourir(objVictime);
 
@@ -6304,16 +6307,16 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
         var pos: Int = -1
         var vale: Int= -1
         try {
-            guid = Integer.parseInt(packet.substring(2).split("\\|")[0]);
-            pos = Integer.parseInt(packet.split("\\|")[1]);
-            vale = Integer.parseInt(packet.split("\\|")[2]);
+            guid = Integer.parseInt(packet.substring(2).split("|")[0]);
+            pos = Integer.parseInt(packet.split("|")[1]);
+            vale = Integer.parseInt(packet.split("|")[2]);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
         if ((guid == -1) || (!this.player.hasItemGuid(guid)))
             return;
-        var obj: GameObject = this.player.getItems().get(guid)!!
+        var obj: GameObject = this.player.objects.get(guid)!!
         if ((vale >= 21) || (vale <= 0))
             return;
 
@@ -6355,10 +6358,10 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     }
 
     private fun acceptInvitation() {
-        if (this.player == null || this.player.getInvitation() == 0)
+        if (this.player == null || this.player.inviting == 0)
             return;
 
-        var target: Player = World.world.getPlayer(this.player.getInvitation())!!
+        var target: Player = World.world.getPlayer(this.player.inviting)!!
 
         if (target == null)
             return;
@@ -6393,7 +6396,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
         try {
             pGuid = Integer.parseInt(packet.substring(3));
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
         if (pGuid == -1)
@@ -6428,7 +6431,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
         try {
             pGuid2 = Integer.parseInt(packet.substring(3));
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             return;
         }
 
@@ -6490,24 +6493,24 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             return;
         }
 
-        target.setInvitation(this.player.id);
-        this.player.setInvitation(target.id);
+        target.inviting = this.player.id;
+        this.player.inviting = target.id;
         SocketManager.GAME_SEND_GROUP_INVITATION(this, this.player.name, name);
         SocketManager.GAME_SEND_GROUP_INVITATION(target.getGameClient()!!, this.player.name, name);
     }
 
     private fun refuseInvitation() {
-        if (this.player == null || this.player.getInvitation() == 0)
+        if (this.player == null || this.player.inviting == 0)
             return;
 
-        var player: Player = World.world.getPlayer(this.player.getInvitation()!!)!!
+        var player: Player = World.world.getPlayer(this.player.inviting!!)!!
 
         if (player != null) {
-            player.setInvitation(0);
+            player.inviting = 0;
             SocketManager.GAME_SEND_PR_PACKET(player);
         }
 
-        this.player.setInvitation(0);
+        this.player.inviting = 0;
     }
 
     private fun leaveParty(packet: String) {
@@ -6651,7 +6654,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
 
     private fun dataMount(packet: String) {
         try {
-            var id: Int = Integer.parseInt(packet.substring(2).split("\\|")[0])
+            var id: Int = Integer.parseInt(packet.substring(2).split("|")[0])
 
             if (id != 0) {
                 var mount: Mount = World.world.getMountById(id)!!
@@ -6667,7 +6670,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             return;
         }
 
-        if (this.player.mount != null && this.player.isOnMount())
+        if (this.player.mount != null && this.player.onMount)
             this.player.toogleOnMount();
         SocketManager.GAME_SEND_Re_PACKET(this.player, "-", this.player.mount);
         DatabaseManager.get(MountData::class.java).delete(this.player.mount!!);
@@ -6724,10 +6727,10 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
                 xp = 0;
             if (xp > 90)
                 xp = 90;
-            this.player.setMountGiveXp(xp);
+            this.player.mountXpGive = xp;
             SocketManager.GAME_SEND_Rx_PACKET(this.player);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -6825,7 +6828,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
                 SocketManager.GAME_SEND_SPELL_UPGRADE_FAILED(this);
             }
         } catch (e: NumberFormatException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             SocketManager.GAME_SEND_SPELL_UPGRADE_FAILED(this);
         }
     }
@@ -6856,7 +6859,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     }
 
     private fun moveSpell(packet: String) {
-        var parts: List<String> = packet.substring(2).split("\\|")
+        var parts: List<String> = packet.substring(2).split("|")
 
         var spellID: Int = Integer.parseInt(parts[0])
         var position: Int = -1
@@ -6917,7 +6920,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
 
             this.player.useZaap(id);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
 
@@ -6966,7 +6969,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     private fun parseTutorialsPacket(packet: String) {
         if(this.player.exchangeAction == null || this.player.exchangeAction!!.getType() != ExchangeAction.IN_SCENARIO)
             return;
-        var param: List<String> = packet.split("\\|")
+        var param: List<String> = packet.split("|")
         var sad: ScenarioActionData = (this.player.exchangeAction!!.getValue() as ScenarioActionData)
 
         if(packet[1] != 'V') {
@@ -6975,7 +6978,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
         var succeed: Boolean = packet[2] == '1'
 
         // Move player to expected cell (FIXME can probably be used to teleport)
-        this.player.set_orientation(param[2].toByte().toInt());
+        this.player.orientation = param[2].toByte().toInt();
         this.player.curCell.removePlayer(this.player);
         var cell: GameCase = this.player.curMap.getCase(param[1].toShort().toInt())!!
         cell.addPlayer(this.player);
@@ -7027,7 +7030,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
                 list = PathFinding.getAllCaseIdAllDirrection(cell, this.player.curMap);
                 //cellID = Pathfinding.getNearestCellAroundGA(this.player.getCurMap(), cell, this.player.getCurCell().getId(), null);
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
 
             //cellID == this.player.getCurCell().getId()
@@ -7054,7 +7057,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             if (dis <= dist)
                 return true;
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
         return false;
     }
@@ -7118,7 +7121,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             this.getSession().write(packet);
         } catch (e: Exception) {
             Logging.getInstance().write("Error", "Send fail : " + packet);
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
     }
     

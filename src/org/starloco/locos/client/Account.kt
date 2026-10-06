@@ -26,6 +26,9 @@ import java.util.Optional
 import java.util.function.Function
 import java.util.stream.Collectors
 import java.util.stream.Stream
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Account::class.java)
 
 class Account(guid: Int, val name: String, val pseudo: String,
               val answer: String, banned: Boolean,
@@ -79,7 +82,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
                 try {
                     this.friends.add(Integer.parseInt(f))
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
         }
@@ -88,7 +91,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
                 try {
                     this.enemys.add(Integer.parseInt(e))
                 } catch (e1: Exception) {
-                    e1.printStackTrace()
+                    log.error("unexpected error", e1)
                 }
             }
         }
@@ -435,7 +438,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
             this.bankKamas = kamas.toLong()
 
             if (items != "") {
-                for (item in items!!.split("\\|")) {
+                for (item in items!!.split("|")) {
                     if (item != "") {
                         val obj = World.world.getGameObject(Integer.parseInt(item))
                         if (obj != null)

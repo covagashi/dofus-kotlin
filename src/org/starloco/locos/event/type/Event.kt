@@ -3,6 +3,9 @@ package org.starloco.locos.event.`type`
 import org.starloco.locos.area.map.GameMap
 import org.starloco.locos.client.Player
 import org.starloco.locos.event.IEvent
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Event::class.java)
 
 /**
  * Created by Locos on 02/10/2016.
@@ -38,7 +41,7 @@ abstract class Event(
                 try {
                     Thread.sleep(50)
                 } catch (e: InterruptedException) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
         }

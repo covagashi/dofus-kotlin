@@ -19,6 +19,9 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.HashMap
 import kotlin.math.floor
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(GameObject::class.java)
 
 open class GameObject {
     val scriptVal: SItem = SItem(this)
@@ -217,7 +220,7 @@ open class GameObject {
 
                     this.stats.addOneStat(id, (stats[1]).toInt(16))
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    log.error("unexpected error", e)
                 }
             }
         }
@@ -306,7 +309,7 @@ open class GameObject {
                     else -> stats.append(Integer.toHexString(effect.effectID)).append("#").append(split[0]).append("#").append(split[1]).append("#").append(split[1]).append("#").append(split[5])
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 continue
             }
             isFirst = false
@@ -330,8 +333,8 @@ open class GameObject {
                         try {
                             corpulence = c.toInt()
                         } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
+                            log.error("unexpected error", e)
+                }
                     }
                     if (corpulence > 0 || corpulence < 0)
                         corpu = 7
@@ -559,7 +562,7 @@ open class GameObject {
             try {
                 stats.append(Integer.toHexString(SE.effectID)).append("#").append(infos[0]).append("#").append(infos[1]).append("#0#").append(infos[5])
             } catch (e: Exception) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 continue
             }
             isFirst = false
@@ -688,13 +691,13 @@ open class GameObject {
                         if (max != 0)
                             value = max
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                        value = Formulas.getRandomJet(null, null, jet)
+                        log.error("unexpected error", e)
+                value = Formulas.getRandomJet(null, null, jet)
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
             itemStats.addOneStat(statID, value)
         }
         return itemStats
@@ -723,8 +726,8 @@ open class GameObject {
                 val newArgs = "0;0;0;-1;0;$jet"
                 effets.add(SpellEffect(SE.effectID, newArgs, 0, -1))
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
         }
         return effets
     }
@@ -785,7 +788,7 @@ open class GameObject {
                 jet = stats[4]
                 value = Formulas.getRandomJet(null, null, jet)
             } catch (e: Exception) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 return 0
             }
         }
@@ -805,7 +808,7 @@ open class GameObject {
                 stats += (Integer.toHexString(EH.effectID) + "#" + infos[0]
                         + "#" + infos[1] + "#0#" + infos[5])
             } catch (e: Exception) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 continue
             }
             first = true
@@ -902,7 +905,7 @@ open class GameObject {
                 stats += (Integer.toHexString(SE.effectID) + "#" + infos[0]
                         + "#" + infos[1] + "#0#" + infos[5])
             } catch (e: Exception) {
-                e.printStackTrace()
+                log.error("unexpected error", e)
                 continue
             }
             isFirst = false
@@ -974,12 +977,12 @@ open class GameObject {
                     if (max != 0)
                         value = max
                 } catch (e: Exception) {
-                    e.printStackTrace()
-                    value = Formulas.getRandomJet(null, null, jet)
+                    log.error("unexpected error", e)
+                value = Formulas.getRandomJet(null, null, jet)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
             if (`val` > value)
                 return true
         }
@@ -1074,12 +1077,12 @@ open class GameObject {
                     if (max != 0)
                         value = max
                 } catch (e: Exception) {
-                    e.printStackTrace()
-                    value = Formulas.getRandomJet(null, null, jet)
+                    log.error("unexpected error", e)
+                value = Formulas.getRandomJet(null, null, jet)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
             if (`val` == value)
                 return true
         }

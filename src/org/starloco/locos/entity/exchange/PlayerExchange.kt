@@ -12,6 +12,9 @@ import org.starloco.locos.kernel.Constant
 import org.starloco.locos.kernel.Logging
 import org.starloco.locos.`object`.GameObject
 import org.starloco.locos.`object`.ObjectTemplate
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(PlayerExchange::class.java)
 
 open class PlayerExchange(player1: Player, player2: Player) : Exchange(player1, player2) {
 
@@ -155,8 +158,8 @@ open class PlayerExchange(player1: Player, player2: Player) : Exchange(player1, 
             }
             str += " avec " + kamas1 + " K.\n"
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
         try {
             str += "Avec " + this.player2.name
             for (couple2 in items2) {
@@ -168,8 +171,8 @@ open class PlayerExchange(player1: Player, player2: Player) : Exchange(player1, 
             if (Logging.USE_LOG)
                 Logging.getInstance().write("Object", "Exchange : $str")
         } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            log.error("unexpected error", e)
+                }
 
         //Gestion des Kamas
         this.player1.addKamas(-kamas1 + kamas2)

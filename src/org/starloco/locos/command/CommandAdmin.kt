@@ -46,6 +46,9 @@ import org.starloco.locos.util.TimerWaiter;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(CommandAdmin::class.java)
 
 class CommandAdmin(player: Player) : AdminUser(player) {
 
@@ -1479,7 +1482,7 @@ Thread.State.TERMINATED -> {news++;
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
                 this.sendMessage("Erreur lors de la commande endfightall : " + e.message.toString() + ".");
             } finally {
                 this.sendMessage("Tous les combats ont ete termines.");
@@ -1923,7 +1926,7 @@ else -> {
 "RECEIVE" -> {try {
                         this.player!!.getGameClient()!!.parsePacket(infos[2]);
                     } catch (e: InterruptedException) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                         this.sendErrorMessage("You've fail the structure of the command. Please retry.");
                     }
                     this.sendSuccessMessage("You send to server this packet : " + infos[2]);

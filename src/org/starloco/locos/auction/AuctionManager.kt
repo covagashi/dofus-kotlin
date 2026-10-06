@@ -17,6 +17,9 @@ import java.util.Date
 import java.util.LinkedList
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(AuctionManager::class.java)
 
 /**
  * Created by Locos on 31/01/2018.
@@ -76,7 +79,7 @@ class AuctionManager : Updatable<Void?>(10000) {
 
     private fun auctionIsAvailable(auction: Auction?): Boolean {
         val available = auction != null && auction.owner != null && auction.`object` != null
-        if (!available) System.err.println(if (auction == null) "AuctionM : current is null" else "AuctionM : " + auction.`object` + " " + auction.owner + " ")
+        if (!available) log.error(if (auction == null) "AuctionM : current is null" else "AuctionM : " + auction.`object` + " " + auction.owner + " ")
         return available
     }
 
@@ -247,8 +250,8 @@ class AuctionManager : Updatable<Void?>(10000) {
                 this.task?.cancel(true)
                 this.task = TimerWaiter.addNext({ this.check(player, price) }, 100, TimeUnit.MILLISECONDS)
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
         }
     }
 

@@ -4,6 +4,9 @@ import org.apache.commons.lang.StringEscapeUtils
 
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(CryptManager::class.java)
 
 class CryptManager {
 
@@ -74,7 +77,7 @@ class CryptManager {
                 try {
                     str.append((Integer.parseInt(message.substring(i, i + 2), 16) xor key[(j++ + c) % keyLength].code).toChar())
                 } catch (ignored: Exception) {
-                    println("CryptManager : DecryptMessage : $message (key: $key) : $i to${i + 2}")
+                    log.warn("CryptManager : DecryptMessage : $message (key: $key) : $i to${i + 2}")
                 }
                 i += 2
             }
@@ -83,8 +86,8 @@ class CryptManager {
             data = data.replace("\\+".toRegex(), "%2B")
             return URLDecoder.decode(data, "UTF-8").replace("'", "'")
         } catch (e: Exception) {
-            e.printStackTrace()
-            return ""
+            log.error("unexpected error", e)
+                return ""
         }
     }
 

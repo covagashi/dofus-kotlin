@@ -143,7 +143,7 @@ class Start(player: Player?) {
 //			player.setCurCell(map.getCase(238));
 //			map.addPlayer(player);
 //			try { Thread.sleep(3000); } catch (InterruptedException ignored) {}
-//			player.set_orientation(7);
+//			player.orientation = 7;
 //			SocketManager.GAME_SEND_eD_PACKET_TO_MAP(map, player.id, 7);
 //
 //			try { Thread.sleep(1000); } catch (InterruptedException ignored) {}

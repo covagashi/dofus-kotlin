@@ -12,6 +12,9 @@ import org.starloco.locos.game.world.World
 import org.starloco.locos.kernel.Constant
 import org.starloco.locos.`object`.GameObject
 import org.starloco.locos.guild.Guild
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Collector::class.java)
 
 class Collector(
     var id: Int,
@@ -38,7 +41,7 @@ class Collector(
     val defenseFight = HashMap<Int, Player>()
 
     init {
-        for (item in items.split("\\|")) {
+        for (item in items.split("|")) {
             if (item == "")
                 continue
             val infos = item.split(":")
@@ -62,8 +65,8 @@ class Collector(
         try {
             path = PathFinding.getShortestStringPathBetween(map, this.cell, cell, 0)
         } catch (e: Exception) {
-            e.printStackTrace()
-            return
+            log.error("unexpected error", e)
+                return
         }
 
         if (path != null) {

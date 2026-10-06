@@ -56,6 +56,9 @@ import org.starloco.locos.other.Action;
 import org.starloco.locos.script.DataScriptVM;
 import org.starloco.locos.script.ScriptVM;
 import org.starloco.locos.util.TimerWaiter;
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(Fight::class.java)
 
 
 
@@ -1387,7 +1390,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
             var winners: ArrayList<Fighter> = ArrayList(this.getTeam(if (caster.team == 0) 2 else 1).values)
             var loosers: ArrayList<Fighter> = ArrayList(this.getTeam(caster.team + 1).values)
 
-            var honor: Int = player.get_honor() - Formulas.calculHonorWin(winners, loosers, caster, false)
+            var honor: Int = player.honor - Formulas.calculHonorWin(winners, loosers, caster, false)
             if (honor < 0) honor = 0;
             player.honor = honor;
             if (player.isOnline)
@@ -1503,7 +1506,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                         SocketManager.GAME_SEND_GV_PACKET(player);
                     }
                 }
-                System.out.println("Error : (verifIfTeamAllDead) : " + e.message + e.stackTrace[0].getLineNumber());
+                log.error("Error : (verifIfTeamAllDead) : " + e.message + e.stackTrace[0].getLineNumber());
             }
 
 
@@ -1720,7 +1723,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
             if (onAction) TimerWaiter.addNext({ this.newTurn(current) }, 2100);
             else this.newTurn(current);
         } catch (e: NullPointerException) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
             this.endTurn(false);
         }
     }
@@ -1734,7 +1737,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
             try {
                 vale = Integer.parseInt(SE.args.split(";")[1]);
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
 
             if (vale == -1)
@@ -2339,7 +2342,7 @@ var curMax0: Fighter? = null
                         }
                         SE.applyToFight(this, caster, targets, true);
                     } catch (e: Exception) {
-                        e.printStackTrace();
+                        log.error("unexpected error", e)
                     }
                 }
                 /*
@@ -2985,7 +2988,7 @@ var curMax0: Fighter? = null
                             }
 
                         } catch (e: Exception) {
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                         }
                         SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(this, 7, 999, target.id.toString() + "", this@Fight.getGTL());
                     }
@@ -3009,7 +3012,7 @@ var curMax0: Fighter? = null
                                     if (index != -1)
                                         this@Fight.orderPlaying!!.removeAt(index);
                                 } catch (e: Exception) {
-                                    e.printStackTrace();
+                                    log.error("unexpected error", e)
                                 }
                             }
                             if (this@Fight.team0.containsKey(fighter.id))
@@ -3064,7 +3067,7 @@ var curMax0: Fighter? = null
                         this@Fight.curAction = "";
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    log.error("unexpected error", e)
                 }
             }
 
@@ -3794,7 +3797,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
                 for (fighter in  fighters) {
                     var player: Player = fighter.getPlayer()!!
                     if (player != null) {
@@ -4199,7 +4202,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                                 }
                             }
                         } catch (e: NullPointerException) {
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                         }
                     }
                 }
@@ -4259,7 +4262,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                                 break;
                             }
                         } catch (e: NullPointerException) {
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                         }
                     }
                 }
@@ -4527,7 +4530,7 @@ Constant.FIGHT_TYPE_PVM -> {try {
                                 if (group.isFix) this.mapOld.spawnAfterTimeGroup();
                             }
                         } catch (e: Exception) {
-                            e.printStackTrace();
+                            log.error("unexpected error", e)
                         }
                         
 }
@@ -4967,8 +4970,8 @@ else -> {itsOk = true;
                             winH = Formulas.calculHonorWin(winners, loosers, i, true);
 
                         if (player.alignment != 0) {
-                            if (player.get_honor() + winH < 0)
-                                winH = -player.get_honor();
+                            if (player.honor + winH < 0)
+                                winH = -player.honor;
                             player.addHonor(winH);
                             player.deshonor = player.deshonor + winD;
                         }
@@ -4983,7 +4986,7 @@ else -> {itsOk = true;
                         }
                         temporary.append(if (i.isDead) "1" else "0").append(";");
                         temporary.append(if (player.alignment != Constant.ALIGNEMENT_NEUTRE) xpTable.minXpAt(player.grade) else 0).append(";");
-                        temporary.append(player.get_honor()).append(";");
+                        temporary.append(player.honor).append(";");
                         temporary.append(if (player.alignment != Constant.ALIGNEMENT_NEUTRE) maxHonor else 0).append(";");
                         temporary.append(winH).append(";");
                         temporary.append(player.grade).append(";");
@@ -5004,13 +5007,13 @@ else -> {itsOk = true;
                         gains.put(i.id, temporary);
                     } else if (this.type == Constant.FIGHT_TYPE_CONQUETE) {
                         if (player != null) {
-                            winH = ((player.get_honor() * 0.1)).toInt();
+                            winH = ((player.honor * 0.1)).toInt();
                             if (winH == 0)
                                 winH = 50;
                             if (winH > 500)
                                 winH = 500;
-                            if (player.get_honor() + winH < 0)
-                                winH = -player.get_honor();
+                            if (player.honor + winH < 0)
+                                winH = -player.honor;
                             player.addHonor(winH);
                             if (player.deshonor - winD < 0)
                                 winD = 0;
@@ -5024,7 +5027,7 @@ else -> {itsOk = true;
                             temporary.append(i.getDefaultGfx()).append(";");
                             temporary.append(if (i.isDead) "1" else "0").append(";");
                             temporary.append(if (player.alignment != Constant.ALIGNEMENT_NEUTRE) xpTable.minXpAt(player.grade) else 0).append(";");
-                            temporary.append(player.get_honor()).append(";");
+                            temporary.append(player.honor).append(";");
                             temporary.append(if (player.alignment != Constant.ALIGNEMENT_NEUTRE) maxHonor else 0).append(";");
                             temporary.append(winH).append(";");
                             temporary.append(player.grade).append(";");
@@ -5109,7 +5112,7 @@ else -> {itsOk = true;
                         if (player == null)
                             continue;
                         if (player.alignment != 0) {
-                            player.remHonor(if (player.get_honor() + winH < 0) -player.get_honor() else -winH);
+                            player.remHonor(if (player.honor + winH < 0) -player.honor else -winH);
                             if (player.deshonor - winD < 0)
                                 winD = 0;
                             player.deshonor = player.deshonor - winD;
@@ -5121,7 +5124,7 @@ else -> {itsOk = true;
                         packet.append("0;").append(i.id).append(";").append(i.getPacketsName()).append(";").append(i.getLvl()).append(";");
                         packet.append(i.getDefaultGfx()).append(";").append(if (i.isDead) "1" else "0").append(";");
                         packet.append(if (player.alignment != Constant.ALIGNEMENT_NEUTRE) xpTable.minXpAt(player.grade) else 0).append(";");
-                        packet.append(player.get_honor()).append(";");
+                        packet.append(player.honor).append(";");
                         packet.append(if (player.alignment != Constant.ALIGNEMENT_NEUTRE) maxHonor else 0).append(";");
                         packet.append(winH).append(";");
                         packet.append(player.grade).append(";");
@@ -5143,7 +5146,7 @@ else -> {itsOk = true;
                             packet.append("0;").append(i.id).append(";").append(i.getPacketsName()).append(";").append(i.getLvl()).append(";");
                             packet.append(i.getDefaultGfx()).append(";").append(if (i.isDead) "1" else "0").append(";");
                             packet.append(if (player.alignment != Constant.ALIGNEMENT_NEUTRE) xpTable.minXpAt(player.grade) else 0).append(";");
-                            packet.append(player.get_honor()).append(";");
+                            packet.append(player.honor).append(";");
                             packet.append(if (player.alignment != Constant.ALIGNEMENT_NEUTRE) maxHonor else 0).append(";");
                             packet.append(winH).append(";");
                             packet.append(player.grade).append(";");
@@ -5290,8 +5293,8 @@ else -> {itsOk = true;
             //endregion
             return packet.toString();
         } catch (e: Exception) {
-            e.printStackTrace();
-            System.out.println("An error occurred when server went to give the 'GE' packet : " + e.message.toString() + " " + e.getLocalizedMessage());
+            log.error("unexpected error", e)
+            log.error("An error occurred when server went to give the 'GE' packet : " + e.message.toString() + " " + e.getLocalizedMessage());
         }
         return "";
     }
@@ -5415,7 +5418,7 @@ Constant.FIGHT_TYPE_PVT -> {infos.append("0,");
         try {
             current = this.orderPlaying!!.get(this.curPlayer);
         } catch (e: Exception) {
-            e.printStackTrace();
+            log.error("unexpected error", e)
         }
         return current!!;
     }
@@ -5444,7 +5447,7 @@ Constant.FIGHT_TYPE_PVT -> {infos.append("0,");
             try {
                 runnable.run();
             } catch (e: Exception) {
-                e.printStackTrace();
+                log.error("unexpected error", e)
             }
             SocketManager.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 0, fighter.id);
         }

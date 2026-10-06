@@ -155,7 +155,7 @@ class PlayerData(dataSource: HikariDataSource?) : FunctionDAO<Player>(dataSource
             p?.setInt(7, entity.size)
             p?.setInt(8, entity.gfxId)
             p?.setInt(9, entity.alignment)
-            p?.setInt(10, entity.get_honor())
+            p?.setInt(10, entity.honor)
             p?.setInt(11, entity.deshonor)
             p?.setInt(12, entity.aLvl)
             p?.setInt(13, entity.stats.getEffect(Constant.STATS_ADD_VITA))

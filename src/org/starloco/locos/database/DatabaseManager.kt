@@ -45,8 +45,8 @@ class DatabaseManager {
             return login != null && login.connection != null && !login.connection.isClosed &&
                 game != null && game.connection != null && !game.connection.isClosed
         } catch (e: SQLException) {
-            e.printStackTrace()
-        }
+            logger.error("unexpected error", e)
+                }
         return false
     }
 

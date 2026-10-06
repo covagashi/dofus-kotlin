@@ -28,7 +28,7 @@ class Trunk(
     var `object`: MutableMap<Int, GameObject> = HashMap()
 
     fun setObjects(`object`: String) {
-        for (item in `object`.split("\\|")) {
+        for (item in `object`.split("|")) {
             if (item == "")
                 continue
             val infos = item.split(":")

@@ -11,6 +11,9 @@ import java.util.LinkedList
 import java.util.Timer
 import java.util.TimerTask
 import java.util.stream.Collectors
+import org.slf4j.LoggerFactory
+
+private val log = LoggerFactory.getLogger(MonsterGroup::class.java)
 
 class MonsterGroup {
     val id: Int
@@ -112,8 +115,8 @@ class MonsterGroup {
                     this.aggroDistance = m!!.aggroDistance
                 guid--
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
         }
 
         if (objects.isNotEmpty()) {
@@ -161,8 +164,8 @@ class MonsterGroup {
                     this.aggroDistance = m!!.aggroDistance
                 guid--
             } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                log.error("unexpected error", e)
+                }
         }
         this.orientation = if (map != null && map.id == 11095) 3 else Formulas.getRandomValue(0, 3) * 2 + 1
         this.starBonus = (if (star) 0 else -1).toShort()
