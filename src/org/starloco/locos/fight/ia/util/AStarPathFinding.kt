@@ -50,7 +50,7 @@ class AStarPathFinding {
         val start = Node(map!!.getCase(cellStart)!!, null)
         openList[cellStart] = start
 
-        while (!openList.isEmpty() && !closeList.containsKey(cellEnd)) {
+        while (!openList.isEmpty() && cellEnd !in closeList) {
             val dirs = charArrayOf('b', 'd', 'f', 'h')
             val current = bestNode()
 
@@ -70,10 +70,10 @@ class AStarPathFinding {
                     continue
 
                 val occupied = fight != null && PathFinding.haveFighterOnThisCell(cellId, fight!!, true)
-                if (occupied && cellId != cellEnd || closeList.containsKey(cellId))
+                if (occupied && cellId != cellEnd || cellId in closeList)
                     continue
 
-                if (openList.containsKey(cellId)) {
+                if (cellId in openList) {
                     if (openList[cellId]!!.countG > getCostG(node)) {
                         current.child = openList[cellId]
                         openList[cellId]!!.parent = current
@@ -137,8 +137,8 @@ class AStarPathFinding {
 
     private fun addListClose(node: Node) {
         val id = node.cell.cellId
-        if (openList.containsKey(id)) openList.remove(id)
-        if (!closeList.containsKey(id)) closeList[id] = node
+        if (id in openList) openList.remove(id)
+        if (id !in closeList) closeList[id] = node
     }
 
     private fun getCostG(node: Node): Int {

@@ -262,7 +262,7 @@ open class GameObject {
 
     val isAttach: Boolean
         get() {
-            val ok = this.txtStat.containsKey(Constant.STATS_OWNER_1)
+            val ok = Constant.STATS_OWNER_1 in this.txtStat
 
             if (ok) {
                 val player = World.world.getPlayerByName(this.txtStat[Constant.STATS_OWNER_1]!!)

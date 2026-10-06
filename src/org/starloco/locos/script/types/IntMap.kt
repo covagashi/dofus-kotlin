@@ -11,7 +11,7 @@ class IntMap : Table(), MutableMap<String, Int> {
 
     override fun isEmpty(): Boolean = m.isEmpty()
 
-    override fun containsKey(key: String): Boolean = m.containsKey(key)
+    override fun containsKey(key: String): Boolean = key in m
 
     override fun containsValue(value: Int): Boolean = m.containsValue(value)
 

@@ -63,7 +63,7 @@ class PlayerFighter(f: Fight, player: Player) : Fighter(player.id, f) {
         if (agi < 0)
             agi = 0
         porcCC -= getTotalStats().getEffect(Constant.STATS_ADD_CC)
-        if (player.objectsClassSpell.containsKey(spellID)) {
+        if (spellID in player.objectsClassSpell) {
             val modi = player.getValueOfClassObject(spellID, 287)
             porcCC -= modi
         }

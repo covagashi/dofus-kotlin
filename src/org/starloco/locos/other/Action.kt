@@ -146,7 +146,7 @@ open class Action {
 -6 -> {var mapActuel: GameMap = player.curMap
                 var dopeuls: Map<Int, Couple<Int, Int>> = Action.getDopeul()
                 var IDmob: Int? = null
-                if (dopeuls.containsKey(mapActuel.id)) {
+                if (mapActuel.id in dopeuls) {
                     IDmob = dopeuls[mapActuel.id]!!.first
                 } else {
                     SocketManager.GAME_SEND_MESSAGE(player, player.getLang().trans("other.action.apply.error.dopeul"))

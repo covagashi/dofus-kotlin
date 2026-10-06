@@ -159,7 +159,7 @@ class MountPark(
     fun getCellAndObject(): Map<Int, Int> = this.cellAndObject
 
     fun addObject(cell: Int, `object`: Int, owner: Int, durability: Int, durabilityMax: Int) {
-        if (this.breedingObject.containsKey(cell)) {
+        if (cell in this.breedingObject) {
             this.breedingObject.remove(cell)
             this.cellAndObject.remove(cell)
         }
@@ -175,7 +175,7 @@ class MountPark(
     }
 
     fun delObject(cell: Int): Boolean {
-        if (!this.breedingObject.containsKey(cell) && !this.objDurab.containsKey(cell))
+        if (cell !in this.breedingObject && cell !in this.objDurab)
             return false
         this.objDurab.remove(cell)
         this.breedingObject.remove(cell)

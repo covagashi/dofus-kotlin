@@ -81,7 +81,7 @@ open class JobAction {
             }
         }
 
-        this.player!!.items.put(newObj.guid, newObj)
+        this.player!!.items[newObj.guid] = newObj
         SocketManager.GAME_SEND_OAKO_PACKET(player, newObj)
         World.world.addGameObject(newObj)
         return -1
@@ -95,7 +95,7 @@ open class JobAction {
         oldQuantity += quantity
 
         if (oldQuantity > 0) {
-            this.ingredients.put(id, oldQuantity)
+            this.ingredients[id] = oldQuantity
             SocketManager.GAME_SEND_EXCHANGE_MOVE_OK(player, 'O', "+", id.toString() + "|" + oldQuantity)
         } else {
             SocketManager.GAME_SEND_EXCHANGE_MOVE_OK(player, 'O', "-", id.toString() + "")
@@ -187,13 +187,13 @@ open class JobAction {
                     SocketManager.GAME_SEND_OBJECT_QUANTITY_PACKET(player, gameObject)
                 }
 
-                if(items.containsKey(gameObject!!.template!!.id)) {
+                if(gameObject!!.template!!.id in items) {
                     var template: Int = gameObject!!.template!!.id
-                    var quantity: Int = e.second + items.get(template)!!
+                    var quantity: Int = e.second + items[template]!!
                     items.remove(template)
-                    items.put(template, quantity)
+                    items[template] = quantity
                 } else {
-                    items.put(gameObject!!.template!!.id, e.second)
+                    items[gameObject!!.template!!.id] = e.second
                 }
             }
         }
@@ -202,7 +202,7 @@ open class JobAction {
 
 
         //Rune de signature
-        if (items.containsKey(7508))
+        if (7508 in items)
             if (SM!!.get_lvl() == 100)
                 signed = true
 
@@ -305,7 +305,7 @@ open class JobAction {
 
         var signed: Boolean = false
 
-        if (items.containsKey(7508)) {
+        if (7508 in items) {
             signed = true
             items.remove(7508)
         }
@@ -352,7 +352,7 @@ open class JobAction {
             } else {
                 var newObj: GameObject? = World.world.getObjTemplate(templateId)!!.createNewItemWithoutDuplication(this.player!!.items.values, 1, false)
                 if(newObj != null) {
-                    if (this.player!!.items.get(newObj.guid) == null) {
+                    if (this.player!!.items[newObj.guid] == null) {
                         if (this.player!!.addItem(newObj, true, false))
                             World.world.addGameObject(newObj)
                     } else {
@@ -391,7 +391,7 @@ open class JobAction {
             var newObj: GameObject? = World.world.getObjTemplate(templateId)!!.createNewItemWithoutDuplication(this.player!!.items.values, 1, false)
 
             if(newObj != null) {
-                if (this.player!!.items.get(newObj.guid) == null) {
+                if (this.player!!.items[newObj.guid] == null) {
                     if (this.player!!.addItem(newObj, true, false))
                         World.world.addGameObject(newObj)
                 } else {
@@ -438,7 +438,7 @@ open class JobAction {
         if(items != null) {
             for(entry in  items.entries) {
                 for(couple in  entry.value) {
-                    ingredients.put(couple.first, couple.second)
+                    ingredients[couple.first] = couple.second
                 }
             }
         }
@@ -1133,8 +1133,8 @@ else -> {var type: Int = `object`!!.template!!.type
         }
 
         var aleatoryChance: Int = Formulas.getRandomValue(1, 100)
-        var SC: Int = chances.get(0)
-        var SN: Int = chances.get(1)
+        var SC: Int = chances[0]
+        var SN: Int = chances[1]
         var successC: Boolean = (aleatoryChance <= SC)
         var successN: Boolean = (aleatoryChance <= (SC + SN))
 
@@ -1375,11 +1375,11 @@ else -> {var type: Int = `object`!!.template!!.type
             this.player!!.send("EmKO-" + objectFm!!.guid.toString() + "|1|")
             this.ingredients.clear()
             this.player!!.send("EMKO.toString() + " + objectFm!!.guid.toString() + "|1")
-            this.ingredients.put(objectFm!!.guid, 1)
+            this.ingredients[objectFm!!.guid] = 1
 
             if (newQuantity >= 1) {
                 this.player!!.send("EMKO.toString() + " + idRune.toString() + "|" + newQuantity)
-                this.ingredients.put(idRune, newQuantity)
+                this.ingredients[idRune] = newQuantity
             } else {
                 this.player!!.send("EMKO-" + idRune)
             }
@@ -2441,7 +2441,7 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
             }
             //region success critique
             if (result.toInt() == 0) {
-                var newQuantity: Int = this.ingredients.get(runeObject!!.guid)!! - 1
+                var newQuantity: Int = this.ingredients[runeObject!!.guid]!! - 1
                 this.player!!.removeItemByTemplateId(runeObject!!.template!!.id, 1, false)
 
                 var winXP: Int = Formulas.calculXpWinFm(gameObject!!.template!!.level, (Math.floor(runeTemplate.weight.toDouble()).toInt())) * Config.rateJob
@@ -2453,7 +2453,7 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
 
                 if (signingObject != null) {
                     this.player!!.removeItemByTemplateId(signingObject!!.template!!.id, 1, false)
-                    if (newObject!!.txtStat.containsKey(985))
+                    if (985 in newObject!!.txtStat)
                         newObject!!.txtStat.remove(985)
                     newObject!!.addTxtStat(985, this.player!!.name)
                 }
@@ -2471,11 +2471,11 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
 
                 this.ingredients.clear()
                 this.player!!.send("EMKO.toString() + " + newObject!!.guid.toString() + "|1")
-                this.ingredients.put(newObject!!.guid, 1)
+                this.ingredients[newObject!!.guid] = 1
 
                 if (newQuantity >= 1) {
                     this.player!!.send("EMKO.toString() + " + runeObject!!.guid.toString() + "|" + newQuantity)
-                    this.ingredients.put(runeObject!!.guid, newQuantity)
+                    this.ingredients[runeObject!!.guid] = newQuantity
                 }
 
                 this.oldJobCraft = this.jobCraft
@@ -2535,7 +2535,7 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
                             blacklist.add(id.toShort())
                         } else {
                             var puitLoose: Int = Formulas.getRandomValue(1, ((Math.ceil((PWGLoose / PWRJetRune).toDouble())).toInt()))
-                            var old: Int = gameObject!!.stats.get(id.toInt())
+                            var old: Int = gameObject!!.stats[id.toInt()]
                             var value: Int = gameObject!!.stats!!.addOneStat(id.toInt(), -puitLoose)
                             old = old - puitLoose
 
@@ -2566,7 +2566,7 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
                     var PWRGJet: Float = this.getPWR(rune!!, jet, 1.toByte())
 
                     var puitLoose: Int = Formulas.getRandomValue(1, ((Math.ceil((PWGLoose / PWRJetRune).toDouble())).toInt()))
-                    var old: Int = gameObject!!.stats.get(id.toInt())
+                    var old: Int = gameObject!!.stats[id.toInt()]
                     var value: Int = gameObject!!.stats!!.addOneStat(id.toInt(), -puitLoose)
                     old = old - puitLoose
 
@@ -2582,7 +2582,7 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
             }
             //endregion
 
-            var newQuantity: Int = this.ingredients.get(runeObject!!.guid)!! - 1
+            var newQuantity: Int = this.ingredients[runeObject!!.guid]!! - 1
             this.player!!.removeItemByTemplateId(runeObject!!.template!!.id, 1, false)
 
             var newObject: GameObject? = gameObject!!.getClone(1, true)
@@ -2598,7 +2598,7 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
 
             if(result.toInt() == 1) { // succes neutre
                 if (signingObject != null) {
-                    if (newObject!!.txtStat.containsKey(985))
+                    if (985 in newObject!!.txtStat)
                         newObject!!.txtStat.remove(985)
                     newObject!!.addTxtStat(985, this.player!!.name)
                 }
@@ -2624,12 +2624,12 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
             this.ingredients.clear()
 
             this.player!!.send("EMKO.toString() + " + newObject!!.guid.toString() + "|1")
-            this.ingredients.put(newObject!!.guid, 1)
+            this.ingredients[newObject!!.guid] = 1
 
 
             if (newQuantity >= 1) {
                 this.player!!.send("EMKO.toString() + " + runeObject!!.guid.toString() + "|" + newQuantity)
-                this.ingredients.put(runeObject!!.guid, newQuantity)
+                this.ingredients[runeObject!!.guid] = newQuantity
             } else {
                 this.player!!.send("EMKO-" + runeObject!!.guid)
             }

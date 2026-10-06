@@ -255,7 +255,7 @@ class Collector(
 
     @Synchronized
     fun delDefenseFight(P: Player): Boolean {
-        if (this.defenseFight.containsKey(P.id)) {
+        if (P.id in this.defenseFight) {
             this.defenseFight.remove(P.id)
             return true
         }

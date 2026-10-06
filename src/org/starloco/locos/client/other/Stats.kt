@@ -59,7 +59,7 @@ class Stats(val effects: MutableMap<Int, Int>) {
         }
     }
 
-    fun get(id: Int): Int = this.effects.getOrDefault(id, 0)
+    operator fun get(id: Int): Int = this.effects.getOrDefault(id, 0)
 
     fun addOneStat(id: Int, `val`: Int): Int {
         var id = id

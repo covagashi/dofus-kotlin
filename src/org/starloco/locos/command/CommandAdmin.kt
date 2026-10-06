@@ -85,7 +85,7 @@ class CommandAdmin(player: Player) : AdminUser(player) {
             return
         } else if (command.equals("CHALL", ignoreCase = true)) {
             var challenge: Challenge = Challenge(this.player!!.fight!!,infos[1].toInt(), 0, 0)
-            this.player!!.fight!!.allChallenges.put(infos[1].toInt(), challenge)
+            this.player!!.fight!!.allChallenges[infos[1].toInt()] = challenge
             challenge.fightStart()
             SocketManager.GAME_SEND_CHALLENGE_FIGHT(this.player!!.fight!!, 1, challenge.parseToPacket())
             return
@@ -1694,8 +1694,8 @@ Thread.State.TERMINATED -> {news++
                 var mount: Mount = Mount(Constant.getMountColorByParchoTemplate(obj!!.template!!.id),this.player!!.id, false)
                 obj!!.clearStats()
                 obj!!.stats.addOneStat(995, (mount.id))
-                obj!!.txtStat.put(996, this.player!!.name)
-                obj!!.txtStat.put(997, mount.name ?: "")
+                obj!!.txtStat[996] = this.player!!.name
+                obj!!.txtStat[997] = mount.name ?: ""
                 mount.setToMax()
             }
             if(lier) {
@@ -2826,7 +2826,7 @@ else -> {
                 return;
             }
             Player p = World.world.getPlayerByName(perso);
-            Quest q = Quest.quests.get(id);
+            Quest q = Quest.quests[id];
             if (p == null || q == null) {
                 this.sendMessage("La quete ou le joueur est introuvable.");
                 return;
@@ -2859,7 +2859,7 @@ else -> {
                 return;
             }
             Player p = World.world.getPlayerByName(perso);
-            Quest q = Quest.quests.get(id);
+            Quest q = Quest.quests[id];
             if (p == null || q == null) {
                 this.sendMessage("La quete ou le joueur est introuvable.");
                 return;
@@ -2890,7 +2890,7 @@ else -> {
                 return;
             }
             Player p = World.world.getPlayerByName(perso);
-            Quest q = Quest.quests.get(id);
+            Quest q = Quest.quests[id];
             if (p == null || q == null) {
                 this.sendMessage("La quete ou le joueur est introuvable.");
                 return;
@@ -2922,7 +2922,7 @@ else -> {
                 this.sendMessage("Le parametre est invalide.");
                 return;
             }
-            Quest q = Quest.quests.get(id);
+            Quest q = Quest.quests[id];
             if (q == null) {
                 this.sendMessage("La quete est introuvable.");
                 return;
@@ -2955,7 +2955,7 @@ else -> {
             }
 
             for(i in 0 until places.size) {
-                mess = "Team " + i.toString() + " : " + places.get(i).joinToString(",")
+                mess = "Team " + i.toString() + " : " + places[i].joinToString(",")
                 this.sendMessage(mess)
             }
         } else if (command.equals("FINDEXTRAMONSTER", ignoreCase = true)) {

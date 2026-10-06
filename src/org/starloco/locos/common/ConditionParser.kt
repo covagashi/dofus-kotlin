@@ -212,7 +212,7 @@ class ConditionParser {
     private fun haveCe(req: String, player: Player): Boolean {
         val dopeuls: Map<Int, World.Couple<Int, Int>> = Action.getDopeul()
         val map = player.curMap
-        if (dopeuls.containsKey(map.id.toInt())) {
+        if (map.id.toInt() in dopeuls) {
             val couple = dopeuls[map.id.toInt()] ?: return false
 
             val IDmob = couple.first

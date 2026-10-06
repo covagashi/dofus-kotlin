@@ -405,7 +405,7 @@ else -> {
         if(!item.isMimibiote()) return
 
         val mimibiote: GameObject = World.world.getObjTemplate(Constant.ID_TEMPLATE_MIMIBIOTE.toInt())!!.createNewItem(1, false)!!
-        val idApparat: Int = (item.txtStat!!.get(Constant.STATS_MIMIBIOTE)!!.split(";")[0]).toInt(16)
+        val idApparat: Int = (item.txtStat!![Constant.STATS_MIMIBIOTE]!!.split(";")[0]).toInt(16)
         val apparat: GameObject = World.world.getGameObject(idApparat)!!
 
         if(apparat == null)
@@ -652,7 +652,7 @@ else -> {
     }
 
     private fun hardcodeRevive(id: Int) {
-        val player: Player = this.account.getPlayers().get(id)!!
+        val player: Player = this.account.getPlayers()[id]!!
 
         this.getSession().write("BN")
 
@@ -667,8 +667,8 @@ else -> {
     private fun setCharacter(packet: String) {
         var id: Int = (packet.substring(2)).toInt()
 
-        if (this.account.getPlayers().get(id) != null) {
-            this.player = this.account.getPlayers().get(id)!!
+        if (this.account.getPlayers()[id] != null) {
+            this.player = this.account.getPlayers()[id]!!
             if (this.player != null) {
                 if(this.player.isDead().toInt() == 1 && Config.modeHeroic)
                     this.getSession().write("BN")
@@ -782,7 +782,7 @@ else -> {
         var calendar: Calendar = GregorianCalendar()
         calendar.setTime(Date())
 
-        this.send("BD" + calendar.get(Calendar.YEAR) + "|" + calendar.get(Calendar.MONTH) + "|" + calendar.get(Calendar.DAY_OF_MONTH))
+        this.send("BD" + calendar[Calendar.YEAR] + "|" + calendar[Calendar.MONTH] + "|" + calendar[Calendar.DAY_OF_MONTH])
         this.send("BT" + (calendar.getTime().getTime() + 3600000))
     }
 
@@ -1464,7 +1464,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
         if (target.isDead().toInt() == 1 || checkExchangeAction == null || !(checkExchangeAction.getValue() is Int) || (checkExchangeAction.getType() != ExchangeAction.TRADING_WITH_PLAYER && checkExchangeAction.getType() != ExchangeAction.CRAFTING_SECURE_WITH))
             return
 
-        var type: Int = this.player.craftingType.get(0)
+        var type: Int = this.player.craftingType[0]
         var newExchangeAction: ExchangeAction<*>? = null
         when (type){  1 -> {SocketManager.GAME_SEND_EXCHANGE_CONFIRM_OK(this, 1)
                 SocketManager.GAME_SEND_EXCHANGE_CONFIRM_OK(target.getGameClient()!!, 1)
@@ -1476,12 +1476,12 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
                 target.craftingType.clear()
                 
 }
-12, 13 -> {var player1: Player = (if (target.craftingType.get(0) == 12) target else this.player)
-                var player2: Player = (if (target.craftingType.get(0) == 13) target else this.player)
+12, 13 -> {var player1: Player = (if (target.craftingType[0] == 12) target else this.player)
+                var player2: Player = (if (target.craftingType[0] == 13) target else this.player)
 
                 var craftSecure: CraftSecure = CraftSecure(player1, player2)
-                SocketManager.GAME_SEND_ECK_PACKET(this, type, craftSecure.maxCase.toString() + ";" + this.player.craftingType.get(1))
-                SocketManager.GAME_SEND_ECK_PACKET(target.getGameClient()!!, target.craftingType.get(0), craftSecure.maxCase.toString() + ";" + this.player.craftingType.get(1))
+                SocketManager.GAME_SEND_ECK_PACKET(this, type, craftSecure.maxCase.toString() + ";" + this.player.craftingType[1])
+                SocketManager.GAME_SEND_ECK_PACKET(target.getGameClient()!!, target.craftingType[0], craftSecure.maxCase.toString() + ";" + this.player.craftingType[1])
 
                 newExchangeAction = ExchangeAction(ExchangeAction.CRAFTING_SECURE_WITH, craftSecure)
                 this.player.exchangeAction = newExchangeAction
@@ -1514,12 +1514,12 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
                     return
                 }
 
-                    if (!seller.storeItems.containsKey(itemID) || qua <= 0) {
+                    if (itemID !in seller.storeItems || qua <= 0) {
                         SocketManager.GAME_SEND_BUY_ERROR_PACKET(this)
                         return
                     }
-                    price = seller.storeItems.get(itemID)!! * qua
-                    var price2: Int = seller.storeItems.get(itemID)!!
+                    price = seller.storeItems[itemID]!! * qua
+                    var price2: Int = seller.storeItems[itemID]!!
                     var itemStore: GameObject = World.world.getGameObject(itemID)!!
                     if (itemStore == null)
                         return
@@ -1730,7 +1730,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
             var fragment: Fragment = Fragment("")
 
             for (couple in  ((value as BreakingObject)).objects) {
-                var obj: GameObject = this.player.objects.get(couple.first)!!
+                var obj: GameObject = this.player.objects[couple.first]!!
 
                 if (obj == null || couple.second < 1 || obj.quantity < couple.second) {
                     this.player.send("Ea3")
@@ -1826,7 +1826,7 @@ ExchangeAction.TRADING_WITH_ME -> {when (packet[2]) {
                                 var qua: Int = (infos[1]).toInt()
                                 var price: Int = (infos[2]).toInt()
 
-                                var obj: GameObject = this.player.objects.get(guid)!!
+                                var obj: GameObject = this.player.objects[guid]!!
                                 if (obj == null)
                                     return
                                 if (qua <= 0 || obj.isAttach)
@@ -1948,7 +1948,7 @@ ExchangeAction.BREAKING_OBJECTS -> {val breakingObject: BreakingObject = ((this.
                             if (!this.player.hasItemGuid(id))
                                 return
 
-                            var obj: GameObject = this.player.objects.get(id)!!
+                            var obj: GameObject = this.player.objects[id]!!
 
                             if (obj == null || obj.isAttach)
                                 return
@@ -2045,7 +2045,7 @@ ExchangeAction.TRADING_WITH_NPC_EXCHANGE -> {when (packet[2]) {
                                 var quaInExch: Int = ((this.player.exchangeAction!!.getValue() as NpcExchange)).getQuaItem(guid, false)
 
                                 if (!this.player.hasItemGuid(guid)) return
-                                var obj: GameObject = this.player.objects.get(guid)!!
+                                var obj: GameObject = this.player.objects[guid]!!
                                 if (obj == null) return
 
                                 if (qua > obj.quantity - quaInExch)
@@ -2112,7 +2112,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS -> {when (packet[2]) {
 
                                 if (!this.player.hasItemGuid(guid))
                                     return
-                                var obj: GameObject = this.player.objects.get(guid)!!
+                                var obj: GameObject = this.player.objects[guid]!!
                                 if (obj == null)
                                     return
 
@@ -2377,7 +2377,7 @@ ExchangeAction.CRAFTING -> {var skillID: Int = (this.player.exchangeAction!!.get
 //                                if (!this.player.hasItemGuid(id))
 //                                    return;
 //
-//                                GameObject obj = this.player.objects.get(id);
+//                                GameObject obj = this.player.objects[id];
 //
 //                                if (obj == null || obj.getObvijevanLook() != 0) {
 //                                    player.send("BN");
@@ -2463,7 +2463,7 @@ ExchangeAction.IN_BANK -> {when (packet[2]) {
 }
 '-' -> {var obj: GameObject = World.world.getGameObject(guid)!!
                                 if(obj != null) {
-                                    if (obj.txtStat.containsKey(Constant.STATS_OWNER_1)) {
+                                    if (Constant.STATS_OWNER_1 in obj.txtStat) {
                                         var player: Player? = World.world.getPlayerByName(obj.txtStat[Constant.STATS_OWNER_1] ?: "")
                                         if (player != null) {
                                             if (!player!!.name.equals(this.player.name))
@@ -2557,7 +2557,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 
                                     if (!this.player.hasItemGuid(guid))
                                         return
-                                    var obj: GameObject = this.player.objects.get(guid)!!
+                                    var obj: GameObject = this.player.objects[guid]!!
                                     if (obj == null)
                                         return
                                     if (qua > obj.quantity - quaInExch)
@@ -2584,7 +2584,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                                 if (!this.player.hasItemGuid(guid))
                                     return
 
-                                var obj: GameObject = this.player.objects.get(guid)!!
+                                var obj: GameObject = this.player.objects[guid]!!
                                 if (obj == null)
                                     return
                                 if (qua > ((this.player.exchangeAction!!.getValue() as PlayerExchange)).getQuaItem(guid, this.player.id))
@@ -2987,7 +2987,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 //                        if (cell.getObject() != null) {
 //                            if (cell.getObject().getTemplate() != null) {
 //                                int io = cell.getObject().getTemplate().getId();
-//                                ArrayList<Integer> skills = job.getSkills().get(io);
+//                                ArrayList<Integer> skills = job.getSkills()[io];
 //
 //                                if (skills != null) {
 //                                    for (int arg : skills) {
@@ -3062,7 +3062,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 //                        if (cell.getObject() != null) {
 //                            if (cell.getObject().getTemplate() != null) {
 //                                int io = cell.getObject().getTemplate().getId();
-//                                ArrayList<Integer> skills = job.getSkills().get(io);
+//                                ArrayList<Integer> skills = job.getSkills()[io];
 //
 //                                if (skills != null) {
 //                                    for (int arg : skills) {
@@ -3702,7 +3702,7 @@ else -> {packet = packet.substring(2)
                         this.player.follow!!.follower.remove(this.player.id)
                     SocketManager.GAME_SEND_FLAG_PACKET(this.player, Wife)
                     this.player.follow = Wife
-                    Wife.follower.put(this.player.id, this.player)
+                    Wife.follower[this.player.id] = this.player
                 } else
                 //On arrete de suivre
                 {
@@ -4027,7 +4027,7 @@ gameTryCastSpell(packet)
                 removeAction(GA)
 
                 // Maybe the player is right next to an Object and want to use it
-                var allowSkill0: Boolean = Optional.ofNullable(this.player.curMap.data.interactiveObjects.get(targetCell.getId()))
+                var allowSkill0: Boolean = Optional.ofNullable(this.player.curMap.data.interactiveObjects[targetCell.getId()])
                         .flatMap(World.world::getObjectBySprite)
                         .map({ io -> io.allowSkill(0) })
                         .orElse(false)
@@ -4306,7 +4306,7 @@ gameTryCastSpell(packet)
 
                 this.clearAllPanels(null)
                 if(fight!!.prism != null)
-                    fight!!.joinPrismFight(this.player, (if (fight.team0.containsKey(guid)) 0 else 1))
+                    fight!!.joinPrismFight(this.player, (if (guid in fight.team0) 0 else 1))
                 else {
                     fight!!.joinFight(this.player, guid)
 
@@ -4445,8 +4445,8 @@ gameTryCastSpell(packet)
         chalID = (packet.split("i")[1]).toInt()
         if (chalID != 0 && this.player.fight != null) {
             var fight: Fight = this.player.fight!!
-            if (fight.allChallenges.containsKey(chalID))
-                fight.allChallenges.get(chalID)!!.showCibleToPerso(this.player)
+            if (chalID in fight.allChallenges)
+                fight.allChallenges[chalID]!!.showCibleToPerso(this.player)
         }
     }
 
@@ -4545,7 +4545,7 @@ gameTryCastSpell(packet)
         }
         if (id == -1)
             return
-        var GA: GameAction = actions.get(id)!!
+        var GA: GameAction = actions[id]!!
 
         if (GA == null)
             return
@@ -4586,7 +4586,7 @@ gameTryCastSpell(packet)
 
                         // TODO: Maybe check that the player is still where we think he is
                         // Maybe the player is right next to an Object and want to use it
-                        var allowSkill0: Boolean = Optional.ofNullable(player.curMap.data.interactiveObjects.get(targetCellID))
+                        var allowSkill0: Boolean = Optional.ofNullable(player.curMap.data.interactiveObjects[targetCellID])
                                 .flatMap(World.world::getObjectBySprite)
                                 .map({ io -> io.allowSkill(0) })
                                 .orElse(false)
@@ -4795,7 +4795,7 @@ gameTryCastSpell(packet)
         if (!this.player.guildMember!!.canDo(Constant.G_BOOST))
             return
         var spellID: Int = (packet.substring(2)).toInt()
-        if (G2.spells.containsKey(spellID)) {
+        if (spellID in G2.spells) {
             if (G2.capital < 5)
                 return
             G2.capital = G2.capital - 5
@@ -4958,7 +4958,7 @@ gameTryCastSpell(packet)
         if (this.player.fight != null || this.player.away)
             return
         var HouseID: Int = (packet).toInt()
-        var h: House = World.world.houses.get(HouseID)!!
+        var h: House = World.world.houses[HouseID]!!
         if (h == null)
             return
         if (this.player.getGuild()!!.id != h.guildId) {
@@ -5007,8 +5007,8 @@ gameTryCastSpell(packet)
         if (Collector.countCollectorGuild(guild.id) >= guild.nbCollectors)
             return
 
-        if (World.world.delayCollectors.get(map.id) != null) {
-            var time: Long = World.world.delayCollectors.get(map.id)!!
+        if (World.world.delayCollectors[map.id] != null) {
+            var time: Long = World.world.delayCollectors[map.id]!!
 
             if ((System.currentTimeMillis() - time) < (((10L * guild.lvl) * 60) * 1000)) {
                 this.player.send("Im1167;" + ((((((10L * guild.lvl) * 60) * 1000) - (System.currentTimeMillis() - time)) / 1000) / 60))
@@ -5029,7 +5029,7 @@ gameTryCastSpell(packet)
             if(quit[0].toInt() == 1) return
         }
 
-        World.world.delayCollectors.put(map.id, System.currentTimeMillis())
+        World.world.delayCollectors[map.id] = System.currentTimeMillis()
         this.player.kamas = this.player.kamas - price
 
         if (this.player.kamas <= 0)
@@ -5501,7 +5501,7 @@ else -> {packet = packet.substring(2)
                 var pos: Int = (infos[0]).toInt()
                 var option: Int = (infos[1]).toInt()
                 var slots: Int = (infos[2]).toInt()
-                var SM: JobStat = this.player.metiers.get(pos)!!
+                var SM: JobStat = this.player.metiers[pos]!!
                 if (SM == null)
                     return
                 SM.setOptBinValue(option)
@@ -5617,7 +5617,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
                 qua = (infos[1]).toInt()
             } catch (ignored: Exception) {}
 
-            var obj: GameObject = this.player.objects.get(guid)!!
+            var obj: GameObject = this.player.objects[guid]!!
             if (obj == null || !this.player.hasItemGuid(guid) || qua <= 0
                     || this.player.fight != null || this.player.away) {
                 //SocketManager.GAME_SEND_DELETE_OBJECT_FAILED_PACKET(this);
@@ -5657,7 +5657,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
         if (guid == -1 || qua <= 0 || !this.player.hasItemGuid(guid)
                 || this.player.fight != null || this.player.away)
             return
-        var obj: GameObject = this.player.objects.get(guid)!!
+        var obj: GameObject = this.player.objects[guid]!!
 
         if(obj.isAttach) return
 
@@ -5707,7 +5707,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
                 quantity = (infos[2]).toInt()
             } catch (ignored: Exception) {}
 
-            var obj: GameObject = this.player.objects.get(id)!!
+            var obj: GameObject = this.player.objects[id]!!
             if (obj == null || player.exchangeAction != null)
                 return
             if (this.player.fight != null)
@@ -6202,7 +6202,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
             return
         if (target != null && target.away)
             return
-        var obj: GameObject = this.player.objects.get(guid)!!
+        var obj: GameObject = this.player.objects[guid]!!
         if (obj == null)
             return
         var T: ObjectTemplate = obj.template!!
@@ -6236,7 +6236,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
         }
         if ((guid == -1) || (!this.player.hasItemGuid(guid)))
             return
-        var obj: GameObject = this.player.objects.get(guid)!!
+        var obj: GameObject = this.player.objects[guid]!!
         var idOBVI: Int = DatabaseManager.get(ObvijevanData::class.java).load(obj.guid).getFirst()
 
         if (idOBVI == -1) {
@@ -6292,7 +6292,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
 
         if ((guid == -1) || (!this.player.hasItemGuid(guid)))
             return
-        var obj: GameObject = this.player.objects.get(guid)!!
+        var obj: GameObject = this.player.objects[guid]!!
         var objVictime: GameObject = World.world.getGameObject(victime)!!
         obj.obvijevanNourir(objVictime)
 
@@ -6322,7 +6322,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
         }
         if ((guid == -1) || (!this.player.hasItemGuid(guid)))
             return
-        var obj: GameObject = this.player.objects.get(guid)!!
+        var obj: GameObject = this.player.objects[guid]!!
         if ((vale >= 21) || (vale <= 0))
             return
 
@@ -6417,7 +6417,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             SocketManager.GAME_SEND_FLAG_PACKET(this.player, P)
             SocketManager.GAME_SEND_PF(this.player, "+" + P.id)
             this.player.follow = P
-            P.follower.put(this.player.id, this.player)
+            P.follower[this.player.id] = this.player
             P.send("Im052;" + this.player.name)
         } else if (packet[2] == '-')//Ne plus suivre
         {
@@ -6456,7 +6456,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
                 SocketManager.GAME_SEND_FLAG_PACKET(T, P2)
                 SocketManager.GAME_SEND_PF(T, "+" + P2.id)
                 T.follow = P2
-                P2.follower.put(T.id, T)
+                P2.follower[T.id] = T
                 P2.send("Im0178")
             }
         } else if (packet[2] == '-')//Ne plus suivre

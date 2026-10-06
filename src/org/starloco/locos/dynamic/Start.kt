@@ -47,24 +47,24 @@ class Start(player: Player?) {
 //			mapUse.put(3, World.world.getMap(6828).getMapCopy());
 //
 //
-//			MapData data = mapUse.get(1).data;
+//			MapData data = mapUse[1].data;
 //			if(data instanceof SQLMapData) {
 //				((SQLMapData) data).addOnCellStopAction(329, 999, "192", "-1");
 //			}
 //
-//			data = mapUse.get(1).data;
+//			data = mapUse[1].data;
 //			if(data instanceof SQLMapData) {
 //				((SQLMapData) data).addOnCellStopAction(325, 999, "224", "-1");
 //			}
 //
-//			data = mapUse.get(2).data;
+//			data = mapUse[2].data;
 //			if(data instanceof SQLMapData) {
 //				((SQLMapData) data).addOnCellStopAction(192, 999, "389", "-1");
 //			}
 //
 //			/* MAP 1 : Talk & Walk to begin Fight **/
 //			try { Thread.sleep(2000); } catch (InterruptedException ignored) {}
-//			map = mapUse.get(1);
+//			map = mapUse[1];
 //			helper = map.addNpc(15020, (short) 179, 3);
 //			// FIXME player.setSpellsPlace(false);
 //			Start.this.player.unlearnSpell(661);
@@ -112,7 +112,7 @@ class Start(player: Player?) {
 //			}
 //
 //			map.RemoveNpc(helper.id);
-//	        map = mapUse.get(2);
+//	        map = mapUse[2];
 //	        helper = map.addNpc(50000, (short) 210, 3);
 //	        SocketManager.GAME_SEND_ADD_NPC_TO_MAP(Start.this.map, Start.this.helper);
 //
@@ -197,7 +197,7 @@ class Start(player: Player?) {
 //			SocketManager.GAME_SEND_cMK_PACKET(player, "", helper.id, "Ganymede", "Je vais donc reprendre mon sort d'entrainement.");
 //			try { Thread.sleep(3000); } catch (InterruptedException ignored) {}
 //
-//			data = mapUse.get(2).data;
+//			data = mapUse[2].data;
 //			if(data instanceof SQLMapData) {
 //				((SQLMapData) data).addOnCellStopAction(177, 999, "388", "-1");
 //			}
@@ -217,7 +217,7 @@ class Start(player: Player?) {
 //			map.RemoveNpc(helper.id);
 //			SocketManager.GAME_SEND_ERASE_ON_MAP_TO_MAP(map, helper.id);
 //
-//			map = mapUse.get(3);
+//			map = mapUse[3];
 //			map.addNpc(50001, (short) 299, 1);
 //			map.spawnGroupOnCommand(311, "432,1,1;", false);
 //

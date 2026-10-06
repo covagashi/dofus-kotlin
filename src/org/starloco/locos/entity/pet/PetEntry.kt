@@ -155,7 +155,7 @@ class PetEntry(
                 //Update de l'item
                 if ((if (this.getIsEupeoh()) pets.max * 1.1 else pets.max.toDouble()) > this.getCurrentStatsPoids())//Si il est sous l'emprise d'EPO on augmente de +10% le jet maximum
                 {
-                    if (obj.stats.effects.containsKey(statsID)) {
+                    if (statsID in obj.stats.effects) {
                         var value = (obj.stats.effects[statsID]!!
                                 + World.world.getPets(World.world.getGameObject(this.objectId)!!.template!!.id)!!.gain)
                         if (value > this.getMaxStat())
@@ -191,7 +191,7 @@ class PetEntry(
                 //Update de l'item
                 if ((if (this.getIsEupeoh()) pets.max * 1.1 else pets.max.toDouble()) > this.getCurrentStatsPoids())//Si il est sous l'emprise d'EPO on augmente de +10% le jet maximum
                 {
-                    if (obj.stats.effects.containsKey(statsID)) {
+                    if (statsID in obj.stats.effects) {
                         var value = (obj.stats.effects[statsID]!!
                                 + World.world.getPets(World.world.getGameObject(this.objectId)!!.template!!.id)!!.gain)
                         if (value > this.getMaxStat())
@@ -218,7 +218,7 @@ class PetEntry(
                 //Update de l'item
                 if ((if (this.getIsEupeoh()) pets.max * 1.1 else pets.max.toDouble()) > this.getCurrentStatsPoids())//Si il est sous l'emprise d'EPO on augmente de +10% le jet maximum
                 {
-                    if (obj.stats.effects.containsKey(statsID)) {
+                    if (statsID in obj.stats.effects) {
                         var value = (obj.stats.effects[statsID]!!
                                 + World.world.getPets(World.world.getGameObject(this.objectId)!!.template!!.id)!!.gain)
                         if (value > this.getMaxStat())
@@ -253,7 +253,7 @@ class PetEntry(
             }
             SocketManager.GAME_SEND_Im_PACKET(p, "154")
         }
-        if (obj.txtStat.containsKey(Constant.STATS_PETS_REPAS)) {
+        if (Constant.STATS_PETS_REPAS in obj.txtStat) {
             obj.txtStat.remove(Constant.STATS_PETS_REPAS)
             obj.txtStat[Constant.STATS_PETS_REPAS] = Integer.toHexString(feed.template!!.id)
         } else {
@@ -303,7 +303,7 @@ class PetEntry(
                             if (pts > 0) {
                                 if (pts > this.getMaxStat())
                                     pts = this.getMaxStat()
-                                if (obj.stats.effects.containsKey(ent.key)) {
+                                if (ent.key in obj.stats.effects) {
                                     val nbr = obj.stats.effects[ent.key]!!
                                     if (nbr - pts > 0)
                                         pts += nbr - pts

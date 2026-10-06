@@ -194,7 +194,7 @@ class Function private constructor() {
         {
             if (path.size == a)
                 break
-            finalPath.add(path.get(a))
+            finalPath.add(path[a])
         }
         var pathstr: String = ""
         try
@@ -250,7 +250,7 @@ class Function private constructor() {
 
         for (a in 0 until dist) {
             if (path.size == a) break
-            temp = path.get(a)
+            temp = path[a]
             if(temp.firstFighter != null || T.id == temp.getId()) continue
                 cellId = temp.getId()
         }
@@ -483,7 +483,7 @@ class Function private constructor() {
         {
             if (path.size == a)
                 break
-            finalPath.add(path.get(a))
+            finalPath.add(path[a])
         }
         var pathstr: String = ""
         try
@@ -1008,7 +1008,7 @@ class Function private constructor() {
         {
             if (path.size == a)
                 break
-            finalPath.add(path.get(a))
+            finalPath.add(path[a])
         }
         var pathstr: String = ""
         try
@@ -1097,9 +1097,9 @@ class Function private constructor() {
                 break
             if(ligneok == true)
                 break
-            if(PathFinding.casesAreInSameLine(fight.map!!, path.get(a).getId(), T.cell!!.getId(), 'z', 70))
+            if(PathFinding.casesAreInSameLine(fight.map!!, path[a].getId(), T.cell!!.getId(), 'z', 70))
                 ligneok = true
-            finalPath.add(path.get(a))
+            finalPath.add(path[a])
         }
         var pathstr: String = ""
         try
@@ -1604,7 +1604,7 @@ when (SE.effectID) {
 
         for (a in 0 until caster.getCurPm(fight)) {
             if (path.size == a) break
-            next = path.get(a)
+            next = path[a]
             finalPath.add(next)
             if(stop != null && next!!.getId() == stop.getId())
                 break

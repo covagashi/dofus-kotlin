@@ -283,7 +283,7 @@ class ObjectAction(private val type: String, private val args: String, private v
                         obj = World.world.getGameObject(objet)
 
                         if (obj != null) {
-                            val spell = obj.stats.get(Constant.STATS_FORGET_ONE_LEVEL_SPELL)
+                            val spell = obj.stats[Constant.STATS_FORGET_ONE_LEVEL_SPELL]
 
                             if (spell != 0) {
                                 if (spell <= 4) {

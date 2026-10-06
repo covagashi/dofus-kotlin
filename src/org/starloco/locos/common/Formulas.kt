@@ -611,8 +611,8 @@ class Formulas {
             var resP = target.getTotalStats().getEffect(resInfo.percentElem)
 
             if (addPVPRes) {
-                resF += target.getTotalStats().get(resInfo.fixedElemPvP)
-                resP += target.getTotalStats().get(resInfo.percentElemPvP)
+                resF += target.getTotalStats()[resInfo.fixedElemPvP]
+                resP += target.getTotalStats()[resInfo.percentElemPvP]
             }
 
             if (target.player != null) {

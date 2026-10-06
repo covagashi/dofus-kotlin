@@ -37,7 +37,7 @@ class ExchangeHandler : IoHandlerAdapter() {
         fun ioBufferToString(o: Any): String {
             val data = o as IoBuffer
             val buf = ByteArray(data.limit())
-            data.get(buf)
+            data[buf]
             return String(buf)
         }
     }

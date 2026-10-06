@@ -637,7 +637,7 @@ class World private constructor() : Scripted<SWorld> {
     }
 
     fun addNpcTemplate(temp: NpcTemplate) {
-        if (npcsTemplate.containsKey(temp.id) && temp.legacy == null) {
+        if (temp.id in npcsTemplate && temp.legacy == null) {
             Main.logger.warn("Overwriting npc template #{} with script", temp.id)
         }
         npcsTemplate[temp.id] = temp
@@ -978,7 +978,7 @@ class World private constructor() : Scripted<SWorld> {
     fun changeHdv(map0: Int): Int {
         var map = map0
         val changeHdv = changeHdv
-        if (changeHdv.containsKey(map)) {
+        if (map in changeHdv) {
             map = changeHdv[map]!!
         }
         return map

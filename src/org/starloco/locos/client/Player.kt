@@ -516,7 +516,7 @@ open class Player : Scripted<SPlayer>, Actor {
                     if (obj == null)
                         continue
 
-                    storeItems.put(obj.guid, price)
+                    storeItems[obj.guid] = price
                 }
             }
             this.maxPdv = (this.level - 1) * 5 + 55 + getTotalStats(false).getEffect(Constant.STATS_ADD_VITA) + getTotalStats(false).getEffect(Constant.STATS_ADD_VIE)
@@ -536,7 +536,7 @@ open class Player : Scripted<SPlayer>, Actor {
                         var jobID: Int = (infos[0]).toInt()
                         var xp: Long = infos[1].toLong()
                         var m: Job = World.world.getMetier(jobID)!!
-                        var SM: JobStat = metiers.get(learnJob(m))!!
+                        var SM: JobStat = metiers[learnJob(m)]!!
                         SM.addXp(this, xp)
                     } catch (e: Exception) {
                         log.error("unexpected error", e)
@@ -574,7 +574,7 @@ open class Player : Scripted<SPlayer>, Actor {
 
             var obj: GameObject = World.world.getGameObject(guid)!!
             if (obj != null)
-                objects.put(obj.guid, obj)
+                objects[obj.guid] = obj
         }
     }
 
@@ -987,7 +987,7 @@ else -> {turn = 30
         if (spells.isEmpty())
             return ""
         for (key in  spells.keys) {
-            var SS: Spell.SortStats = spells.get(key)!!
+            var SS: Spell.SortStats = spells[key]!!
             if (SS == null)
                 continue
             packet.append(SS.spellID).append(";").append(SS.level).append(";")
@@ -1064,7 +1064,7 @@ else -> {turn = 30
                     learnSpell(id, lvl, false, false, false)
                 else
                     learnSpell(id, lvl, false, true, false)
-                sortsPlaces.put(id, position)
+                sortsPlaces[id] = position
             } catch (e1: NumberFormatException) {
                 log.error("unexpected error", e1)
             }
@@ -1262,7 +1262,7 @@ else -> {turn = 30
 
     // returns Couple<ptsDelta,worked> Worked can only be false when spell/level doesn't exist, or modPoints is true.
     fun ensureSpellLevelSilent(spell: Int, newLevel: Int, modPoints: Boolean): EnsureSpellLevelResult {
-        var previousLevel: Int = Optional.ofNullable(sorts.get(spell)).map(Spell.SortStats::level).orElse(0)
+        var previousLevel: Int = Optional.ofNullable(sorts[spell]).map(Spell.SortStats::level).orElse(0)
 
         // Already in the state we want
         if(previousLevel==newLevel) return EnsureSpellLevelResult(false, 0, 0, true)
@@ -1284,7 +1284,7 @@ else -> {turn = 30
         }
 
         // Set spell
-        sorts.put(spell, ss)
+        sorts[spell] = ss
         return EnsureSpellLevelResult(true, ptsDelta, previousLevel, true)
     }
 
@@ -1318,11 +1318,11 @@ else -> {turn = 30
             return
         }
 
-        if (!sorts.containsKey(spell)) {
+        if (spell !in sorts) {
             sorts[spell] = World.world.getSort(spell)!!.getStatsByLevel(level)!!
             removeSpellShortcutAtPosition(pos)
             sortsPlaces.remove(spell)
-            sortsPlaces.put(spell, pos)
+            sortsPlaces[spell] = pos
             SocketManager.GAME_SEND_SPELL_LIST(this)
             SocketManager.GAME_SEND_Im_PACKET(this, "03;" + spell)
         }
@@ -1334,7 +1334,7 @@ else -> {turn = 30
             return false
         }
 
-        if (sorts.containsKey(spellID) && learn) {
+        if (spellID in sorts && learn) {
             SocketManager.GAME_SEND_MESSAGE(this, this.getLang().trans("client.player.learnspell.exist"))
             return false
         } else {
@@ -1487,14 +1487,14 @@ else -> {turn = 30
         spellPts = 0
 
 
-        gfxId = (fullMorph.get("gfxid")!!).toInt()
+        gfxId = (fullMorph["gfxid"]!!).toInt()
         if (this.fight == null) SocketManager.GAME_SEND_ALTER_GM_PACKET(this.curMap, this)
-        parseSpellsFullMorph(fullMorph.get("spells")!!)
+        parseSpellsFullMorph(fullMorph["spells"]!!)
         morphId = morphid
 
         if (this.getObjetByPos(Constant.ITEM_POS_ARME) != null)
             if (Constant.isIncarnationWeapon(this.getObjetByPos(Constant.ITEM_POS_ARME)!!.template!!.id))
-                for (i in 0 .. this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.get(Constant.STATS_NIVEAU)!!)
+                for (i in 0 .. this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.STATS_NIVEAU]!!)
                     if (i == 10 || i == 20 || i == 30 || i == 40 || i == 50)
                         boostSpellIncarnation()
         if (this.fight == null) {
@@ -1503,21 +1503,21 @@ else -> {turn = 30
         }
 
 
-        if (fullMorph.get("vie") != null) {
+        if (fullMorph["vie"] != null) {
             try {
-                this.maxPdv = (fullMorph.get("vie"))!!.toInt()
+                this.maxPdv = (fullMorph["vie"])!!.toInt()
                 this.setPdv(this.maxPdv)
-                this.pa = (fullMorph.get("pa"))!!.toInt()
-                this.pm = (fullMorph.get("pm"))!!.toInt()
-                this.vitalite = (fullMorph.get("vitalite"))!!.toInt()
-                this.sagesse = (fullMorph.get("sagesse"))!!.toInt()
-                this.terre = (fullMorph.get("terre"))!!.toInt()
-                this.feu = (fullMorph.get("feu"))!!.toInt()
-                this.eau = (fullMorph.get("eau"))!!.toInt()
-                this.air = (fullMorph.get("air"))!!.toInt()
-                this.initiative = (fullMorph.get("initiative"))!!.toInt() + this.sagesse + this.terre + this.feu + this.eau + this.air
-                this.useStats = fullMorph.get("stats").equals("1")
-                this.donjon = fullMorph.get("donjon").equals("1")
+                this.pa = (fullMorph["pa"])!!.toInt()
+                this.pm = (fullMorph["pm"])!!.toInt()
+                this.vitalite = (fullMorph["vitalite"])!!.toInt()
+                this.sagesse = (fullMorph["sagesse"])!!.toInt()
+                this.terre = (fullMorph["terre"])!!.toInt()
+                this.feu = (fullMorph["feu"])!!.toInt()
+                this.eau = (fullMorph["eau"])!!.toInt()
+                this.air = (fullMorph["air"])!!.toInt()
+                this.initiative = (fullMorph["initiative"])!!.toInt() + this.sagesse + this.terre + this.feu + this.eau + this.air
+                this.useStats = fullMorph["stats"].equals("1")
+                this.donjon = fullMorph["donjon"].equals("1")
                 this.useCac = false
             } catch (e: Exception) {
                 log.error("unexpected error", e)
@@ -1573,7 +1573,7 @@ else -> {turn = 30
     fun encodeSpellListForSL(): String {
         return ArrayList(sorts.values).stream().map { s ->
             // Official servers send position 126 for spells without shortcuts
-            var pos: Int = Optional.ofNullable(sortsPlaces.get(s.spellID)).orElse(126)
+            var pos: Int = Optional.ofNullable(sortsPlaces[s.spellID]).orElse(126)
             listOf(
                 s.spellID.toString(),
                 s.level.toString(),
@@ -1598,7 +1598,7 @@ else -> {turn = 30
     }
 
     fun getSortStatBySortIfHas(spellID: Int): Spell.SortStats {
-        return sorts.get(spellID)!!
+        return sorts[spellID]!!
     }
 
     fun parseALK(): String {
@@ -1933,7 +1933,7 @@ else -> {turn = 30
         if (`object` != null) {
             `object`.encodeStats()
 
-            var obvi: Int = `object`.stats.effects.get(970)!!
+            var obvi: Int = `object`.stats.effects[970]!!
             if (obvi == null) {
                 str.append(Integer.toHexString(`object`.getAppearanceTemplateId()))
             } else {
@@ -1948,7 +1948,7 @@ else -> {turn = 30
         if (`object` != null) {
             `object`.encodeStats()
 
-            var obvi: Int = `object`.stats.effects.get(970)!!
+            var obvi: Int = `object`.stats.effects[970]!!
             if (obvi == null) {
                 str.append(Integer.toHexString(`object`.getAppearanceTemplateId()))
             } else {
@@ -2060,14 +2060,14 @@ else -> {turn = 30
         }
         if(this.getObjetByPos(Constant.ITEM_POS_ARME) == null
                 || !Constant.isIncarnationWeapon(this.getObjetByPos(Constant.ITEM_POS_ARME)!!.template!!.id)
-                || this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.get(Constant.ERR_STATS_XP)!! == null) {
+                || this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.ERR_STATS_XP]!! == null) {
             return "1" + c + "1" + c + "1"
         }
 
         // What if it's a tormentator ?
         var xpTable: ExperienceTables.ExperienceTable = World.world.experiences!!.bandits
-        var level: Int = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.get(Constant.STATS_NIVEAU)!!
-        return this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.get(Constant.ERR_STATS_XP)!!.toString() + c + xpTable.minXpAt(level) + c + xpTable.maxXpAt(level)
+        var level: Int = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.STATS_NIVEAU]!!
+        return this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.ERR_STATS_XP]!!.toString() + c + xpTable.minXpAt(level) + c + xpTable.maxXpAt(level)
     }
 
     fun emoteActive(): Int {
@@ -2384,7 +2384,7 @@ else -> {return
     }
 
     fun addItem(item: GameObject, display: Boolean) {
-        this.objects.put(item.guid, item)
+        this.objects[item.guid] = item
         if(isOnline) {
             SocketManager.GAME_SEND_OAKO_PACKET(this, item)
             if(display) {
@@ -2448,7 +2448,7 @@ else -> {return
     }
 
     fun hasItemGuid(guid: Int): Boolean {
-        return objects.get(guid) != null && objects.get(guid)!!.quantity > 0
+        return objects[guid] != null && objects[guid]!!.quantity > 0
     }
 
     fun sellItem(guid: Int, qua: Int) {
@@ -2456,7 +2456,7 @@ else -> {return
         if (qua <= 0)
             return
 
-        var `object`: GameObject = objects.get(guid)!!
+        var `object`: GameObject = objects[guid]!!
         if (`object`.quantity < qua)//Si il a moins d'item que ce qu'on veut Del
             qua = `object`.quantity
 
@@ -2469,8 +2469,8 @@ else -> {return
             World.world.removeGameObject(guid)
             SocketManager.GAME_SEND_REMOVE_ITEM_PACKET(this, guid)
         } else {
-            objects.get(guid)!!.quantity = newQua
-            SocketManager.GAME_SEND_OBJECT_QUANTITY_PACKET(this, objects.get(guid)!!)
+            objects[guid]!!.quantity = newQua
+            SocketManager.GAME_SEND_OBJECT_QUANTITY_PACKET(this, objects[guid]!!)
         }
 
         kamas = kamas + price
@@ -2489,7 +2489,7 @@ else -> {return
         var nombre = nombre
         lateinit var obj: GameObject
         synchronized(objects) {
-            obj = objects.get(guid)!!
+            obj = objects[guid]!!
         }
 
         if(obj == null) return
@@ -2600,7 +2600,7 @@ else -> {return
     }
 
     fun levelUpIncarnations(send: Boolean, addXp: Boolean): Boolean {
-        var level: Int = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.get(Constant.STATS_NIVEAU)!!
+        var level: Int = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.STATS_NIVEAU]!!
 
         if (level == 50)
             return false
@@ -2629,8 +2629,8 @@ else -> {return
 
     fun addXpIncarnations(winxp: Long): Boolean {
         var up: Boolean = false
-        var level: Int = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.get(Constant.STATS_NIVEAU)!!
-        var exp: Long = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.get(Constant.ERR_STATS_XP)!!.toLong()
+        var level: Int = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.STATS_NIVEAU]!!
+        var exp: Long = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.ERR_STATS_XP]!!.toLong()
         exp += winxp
 
         if (Constant.isBanditsWeapon(this.getObjetByPos(Constant.ITEM_POS_ARME)!!.template!!.id)) {
@@ -2638,19 +2638,19 @@ else -> {return
 
             while (exp >= xpTable.maxXpAt(level) && level < xpTable.maxLevel()) {
                 up = levelUpIncarnations(true, false)
-                level = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.get(Constant.STATS_NIVEAU)!!
+                level = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.STATS_NIVEAU]!!
             }
         } else if (Constant.isTourmenteurWeapon(this.getObjetByPos(Constant.ITEM_POS_ARME)!!.template!!.id)) {
             var xpTable: ExperienceTables.ExperienceTable = World.world.experiences!!.tormentators
 
             while (exp >= xpTable.maxXpAt(level) && level < xpTable.maxLevel()) {
                 up = levelUpIncarnations(true, false)
-                level = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.get(Constant.STATS_NIVEAU)!!
+                level = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.STATS_NIVEAU]!!
             }
         }
         if (isOnline)
             SocketManager.GAME_SEND_STATS_PACKET(this)
-        level = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.get(Constant.STATS_NIVEAU)!!
+        level = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.STATS_NIVEAU]!!
         this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.clear()
         this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.put(Constant.STATS_NIVEAU, level)
         this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.put(Constant.ERR_STATS_XP, (exp as Int))
@@ -2712,18 +2712,18 @@ else -> {return
             return -1
         var pos: Int = 0
         if (JobConstant.isMageJob(m.id)) {
-            if (metiers.get(5) == null)
+            if (metiers[5] == null)
                 pos = 5
-            if (metiers.get(4) == null)
+            if (metiers[4] == null)
                 pos = 4
-            if (metiers.get(3) == null)
+            if (metiers[3] == null)
                 pos = 3
         } else {
-            if (metiers.get(2) == null)
+            if (metiers[2] == null)
                 pos = 2
-            if (metiers.get(1) == null)
+            if (metiers[1] == null)
                 pos = 1
-            if (metiers.get(0) == null)
+            if (metiers[0] == null)
                 pos = 0
         }
 
@@ -3259,7 +3259,7 @@ else -> {return str
 
         if (!outside && this.objects == null) return
 
-        if (!outside && objects.get(guid) == null) // Si le joueur n'a pas l'item dans son sac ...
+        if (!outside && objects[guid] == null) // Si le joueur n'a pas l'item dans son sac ...
             return
 
         if (PersoObj == null || PersoObj.position.toInt() != Constant.ITEM_POS_NO_EQUIPED) // Si c'est un item �quip� ...
@@ -3345,7 +3345,7 @@ else -> {return str
                 getAccount().bank.removeAt(index)
                 //On l'ajoute au joueur
 
-                objects.put(guid, BankObj!!)
+                objects[guid] = BankObj!!
 
 
                 //On envoie les packets
@@ -3363,7 +3363,7 @@ else -> {return str
                 BankObj!!.quantity = newQua
                 //On l'ajoute au joueur
 
-                objects.put(PersoObj.guid, PersoObj)
+                objects[PersoObj.guid] = PersoObj
 
 
                 //On envoie les packets
@@ -4612,14 +4612,14 @@ else -> {return str
     fun addInStore(ObjID: Int, price: Int, qua: Int) {
         var PersoObj: GameObject? = World.world.getGameObject(ObjID)
         //Si le joueur n'a pas l'item dans son sac ...
-        if (storeItems.get(ObjID) != null) {
+        if (storeItems[ObjID] != null) {
                 storeItems.remove(ObjID)
-                storeItems.put(ObjID, price)
+                storeItems[ObjID] = price
                 SocketManager.GAME_SEND_ITEM_LIST_PACKET_SELLER(this, this)
                 return
         }
 
-        if (objects.get(ObjID) == null) {
+        if (objects[ObjID] == null) {
             GameServer.a()
             return
         }
@@ -4639,7 +4639,7 @@ else -> {return str
                 //On enleve l'objet du sac du joueur
                 removeItem(PersoObj.guid)
                 //On met l'objet du sac dans le store, avec la meme quantit�
-                storeItems.put(PersoObj.guid, price)
+                storeItems[PersoObj.guid] = price
                 SocketManager.GAME_SEND_REMOVE_ITEM_PACKET(this, PersoObj.guid)
                 SocketManager.GAME_SEND_ITEM_LIST_PACKET_SELLER(this, this)
             } else
@@ -4650,7 +4650,7 @@ else -> {return str
                 //On ajoute l'objet a la banque et au monde
                 SimilarObj = PersoObj.getClone(qua, true)!!
                 World.world.addGameObject(SimilarObj)
-                storeItems.put(SimilarObj.guid, price)
+                storeItems[SimilarObj.guid] = price
 
                 //Envoie des packets
                 SocketManager.GAME_SEND_ITEM_LIST_PACKET_SELLER(this, this)
@@ -4670,7 +4670,7 @@ else -> {return str
                 SimilarObj.quantity = SimilarObj.quantity + PersoObj.quantity
 
                 storeItems.remove(SimilarObj!!.guid)
-                storeItems.put(SimilarObj.guid, price)
+                storeItems[SimilarObj.guid] = price
 
                 //on envoie l'ajout a la banque de l'objet
                 SocketManager.GAME_SEND_ITEM_LIST_PACKET_SELLER(this, this)
@@ -4684,7 +4684,7 @@ else -> {return str
                 SimilarObj.quantity = SimilarObj.quantity + qua
 
                 storeItems.remove(SimilarObj!!.guid)
-                storeItems.put(SimilarObj.guid, price)
+                storeItems[SimilarObj.guid] = price
 
                 SocketManager.GAME_SEND_ITEM_LIST_PACKET_SELLER(this, this)
                 SocketManager.GAME_SEND_OBJECT_QUANTITY_PACKET(this, PersoObj)
@@ -4708,7 +4708,7 @@ else -> {return str
     fun removeFromStore(guid: Int, qua: Int) {
         var SimilarObj: GameObject? = World.world.getGameObject(guid)
         //Si le joueur n'a pas l'item dans son store ...
-        if (storeItems.get(guid) == null) {
+        if (storeItems[guid] == null) {
             GameServer.a()
             return
         }
@@ -4722,7 +4722,7 @@ else -> {return str
                 //On retire l'item du store
                 storeItems.remove(guid)
                 //On l'ajoute au joueur
-                objects.put(guid, SimilarObj!!)
+                objects[guid] = SimilarObj!!
 
                 //On envoie les packets
                 SocketManager.GAME_SEND_OAKO_PACKET(this, SimilarObj!!)
@@ -4750,7 +4750,7 @@ else -> {return str
     }
 
     fun addStoreItem(guid: Int, price: Int) {
-        storeItems.put(guid, price)
+        storeItems[guid] = price
     }
 
 
@@ -5138,13 +5138,13 @@ else -> {mapID = 8534
     //region Objects class
 
     fun addObjectClassSpell(spell: Int, effect: Int, value: Int) {
-        if (!objectsClassSpell.containsKey(spell)) {
-            objectsClassSpell.put(spell, World.Couple(effect, value))
+        if (spell !in objectsClassSpell) {
+            objectsClassSpell[spell] = World.Couple(effect, value)
         }
     }
 
     fun removeObjectClassSpell(spell: Int) {
-        if (objectsClassSpell.containsKey(spell)) {
+        if (spell in objectsClassSpell) {
             objectsClassSpell.remove(spell)
         }
     }
@@ -5190,9 +5190,9 @@ else -> {mapID = 8534
     }
 
     fun getValueOfClassObject(spell: Int, effect: Int): Int {
-        if (this.objectsClassSpell.containsKey(spell)) {
-            if (this.objectsClassSpell.get(spell)!!.first == effect) {
-               return this.objectsClassSpell.get(spell)!!.second
+        if (spell in this.objectsClassSpell) {
+            if (this.objectsClassSpell[spell]!!.first == effect) {
+               return this.objectsClassSpell[spell]!!.second
             }
         }
         return 0
@@ -5612,14 +5612,14 @@ else -> {mapID = 8534
             send("OrR"+p)
         }
 
-        itemShortcuts.put(position, hash)
+        itemShortcuts[position] = hash
         send("OrA"+ listOf(position.toString(), hash.templateId.toString(), hash.strStats).joinToString(";"))
         return true
     }
 
     fun addItemShortcutSend(position: Int, itemID: Int): Boolean {
         // Ensure user owns items
-        var item: GameObject = objects.get(itemID)!!
+        var item: GameObject = objects[itemID]!!
         if(item == null) return false
 
         var hash: ItemHash = ItemHash(item)

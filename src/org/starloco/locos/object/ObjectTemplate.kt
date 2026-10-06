@@ -119,15 +119,15 @@ class ObjectTemplate(
             val myPets = World.world.getPetsEntry(obj.guid)
             val txtStat = HashMap<Int, String>()
             val actualStat = obj.txtStat
-            if (actualStat.containsKey(Constant.STATS_PETS_PDV))
+            if (Constant.STATS_PETS_PDV in actualStat)
                 txtStat[Constant.STATS_PETS_PDV] = actualStat[Constant.STATS_PETS_PDV]!!
-            if (actualStat.containsKey(Constant.STATS_PETS_DATE))
+            if (Constant.STATS_PETS_DATE in actualStat)
                 txtStat[Constant.STATS_PETS_DATE] = myPets!!.lastEatDate.toString() + ""
-            if (actualStat.containsKey(Constant.STATS_PETS_POIDS))
+            if (Constant.STATS_PETS_POIDS in actualStat)
                 txtStat[Constant.STATS_PETS_POIDS] = actualStat[Constant.STATS_PETS_POIDS]!!
-            if (actualStat.containsKey(Constant.STATS_PETS_EPO))
+            if (Constant.STATS_PETS_EPO in actualStat)
                 txtStat[Constant.STATS_PETS_EPO] = actualStat[Constant.STATS_PETS_EPO]!!
-            if (actualStat.containsKey(Constant.STATS_PETS_REPAS))
+            if (Constant.STATS_PETS_REPAS in actualStat)
                 txtStat[Constant.STATS_PETS_REPAS] = actualStat[Constant.STATS_PETS_REPAS]!!
             item = GameObject(-1, id, 1, Constant.ITEM_POS_NO_EQUIPED, obj.stats, ArrayList(), HashMap(), txtStat, 0)
             DatabaseManager.get(ObjectData::class.java).insert(item)
@@ -143,7 +143,7 @@ class ObjectTemplate(
         val `object` = GameObject(-1, id, 1, Constant.ITEM_POS_NO_EQUIPED, obj.stats, ArrayList(), HashMap(), stats, 0)
 
         if (DatabaseManager.get(ObjectData::class.java).insert(`object`)) {
-            val petEntry = PetEntry(`object`.guid, id, System.currentTimeMillis(), 0, (stats[Constant.STATS_PETS_PDV])!!.toInt(16), (stats[Constant.STATS_PETS_POIDS])!!.toInt(16), !stats.containsKey(Constant.STATS_PETS_EPO))
+            val petEntry = PetEntry(`object`.guid, id, System.currentTimeMillis(), 0, (stats[Constant.STATS_PETS_PDV])!!.toInt(16), (stats[Constant.STATS_PETS_POIDS])!!.toInt(16), Constant.STATS_PETS_EPO !in stats)
 
             if (DatabaseManager.get(PetData::class.java).insert(petEntry)) {
                 World.world.addPetsEntry(petEntry)

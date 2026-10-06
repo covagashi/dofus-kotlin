@@ -25,9 +25,9 @@ class ZaapiData(dataSource: HikariDataSource?) : FunctionDAO<Any>(dataSource, "z
         if (!result.isLast()) neutral.append(",")
                     }
                 }
-        Constant.ZAAPI.put(Constant.ALIGNEMENT_BONTARIEN, angels.toString())
-        Constant.ZAAPI.put(Constant.ALIGNEMENT_BRAKMARIEN, demons.toString())
-        Constant.ZAAPI.put(Constant.ALIGNEMENT_NEUTRE, neutral.toString())
+        Constant.ZAAPI[Constant.ALIGNEMENT_BONTARIEN] = angels.toString()
+        Constant.ZAAPI[Constant.ALIGNEMENT_BRAKMARIEN] = demons.toString()
+        Constant.ZAAPI[Constant.ALIGNEMENT_NEUTRE] = neutral.toString()
         }
         } catch (e: SQLException) {
         super.sendError(e)

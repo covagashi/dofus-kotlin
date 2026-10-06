@@ -151,7 +151,7 @@ class DataScriptVM private constructor() : ScriptVM("Data") {
                 { KeyFrame.fromScriptValue(it as Table) }
             )
 
-            if (!keyFrames.containsKey(defaultFrame)) {
+            if (defaultFrame !in keyFrames) {
                 throw IllegalArgumentException("default frame is not a key frame")
             }
 

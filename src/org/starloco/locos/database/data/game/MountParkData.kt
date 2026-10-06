@@ -14,7 +14,7 @@ class MountParkData(dataSource: HikariDataSource?) : FunctionDAO<MountPark>(data
         getData("SELECT * from mountpark_data") { result ->
         while (result.next()) {
         var map: Int = result.getInt("mapid")
-        var park: MountPark? = World.world.mountParks.get(map)
+        var park: MountPark? = World.world.mountParks[map]
         if (park == null) continue
         var owner: Int = result.getInt("owner")
         var guild: Int = result.getInt("guild")

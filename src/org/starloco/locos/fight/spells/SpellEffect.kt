@@ -317,7 +317,7 @@ else -> {var stat: Int = 0
 										target.addBuff(stat, gain, 5, true, -1, buff.args, caster, false, true)
 										SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, stat, caster.id.toString() + "", target.id.toString() + "," + gain + "," + 5)
 									}
-									target.chatiValue.put(stat, newValue)
+									target.chatiValue[stat] = newValue
 									
 }
 else -> {
@@ -379,7 +379,7 @@ else -> {
 
 		if (caster!!.player != null) {
 			var perso: Player? = caster!!.player
-			if (perso!!.objectsClassSpell.containsKey(spell)) {
+			if (spell in perso!!.objectsClassSpell) {
 				var modi: Int = 0
 				if (effectID == 108)
 					modi = perso!!.getValueOfClassObject(spell, 284)
@@ -3577,7 +3577,7 @@ else -> {
 	{
 		var cell: Int = this.cell!!.getId()
 
-		if (!this.cell!!.fighters.isEmpty() || caster!!.getNbrInvoc() >= caster!!.getTotalStats().get(Constant.STATS_SUMMON_COUNT))
+		if (!this.cell!!.fighters.isEmpty() || caster!!.getNbrInvoc() >= caster!!.getTotalStats()[Constant.STATS_SUMMON_COUNT])
 			return
 
 		var id: Int = -1
@@ -4283,13 +4283,13 @@ var MG: MonsterGrade? = null
 		var list: ArrayList<Fighter> = fight.getFighters(3) // on copie la liste des fighters
 		for (i in 1 until list.size) {   // on boucle si tout le monde est à la place
 			for (F in  list) {
-				if (F == null || F.isDead || !origPos.containsKey(F.id) || F.cell!!.getId() == origPos.get(F.id)!!.getId()) {
+				if (F == null || F.isDead || F.id !in origPos || F.cell!!.getId() == origPos[F.id]!!.getId()) {
 					continue
 				}
 
-				if (origPos.get(F.id)!!.firstFighter == null) {
+				if (origPos[F.id]!!.firstFighter == null) {
 					F.cell!!.removeFighter(F)
-					F.cell = (origPos.get(F.id))
+					F.cell = (origPos[F.id])
 					F.cell!!.addFighter(F)
 					SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 4, F.id.toString() + "", F.id.toString() + "," + F.cell!!.getId())
 				}

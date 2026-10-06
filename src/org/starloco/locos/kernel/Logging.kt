@@ -48,9 +48,9 @@ object Logging {
             }
         }
 
-        val date = (Calendar.getInstance().get(Calendar.YEAR).toString() + "-"
-                + Calendar.getInstance().get(Calendar.MONTH) + "-"
-                + Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+        val date = (Calendar.getInstance()[Calendar.YEAR].toString() + "-"
+                + Calendar.getInstance()[Calendar.MONTH] + "-"
+                + Calendar.getInstance()[Calendar.DAY_OF_MONTH])
 
         try {
             this.logs.add(Log(name, date))
@@ -77,9 +77,9 @@ object Logging {
 
         @Throws(IOException::class)
         fun write(arg0: String) {
-            val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-            val min = Calendar.getInstance().get(Calendar.MINUTE)
-            val sec = Calendar.getInstance().get(Calendar.SECOND)
+            val hour = Calendar.getInstance()[Calendar.HOUR_OF_DAY]
+            val min = Calendar.getInstance()[Calendar.MINUTE]
+            val sec = Calendar.getInstance()[Calendar.SECOND]
 
             val date = ("[" + (if (hour < 10) "0" else "") + hour + " : " + (if (min < 10) "0" else "") + min + " : "
                     + (if (sec < 10) "0" else "") + sec + "] : ")

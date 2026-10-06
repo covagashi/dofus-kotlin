@@ -8,7 +8,7 @@ class LaunchedSpell(private var target: Fighter?, private val spellStats: SortSt
     private var cooldown = 0
 
     init {
-        if (caster.getType() == 1 && caster.player!!.objectsClassSpell.containsKey(spellStats.spellID)) {
+        if (caster.getType() == 1 && spellStats.spellID in caster.player!!.objectsClassSpell) {
             val modi = caster.player!!.getValueOfClassObject(spellStats.spellID, 286)
             this.cooldown = spellStats.coolDown - modi
         } else {

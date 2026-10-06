@@ -218,7 +218,7 @@ class GameMap(@JvmField val data: ScriptMapData) {
                 durability = 0
                 val InDurab = HashMap<Int, Int>()
                 InDurab[durabilityMax] = durability
-                MP.objDurab.put(cell, InDurab)
+                MP.objDurab[cell] = InDurab
                 SocketManager.SEND_GDO_PUT_OBJECT_MOUNT(perso.curMap, cell.toString()
                         + ";" + itemID + ";1;" + durability + ";" + durabilityMax)
                 return 0
@@ -226,7 +226,7 @@ class GameMap(@JvmField val data: ScriptMapData) {
             } else {
                 val InDurab = HashMap<Int, Int>()
                 InDurab[durabilityMax] = durability
-                MP.objDurab.put(cell, InDurab)
+                MP.objDurab[cell] = InDurab
                 SocketManager.SEND_GDO_PUT_OBJECT_MOUNT(perso.curMap, cell.toString()
                         + ";" + itemID + ";1;" + durability + ";" + durabilityMax)
             }
@@ -261,7 +261,7 @@ class GameMap(@JvmField val data: ScriptMapData) {
                 durability = 0
                 val InDurab = HashMap<Int, Int>()
                 InDurab[durabilityMax] = durability
-                MP.objDurab.put(cell, InDurab)
+                MP.objDurab[cell] = InDurab
                 SocketManager.SEND_GDO_PUT_OBJECT_MOUNT(map, cell.toString()
                         + ";" + itemID + ";1;" + durability + ";" + durabilityMax)
                 return 0
@@ -269,7 +269,7 @@ class GameMap(@JvmField val data: ScriptMapData) {
             } else {
                 val InDurab = HashMap<Int, Int>()
                 InDurab[durabilityMax] = durability
-                MP.objDurab.put(cell, InDurab)
+                MP.objDurab[cell] = InDurab
                 SocketManager.SEND_GDO_PUT_OBJECT_MOUNT(map, (cell.toString() + ";"
                         + itemID + ";1;" + durability + ";" + durabilityMax))
             }
@@ -992,7 +992,7 @@ class GameMap(@JvmField val data: ScriptMapData) {
             party.players.stream().filter { follower -> party.isWithTheMaster(follower, false, false) }.forEach { follower ->
                 TimerWaiter.addNext({
                     if (fight.prism != null)
-                        fight.joinPrismFight(follower, (if (fight.team0.containsKey(player.id)) 0 else 1))
+                        fight.joinPrismFight(follower, (if (player.id in fight.team0) 0 else 1))
                     else
                         fight.joinFight(follower, player.id)
                 }, follower.party!!.getOptionByPlayer(follower)!!.second.toLong(), TimeUnit.SECONDS)

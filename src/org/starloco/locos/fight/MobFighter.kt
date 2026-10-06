@@ -25,7 +25,7 @@ open class MobFighter(id: Int, f: Fight, val mobGrade: MonsterGrade) : Fighter(i
     }
 
     override fun baseMaxPdv(): Int {
-        return getBaseStats().get(Constant.STATS_ADD_VITA)
+        return getBaseStats()[Constant.STATS_ADD_VITA]
     }
 
     open override fun getBaseStats(): Stats {

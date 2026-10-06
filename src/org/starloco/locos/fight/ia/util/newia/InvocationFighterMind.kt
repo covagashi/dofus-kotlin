@@ -16,7 +16,7 @@ import java.util.LinkedList
 class InvocationFighterMind(ia: AbstractEasyIA) : FighterMind(ia) {
 
     init {
-        if (ia.getFighter().getNbrInvoc() < ia.getFighter().getTotalStats().get(Constant.STATS_SUMMON_COUNT)) {
+        if (ia.getFighter().getNbrInvoc() < ia.getFighter().getTotalStats()[Constant.STATS_SUMMON_COUNT]) {
             setup(ia)
         }
     }

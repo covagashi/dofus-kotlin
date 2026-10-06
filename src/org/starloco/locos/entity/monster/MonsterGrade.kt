@@ -150,7 +150,7 @@ class MonsterGrade private constructor(
     }
 
     fun getStats(): Stats {
-        if (this.template!!.id == 42 && !stats.containsKey(Constant.STATS_SUMMON_COUNT))
+        if (this.template!!.id == 42 && Constant.STATS_SUMMON_COUNT !in stats)
             stats[Constant.STATS_SUMMON_COUNT] = 5
 
         if (this.stats[-1] != null) {
