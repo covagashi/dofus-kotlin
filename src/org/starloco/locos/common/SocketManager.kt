@@ -1493,7 +1493,7 @@ object SocketManager {
         send(perso, packet)
     }
 
-    @JvmStatic fun GAME_SEND_Rp_PACKET(perso: Player, MP: MountPark) {
+    @JvmStatic fun GAME_SEND_Rp_PACKET(perso: Player, MP: MountPark?) {
         var packet: StringBuilder = StringBuilder()
         if (MP == null)
             return

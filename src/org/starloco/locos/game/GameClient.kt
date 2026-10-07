@@ -4510,7 +4510,7 @@ gameTryCastSpell(packet)
             // Collector
             SocketManager.GAME_SEND_MAP_PERCO_GMS_PACKETS(this, this.player.curMap)
             // Mount park
-            SocketManager.GAME_SEND_Rp_PACKET(this.player, this.player.curMap.mountPark!!)
+            SocketManager.GAME_SEND_Rp_PACKET(this.player, this.player.curMap.mountPark)
             // Mount park objects
             SocketManager.GAME_SEND_GDO_OBJECT_TO_MAP(this, this.player.curMap)
             SocketManager.GAME_SEND_GM_MOUNT(this, this.player.curMap, true)
