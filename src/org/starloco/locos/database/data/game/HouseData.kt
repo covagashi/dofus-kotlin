@@ -20,7 +20,7 @@ class HouseData(dataSource: HikariDataSource?) : FunctionDAO<House>(dataSource, 
         var sale: Int = result.getInt("sale")
         var guild: Int = result.getInt("guild_id")
         var access: Int = result.getInt("access")
-        var key: String = result.getString("key")
+        var key: String = result.getString("key") ?: ""
         var guildRights: Int = result.getInt("guild_rights")
         var house: House? = World.world.getHouse(id)
                     if (house == null)

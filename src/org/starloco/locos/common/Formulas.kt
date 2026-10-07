@@ -599,7 +599,7 @@ class Formulas {
 
         @JvmStatic
         fun calculZaapCost(player: Player, map1: GameMap, map2: GameMap): Int {
-            return if (player.getAccount().isSubscribeWithoutCondition()) 10 else 10 * abs((abs(map2.x - map1.x) + abs(map2.y - map1.y) - 1))
+            return if (player.getAccount()!!.isSubscribeWithoutCondition()) 10 else 10 * abs((abs(map2.x - map1.x) + abs(map2.y - map1.y) - 1))
         }
 
         @JvmStatic
@@ -1055,10 +1055,10 @@ class Formulas {
         fun translateMsg(msg0: String): String {
             var msg = msg0
             var alpha = "a b c d e f g h i j k l n o p q r s t u v w x y z é è à ç & û â ê ô î ä ë ü ï ö"
-            for (i in alpha.split(" "))
+            for (i in alpha.splitJ(" "))
                 msg = msg.replace(i, "m")
             alpha = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Ë Ü Ä Ï Ö Â Ê Û Î Ô"
-            for (i in alpha.split(" "))
+            for (i in alpha.splitJ(" "))
                 msg = msg.replace(i, "H")
             return msg
         }
@@ -1088,7 +1088,7 @@ class Formulas {
                     return 0
                 if (levelsTotalDivide[0] < levelsTotalDivide[1] - 20)
                     diffLevels = -20
-                return (Math.round(((100 * factor) - diffLevels + (3 * -diffGrades) + 15 * loosers.size)) * (if (player.getAccount().isSubscribeWithoutCondition()) 2 else 1)).toInt()
+                return (Math.round(((100 * factor) - diffLevels + (3 * -diffGrades) + 15 * loosers.size)) * (if (player.getAccount()!!.isSubscribeWithoutCondition()) 2 else 1)).toInt()
             } else { // He loose
                 // Variables for the loosers
                 diffGrades = player.getGrade() - gradesTotalDivide[0]

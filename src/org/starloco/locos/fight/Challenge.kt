@@ -10,6 +10,7 @@ import org.starloco.locos.game.GameClient
 import java.util.ArrayList
 import java.util.Collections
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Challenge::class.java)
 
@@ -677,9 +678,9 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
 
                     var id = 0
 
-                    for (string in this.Args.split(";")) {
+                    for (string in this.Args.splitJ(";")) {
                         if (string.contains("" + fighter.id)) {
-                            for (test in string.split(","))
+                            for (test in string.splitJ(","))
                                 id = (test).toInt()
                             break
                         }
@@ -774,7 +775,7 @@ class Challenge(private val fight: Fight, private val Type: Int, private val xpW
             }
             42 -> {
                 if (!Args.isEmpty())
-                    if (!(Args.split(";").size % 2 == 0))
+                    if (!(Args.splitJ(";").size % 2 == 0))
                         hasFailed = true
                 Args = ""
             }

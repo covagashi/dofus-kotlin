@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.HashMap
 import java.util.Optional
 import java.util.stream.Collectors
+import org.starloco.locos.common.splitJ
 
 // Holds all static data for maps
 abstract class MapData(
@@ -145,7 +146,7 @@ abstract class MapData(
         @JvmStatic
         fun decodePositions(strPlaces: String): List<List<Int>> {
             val out = ArrayList<List<Int>>()
-            for (p in strPlaces.split("|")) {
+            for (p in strPlaces.splitJ("|")) {
                 if (p.isEmpty()) continue
                 if (p.length % 2 != 0) throw IllegalArgumentException("places length must be pair")
 

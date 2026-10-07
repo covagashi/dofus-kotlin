@@ -43,6 +43,7 @@ import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
 import java.util.stream.Stream
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val logger = LoggerFactory.getLogger(GameMap::class.java)
 
@@ -57,7 +58,7 @@ class GameMap(@JvmField val data: ScriptMapData) {
             private val groups = ArrayList<RespawnGroup>()
 
             private fun randomizeMobGroup(cellID: Int, data: String): MobGroupDef {
-                val grades = data.split(";").map { mob ->
+                val grades = data.splitJ(";").map { mob ->
                     val infos = mob.split(",")
                     val idMonster = infos[0].toInt()
                     val min = infos[1].toInt()
@@ -665,7 +666,7 @@ class GameMap(@JvmField val data: ScriptMapData) {
         if (frame.hasDuration()) {
             // Start timer
             World.world.scheduler.schedule({
-                this.setAnimationState(cellId, frame.nextFrame, null)
+                this.setAnimationState(cellId, frame.nextFrame!!, null)
                 cb?.run()
             }, frame.durationMillis().toLong(), TimeUnit.MILLISECONDS)
         } else if (cb != null) {

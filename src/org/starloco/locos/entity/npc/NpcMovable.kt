@@ -4,6 +4,7 @@ import org.starloco.locos.common.PathFinding
 import org.starloco.locos.common.SocketManager
 import org.starloco.locos.game.world.World
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(NpcMovable::class.java)
 
@@ -14,7 +15,7 @@ class NpcMovable(id: Int, cellid: Int, orientation: Byte, private val mapId: Int
     private var path: Array<String>
 
     init {
-        this.path = this.template!!.legacy!!.path.split(";").toTypedArray()
+        this.path = this.template!!.legacy!!.path.splitJ(";").toTypedArray()
         movables.add(this)
     }
 
@@ -60,7 +61,7 @@ class NpcMovable(id: Int, cellid: Int, orientation: Byte, private val mapId: Int
         if (this.position == this.path.size) {
             val templatePath = template.legacy!!.path
             this.path =
-                if (getPath(this.path) == templatePath) inverseOfPath(templatePath).split(";").toTypedArray() else templatePath.split(
+                if (getPath(this.path) == templatePath) inverseOfPath(templatePath).splitJ(";").toTypedArray() else templatePath.splitJ(
                     ";"
                 ).toTypedArray()
             this.position = 0

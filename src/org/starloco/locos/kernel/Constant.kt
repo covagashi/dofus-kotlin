@@ -1693,7 +1693,7 @@ else -> {return 7
 1 -> {
 }
 3 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2)
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.25) as Int));//100/1.25 = 80
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.25).toInt()));//100/1.25 = 80
                 
 }
 10 -> {stats.addOneStat(STATS_ADD_VITA, lvl); //100/1 = 100
@@ -1704,7 +1704,7 @@ else -> {return 7
                 
 }
 18 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2)
-                stats.addOneStat(STATS_ADD_SAGE, ((lvl / 2.50) as Int)); // 100/2.50 = 40
+                stats.addOneStat(STATS_ADD_SAGE, ((lvl / 2.50).toInt())); // 100/2.50 = 40
                 
 }
 38 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5); // 100*5 = 500
@@ -1722,35 +1722,35 @@ else -> {return 7
                 stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100); // 100/100 = 1
                 
 }
-17 -> {stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.25) as Int))
+17 -> {stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.25).toInt()))
                 stats.addOneStat(STATS_ADD_VITA, lvl / 2)
                 
 }
-62 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.50) as Int)); // 100*1.50 = 150
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int))
+62 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.50).toInt())); // 100*1.50 = 150
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65).toInt()))
                 
 }
-12 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.50) as Int))
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int))
+12 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.50).toInt()))
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65).toInt()))
                 
 }
 36 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
                 stats.addOneStat(STATS_ADD_VITA, lvl / 2)
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65).toInt()))
                 stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
-19 -> {stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.25) as Int))
+19 -> {stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.25).toInt()))
                 stats.addOneStat(STATS_ADD_VITA, lvl / 2)
                 
 }
-22 -> {stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.25) as Int))
+22 -> {stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.25).toInt()))
                 stats.addOneStat(STATS_ADD_VITA, lvl / 2)
                 
 }
 48 -> {stats.addOneStat(STATS_ADD_VITA, (lvl))
                 stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65).toInt()))
                 
 }
 65 -> {stats.addOneStat(STATS_ADD_VITA, (lvl))
@@ -1780,24 +1780,24 @@ else -> {return 7
 }
 34 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
                 stats.addOneStat(STATS_ADD_VITA, lvl / 2)
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65).toInt()))
                 stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
 37 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
-                stats.addOneStat(STATS_ADD_VITA, ((lvl * 0.4) as Int))
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl * 0.4) as Int))
+                stats.addOneStat(STATS_ADD_VITA, ((lvl * 0.4).toInt()))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl * 0.4).toInt()))
                 stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
 44 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
                 stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65).toInt()))
                 
 }
 42 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
                 stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65).toInt()))
                 
 }
 51 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
@@ -1805,29 +1805,29 @@ else -> {return 7
                 stats.addOneStat(STATS_ADD_AGIL, lvl / 2)
                 
 }
-71 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.5) as Int))
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
+71 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.5).toInt()))
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65).toInt()))
                 
 }
-70 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.5) as Int))
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int))
+70 -> {stats.addOneStat(STATS_ADD_VITA, ((lvl * 1.5).toInt()))
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65).toInt()))
                 
 }
 41 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
                 stats.addOneStat(STATS_ADD_VITA, lvl / 2)
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65).toInt()))
                 stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
 40 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
                 stats.addOneStat(STATS_ADD_VITA, lvl / 2)
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65).toInt()))
                 stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
 49 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
                 stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65).toInt()))
                 
 }
 16 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2)
@@ -1835,71 +1835,71 @@ else -> {return 7
                 
 }
 15 -> {stats.addOneStat(STATS_ADD_VITA, lvl / 2)
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 1.25) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 1.25).toInt()))
                 
 }
 11 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2); // 100*2 = 200
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int)); // = 40
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5).toInt())); // = 40
                 
 }
 69 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50).toInt()))
                 
 }
 39 -> {stats.addOneStat(STATS_ADD_INIT, lvl * 5)
                 stats.addOneStat(STATS_ADD_VITA, lvl / 2)
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50).toInt()))
                 stats.addOneStat(STATS_SUMMON_COUNT, lvl / 100)
                 
 }
 45 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5).toInt()))
                 stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
                 
 }
 47 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50).toInt()))
                 stats.addOneStat(STATS_ADD_SAGE, lvl / 4)
                 
 }
 61 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 2.50) as Int))
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int))
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 2.50).toInt()))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5).toInt()))
                 
 }
 63 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int))
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.5) as Int))
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65).toInt()))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.5).toInt()))
                 
 }
 9 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 2.50) as Int))
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int))
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 2.50).toInt()))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5).toInt()))
                 
 }
 52 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int))
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65).toInt()))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50).toInt()))
                 
 }
 68 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int))
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65).toInt()))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5).toInt()))
                 
 }
 73 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65).toInt()))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50).toInt()))
                 
 }
 72 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int))
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.5) as Int))
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65).toInt()))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.5).toInt()))
                 
 }
 66 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5) as Int))
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50) as Int))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 2.5).toInt()))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 2.50).toInt()))
                 
 }
 21 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
@@ -1941,62 +1941,62 @@ else -> {return 7
                 
 }
 55 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 3.33).toInt()))
                 stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
 82 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
-                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_CHAN, ((lvl / 1.65).toInt()))
                 stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
 50 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 3.33).toInt()))
                 stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
 79 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
-                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_AGIL, ((lvl / 1.65).toInt()))
                 stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
 60 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 3.33).toInt()))
                 stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
 87 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
-                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_FORC, ((lvl / 1.65).toInt()))
                 stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
 59 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 3.33).toInt()))
                 stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
 86 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
-                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_INTE, ((lvl / 1.65).toInt()))
                 stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
 56 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 3.33).toInt()))
                 stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
 83 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
-                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PERDOM, ((lvl / 1.65).toInt()))
                 stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }
 58 -> {stats.addOneStat(STATS_ADD_VITA, lvl)
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 3.33) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 3.33).toInt()))
                 stats.addOneStat(STATS_ADD_PM, lvl / 100)
                 
 }
 85 -> {stats.addOneStat(STATS_ADD_VITA, lvl * 2)
-                stats.addOneStat(STATS_ADD_PROS, ((lvl / 1.65) as Int))
+                stats.addOneStat(STATS_ADD_PROS, ((lvl / 1.65).toInt()))
                 stats.addOneStat(STATS_ADD_PO, lvl / 100)
                 
 }

@@ -13,6 +13,7 @@ import org.starloco.locos.kernel.Constant
 import org.starloco.locos.`object`.GameObject
 import java.util.Optional
 import java.util.stream.Stream
+import org.starloco.locos.common.splitJ
 
 class Trunk(
     var id: Int,
@@ -28,7 +29,7 @@ class Trunk(
     var `object`: MutableMap<Int, GameObject> = HashMap()
 
     fun setObjects(`object`: String) {
-        for (item in `object`.split("|")) {
+        for (item in `object`.splitJ("|")) {
             if (item == "")
                 continue
             val infos = item.split(":")

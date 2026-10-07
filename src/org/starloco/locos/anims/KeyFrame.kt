@@ -8,7 +8,7 @@ import java.util.Collections
 class KeyFrame private constructor(
     @JvmField val frame: Int,
     private val durationMillis: Int,
-    @JvmField val nextFrame: String,
+    @JvmField val nextFrame: String?,
     private val interactive: Boolean,
     overrides: Map<String, Int>
 ) {
@@ -17,7 +17,7 @@ class KeyFrame private constructor(
     val cellOverrides: Map<String, Int> = Collections.unmodifiableMap(overrides)
 
     init {
-        if (durationMillis > 0 && nextFrame!!.isEmpty()) {
+        if (durationMillis > 0 && nextFrame.isNullOrEmpty()) {
             throw InvalidParameterException("nextFrame is mandatory when duration is set")
         }
     }
@@ -43,9 +43,9 @@ class KeyFrame private constructor(
 
             if (frame < 0) throw InvalidParameterException("frame must be positive")
             if (duration < 0) throw InvalidParameterException("duration must be strictly positive")
-            if (duration != 0 && nextFrame!!.isEmpty()) throw InvalidParameterException("nextFrame is required when duration >0")
+            if (duration != 0 && nextFrame.isNullOrEmpty()) throw InvalidParameterException("nextFrame is required when duration >0")
 
-            return KeyFrame(frame, duration, nextFrame!!, interactive, Collections.unmodifiableMap(cellOverrides))
+            return KeyFrame(frame, duration, nextFrame, interactive, Collections.unmodifiableMap(cellOverrides))
         }
     }
 }

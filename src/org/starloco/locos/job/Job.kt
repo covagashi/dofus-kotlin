@@ -3,6 +3,7 @@ package org.starloco.locos.job
 import java.util.ArrayList
 import java.util.HashMap
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Job::class.java)
 
@@ -14,7 +15,7 @@ class Job(val id: Int, tools: String, crafts: String, skills: String) {
 
     init {
         if (tools != "") {
-            for (str in tools.split(",")) {
+            for (str in tools.splitJ(",")) {
                 try {
                     this.tools.add(str.toInt())
                 } catch (e: Exception) {
@@ -23,11 +24,11 @@ class Job(val id: Int, tools: String, crafts: String, skills: String) {
             }
         }
         if (crafts != "") {
-            for (str in crafts.split("|")) {
+            for (str in crafts.splitJ("|")) {
                 try {
                     val skID = str.split(";")[0].toInt()
                     val list = ArrayList<Int>()
-                    for (str2 in str.split(";")[1].split(","))
+                    for (str2 in str.splitJ(";")[1].split(","))
                         list.add(str2.toInt())
                     this.crafts[skID] = list
                 } catch (e: Exception) {
@@ -36,15 +37,15 @@ class Job(val id: Int, tools: String, crafts: String, skills: String) {
             }
         }
         if (skills != "") {
-            for (arg0 in skills.split("|")) {
+            for (arg0 in skills.splitJ("|")) {
                 val io = arg0.split(";")[0]
                 val skill = arg0.split(";")[1]
                 val list = ArrayList<Int>()
 
-                for (arg1 in skill.split(","))
+                for (arg1 in skill.splitJ(","))
                     list.add(arg1.toInt())
 
-                for (arg1 in io.split(","))
+                for (arg1 in io.splitJ(","))
                     this.skills[arg1.toInt()] = list
             }
         }

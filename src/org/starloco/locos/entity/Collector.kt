@@ -13,6 +13,7 @@ import org.starloco.locos.kernel.Constant
 import org.starloco.locos.`object`.GameObject
 import org.starloco.locos.guild.Guild
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Collector::class.java)
 
@@ -41,7 +42,7 @@ class Collector(
     val defenseFight = HashMap<Int, Player>()
 
     init {
-        for (item in items.split("|")) {
+        for (item in items.splitJ("|")) {
             if (item == "")
                 continue
             val infos = item.split(":")

@@ -125,12 +125,9 @@ class DatabaseManager {
      */
     private fun createHikariDataSource(host: String, port: String, database: String, user: String, pass: String): HikariDataSource? {
         val config = HikariConfig()
-        config.setDataSourceClassName("org.mariadb.jdbc.MariaDbDataSource")
-        config.addDataSourceProperty("serverName", host)
-        config.addDataSourceProperty("port", port)
-        config.addDataSourceProperty("databaseName", database)
-        config.addDataSourceProperty("user", user)
-        config.addDataSourceProperty("password", pass)
+        config.jdbcUrl = "jdbc:mariadb://$host:$port/$database"
+        config.username = user
+        config.password = pass
         config.setAutoCommit(true) // AutoCommit, c'est cool
         config.setMaximumPoolSize(20)
         config.setMinimumIdle(1)

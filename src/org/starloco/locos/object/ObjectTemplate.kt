@@ -16,6 +16,7 @@ import java.util.ArrayList
 import java.util.Arrays
 import java.util.HashMap
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(ObjectTemplate::class.java)
 
@@ -232,7 +233,7 @@ class ObjectTemplate(
                 when (type) {
                     1, 2, 3, 4, 5, 6, 7, 8 -> {
                         if (!(strTemplate == null || strTemplate.equals("", ignoreCase = true) || strTemplate.length <= 1)) {
-                            for (stat in this.strTemplate.split(",")) {
+                            for (stat in this.strTemplate.splitJ(",")) {
                                 val stats = stat.split("#")
                                 val id = (stats[0]).toInt(16)
                                 if (id == Constant.STATS_RESIST) Stat[id] = stats[1]
@@ -323,7 +324,7 @@ class ObjectTemplate(
         val spellStats = ArrayList<String>()
 
         if (!this.strTemplate.isEmpty()) {
-            for (stats in this.strTemplate.split(",")) {
+            for (stats in this.strTemplate.splitJ(",")) {
                 val split = stats.split("#")
                 val id = (split[0]).toInt(16)
 

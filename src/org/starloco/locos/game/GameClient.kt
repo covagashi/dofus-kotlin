@@ -79,6 +79,7 @@ import org.starloco.locos.`object`.entity.Fragment
 import org.starloco.locos.`object`.entity.SoulStone
 import org.starloco.locos.util.TimerWaiter
 import org.starloco.locos.util.generator.NameGenerator
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(GameClient::class.java)
 
@@ -139,8 +140,8 @@ open class GameClient {
             return
         }
         if(Logging.USE_LOG) {
-            if (this.player != null) {
-                Logging.getInstance().write("RecvPacket", this.player.name + " : " + this.player.getAccount().currentIp + " : " + packet)
+            if (this::player.isInitialized) {
+                Logging.getInstance().write("RecvPacket", this.player.name + " : " + this.player.getAccount()!!.currentIp + " : " + packet)
             } else {
                 var IP: String = (((this.getSession().getRemoteAddress()) as InetSocketAddress)).getAddress().getHostAddress()
                 Logging.getInstance().write("RecvPacket", IP + " : " + packet)
@@ -238,7 +239,7 @@ open class GameClient {
 'W' -> {parseWaypointPacket(packet)
                 
 }
-else -> {if(this.player != null)
+else -> {if(this::player.isInitialized)
                     if(this.player.changeName)
                         this.changeName(packet)                
                 
@@ -545,7 +546,7 @@ else -> {
         if (!gifts.isEmpty()) {
             var data: String = ""
             var item: Int = -1
-            for (gift in  gifts.split(";")) {
+            for (gift in  gifts.splitJ(";")) {
                 if(gift.isEmpty()) continue
                 var id: Int = (gift.split(",")[0]).toInt()
                 var qua: Int = (gift.split(",")[1]).toInt()
@@ -579,7 +580,7 @@ else -> {
         if (gifts.isEmpty())
             return
 
-        for (data in  gifts.split(";")) {
+        for (data in  gifts.splitJ(";")) {
             if(data.isEmpty()) continue
             var split: List<String> = data.split(",")
             var id: Int = (split[0]).toInt()
@@ -669,7 +670,7 @@ else -> {
 
         if (this.account.getPlayers()[id] != null) {
             this.player = this.account.getPlayers()[id]!!
-            if (this.player != null) {
+            if (this::player.isInitialized) {
                 if(this.player.isDead().toInt() == 1 && Config.modeHeroic)
                     this.getSession().write("BN")
                 else
@@ -767,13 +768,13 @@ else -> {
 
     private fun authorisedCommand(packet: String) {
         if (this.adminUser == null) this.adminUser = CommandAdmin(this.player)
-        if (this.player.getGroup() == null || this.player == null) {
-            this.getAccount().gameClient!!.kick()
+        if (this.player.getGroup() == null || !this::player.isInitialized) {
+            this.getAccount()!!.gameClient!!.kick()
             return
         }
 
         if (Logging.USE_LOG)
-            Logging.getInstance().write("CommandAdmin", this.getAccount().currentIp + " : " + this.getAccount().name + " > " + this.player.name + " > " + packet.substring(2))
+            Logging.getInstance().write("CommandAdmin", this.getAccount()!!.currentIp + " : " + this.getAccount()!!.name + " > " + this.player.name + " > " + packet.substring(2))
 
         this.adminUser.apply(packet)
     }
@@ -792,8 +793,8 @@ else -> {
         var lastMsg: String = ""
 
         if (this.player.getAccount() != null && this.player.isMuted()) {
-            var remaining: Short = (((this.getAccount().getMuteTime() - System.currentTimeMillis()) / 60000) as Short)
-            this.player.send("Im117;" + this.getAccount().getMutePseudo() + "~" + remaining)
+            var remaining: Short = (((this.getAccount()!!.getMuteTime() - System.currentTimeMillis()) / 60000) as Short)
+            this.player.send("Im117;" + this.getAccount()!!.getMutePseudo() + "~" + remaining)
             return
         }
 
@@ -1020,7 +1021,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
                         SocketManager.GAME_SEND_CHAT_ERROR_PACKET(this, nom)
                         return
                     }
-                    if (target.getAccount().isEnemyWith(this.player.getAccount().id) || !target.isDispo(this.player)) {
+                    if (target.getAccount()!!.isEnemyWith(this.player.getAccount()!!.id) || !target.isDispo(this.player)) {
                         SocketManager.GAME_SEND_Im_PACKET(this.player, "114;" + target.name)
                         return
                     }
@@ -1050,8 +1051,8 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
                     SocketManager.GAME_SEND_cMK_PACKET(this.player, "T", target.id, target.name, msg)
                     SocketManager.GAME_SEND_cMK_PACKET(target, "F", this.player.id, this.player.name, msg)
 
-                    if(target.getAccount().isMuted())
-                        this.send("Im0168;" + target.name + "~" + target.getAccount().getMuteTime())
+                    if(target.getAccount()!!.isMuted())
+                        this.send("Im0168;" + target.name + "~" + target.getAccount()!!.getMuteTime())
                 }
                 
 }
@@ -1065,7 +1066,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
         var player: Player = World.world.getPlayerByName(packet)!!
         if (player == null) {
             if (packet.isEmpty())
-                SocketManager.GAME_SEND_BWK(this.player, this.player.getAccount().pseudo + "|1|" + this.player.name + "|" + (if (this.player.curMap.subArea != null) this.player.curMap.subArea!!.area!!.id else "-1"))
+                SocketManager.GAME_SEND_BWK(this.player, this.player.getAccount()!!.pseudo + "|1|" + this.player.name + "|" + (if (this.player.curMap.subArea != null) this.player.curMap.subArea!!.area!!.id else "-1"))
             else
                 this.player.send("PIEn" + packet)
 
@@ -1074,12 +1075,12 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
                 this.player.send("PIEn" + player.name)
                 return
             }
-            if (this.player.getAccount().isFriendWith(player.id))
-                SocketManager.GAME_SEND_BWK(this.player, player.getAccount().pseudo + "|1|" + player.name + "|" + (if (player.curMap.subArea != null) player.curMap.subArea!!.area!!.id else "-1"))
+            if (this.player.getAccount()!!.isFriendWith(player.id))
+                SocketManager.GAME_SEND_BWK(this.player, player.getAccount()!!.pseudo + "|1|" + player.name + "|" + (if (player.curMap.subArea != null) player.curMap.subArea!!.area!!.id else "-1"))
             else if (player == this.player)
-                SocketManager.GAME_SEND_BWK(this.player, this.player.getAccount().pseudo + "|1|" + this.player.name + "|" + (if (this.player.curMap.subArea != null) this.player.curMap.subArea!!.area!!.id else "-1"))
+                SocketManager.GAME_SEND_BWK(this.player, this.player.getAccount()!!.pseudo + "|1|" + this.player.name + "|" + (if (this.player.curMap.subArea != null) this.player.curMap.subArea!!.area!!.id else "-1"))
             else
-                SocketManager.GAME_SEND_BWK(this.player, player.getAccount().pseudo + "|1|" + player.name + "|-1")
+                SocketManager.GAME_SEND_BWK(this.player, player.getAccount()!!.pseudo + "|1|" + player.name + "|-1")
         }
     }
 
@@ -2261,7 +2262,7 @@ ExchangeAction.AUCTION_HOUSE_SELLING -> {var exchangeAction: BigStoreActionData 
                         if (count <= 0)
                             return
 
-                        if(!curBigStore.removeListing(this.player.getAccount(), lineId)) {
+                        if(!curBigStore.removeListing(this.player.getAccount()!!, lineId)) {
                             return
                         }
 
@@ -2304,7 +2305,7 @@ ExchangeAction.AUCTION_HOUSE_SELLING -> {var exchangeAction: BigStoreActionData 
 
                         if (!this.player.hasItemGuid(itmID))//V?rifie si le this.playernnage a bien l'item sp?cifi? et l'argent pour payer la taxe
                             return
-                        if (this.player.getAccount().countHdvEntries(curBigStore.hdvId) >= curBigStore.maxAccountItem) {
+                        if (this.player.getAccount()!!.countHdvEntries(curBigStore.hdvId) >= curBigStore.maxAccountItem) {
                             SocketManager.GAME_SEND_Im_PACKET(this.player, "058")
                             return
                         }
@@ -2337,7 +2338,7 @@ ExchangeAction.AUCTION_HOUSE_SELLING -> {var exchangeAction: BigStoreActionData 
                             obj = newObj
                         }
                         // Client amount is 1,2,3, we need 0,1,2
-                        var toAdd: BigStoreListing = BigStoreListing(price, ((amount-1) as Byte), this.player.getAccount().id, obj)
+                        var toAdd: BigStoreListing = BigStoreListing(price, ((amount-1).toByte()), this.player.getAccount()!!.id, obj)
                         if(!curBigStore.addEntry(toAdd)) {
                             return
                         }
@@ -2969,7 +2970,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                 if (jobs == null || jobs.isEmpty())
                     return
 
-                var obj: GameObject = player.getObjetByPos(Constant.ITEM_POS_ARME)!!
+                var obj: GameObject? = player.getObjetByPos(Constant.ITEM_POS_ARME)
 
                 if (obj == null) {
                     this.player.send("BN")
@@ -3051,7 +3052,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                 var jobs: List<Job> = this.player.getJobs()
                 if (jobs == null || jobs.isEmpty()) return
 
-                var obj: GameObject = this.player.getObjetByPos(Constant.ITEM_POS_ARME)!!
+                var obj: GameObject? = this.player.getObjetByPos(Constant.ITEM_POS_ARME)
                 if (obj == null) return
 
                 var ok: Boolean = false
@@ -3490,7 +3491,7 @@ else -> {player.livreArti = false
         var emote: Int = (packet.substring(2)).toInt()
         if (emote == -1)
             return
-        if (this.player == null)
+        if (!this::player.isInitialized)
             return
         if (this.player.fight != null)
             return;//Pas d'?mote en combat
@@ -3588,7 +3589,7 @@ else -> {player.livreArti = false
     private fun
         addFriend(packet: String) {
         var packet = packet
-        if (this.player == null)
+        if (!this::player.isInitialized)
             return
         var guid: Int = -1
         when (packet[2]) {
@@ -3618,7 +3619,7 @@ else -> {packet = packet.substring(2)
                     SocketManager.GAME_SEND_FA_PACKET(this.player, "Ef")
                     return
                 }
-                guid = Pr.getAccount().id
+                guid = Pr.getAccount()!!.id
                 
 }
 }
@@ -3631,7 +3632,7 @@ else -> {packet = packet.substring(2)
 
     private fun removeFriend(packet: String) {
         var packet = packet
-        if (this.player == null)
+        if (!this::player.isInitialized)
             return
         var guid: Int = -1
         when (packet[2]) {
@@ -3661,7 +3662,7 @@ else -> {packet = packet.substring(2)
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
                     return
                 }
-                guid = Pr.getAccount().id
+                guid = Pr.getAccount()!!.id
                 
 }
 }
@@ -3770,11 +3771,11 @@ else -> {packet = packet.substring(2)
     private fun parseGamePacket(packet: String) {
         var c: Char = packet[1]
         when (c) {
-'A' -> {if (this.player != null)
+'A' -> {if (this::player.isInitialized)
                     parseAction(packet)
                 
 }
-'C' -> {if (this.player != null)
+'C' -> {if (this::player.isInitialized)
                     this.player.sendGameCreate()
                 
 }
@@ -4139,7 +4140,7 @@ gameTryCastSpell(packet)
         }
 
         //Si packet invalide, ou cellule introuvable
-        if (cellID == -1 || actionID == -1 || this.player == null || this.player.curMap == null || this.player.curMap.getCase(cellID) == null)
+        if (cellID == -1 || actionID == -1 || !this::player.isInitialized || this.player.curMap == null || this.player.curMap.getCase(cellID) == null)
             return
 
         GA.args = cellID.toString() + ";" + actionID
@@ -4310,7 +4311,7 @@ gameTryCastSpell(packet)
                 else {
                     fight!!.joinFight(this.player, guid)
 
-                    val party: Party? = if (this.player == null) null else this.player.party
+                    val party: Party? = if (!this::player.isInitialized) null else this.player.party
                     val f: Fight = fight
                     if(party != null && party.master != null && party.master!!.name.equals(this.player.name)) {
                         party.players.stream().filter({ follower -> party.isWithTheMaster(follower, false, false) }).forEach { follower ->
@@ -4326,7 +4327,7 @@ gameTryCastSpell(packet)
 
     private fun gameAggro(packet: String) {
         try {
-            if (this.player == null || this.player.fight != null || this.player.isGhost ||this.player.isDead().toInt() == 1 || this.player.cantAgro())
+            if (!this::player.isInitialized || this.player.fight != null || this.player.isGhost ||this.player.isDead().toInt() == 1 || this.player.cantAgro())
                 return
             if (this.player.isMissingSubscription()) {
                 SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this.player.getGameClient()!!, 'S')
@@ -4364,7 +4365,7 @@ gameTryCastSpell(packet)
 
     private fun gameCollector(packet: String) {
         try {
-            if (this.player == null)
+            if (!this::player.isInitialized)
                 return
             if (this.player.fight != null)
                 return
@@ -4451,7 +4452,7 @@ gameTryCastSpell(packet)
     }
 
     private fun setFlag(packet: String) {
-        if (this.player == null)
+        if (!this::player.isInitialized)
             return
         if (this.player.fight == null)
             return
@@ -4468,7 +4469,7 @@ gameTryCastSpell(packet)
 
     private fun getExtraInformations() {
         try {
-            if (this.player != null && this.player.lastFight != null) {
+            if (this::player.isInitialized && this.player.lastFight != null) {
                 if (player.applyEndFightAction()) {
                     return
                 }
@@ -4484,7 +4485,7 @@ gameTryCastSpell(packet)
 
     private fun sendExtraInformations() {
         try {
-            if(this.player == null) return
+            if(!this::player.isInitialized) return
             if (this.player.fight != null && !this.player.fight!!.isFinish()) {
                 //Only Collector
                 SocketManager.GAME_SEND_MAP_GMS_PACKETS(this.player.fight!!.map!!, this.player)
@@ -4808,7 +4809,7 @@ gameTryCastSpell(packet)
     }
 
     private fun createGuild(packet: String) {
-        if (this.player == null)
+        if (!this::player.isInitialized)
             return
         if (this.player.getGuild() != null || this.player.guildMember != null) {
             SocketManager.GAME_SEND_gC_PACKET(this.player, "Ea")
@@ -4989,7 +4990,7 @@ gameTryCastSpell(packet)
             return
         }
 
-        var price: Short = ((1000 + 10 * guild.lvl) as Short)//Calcul du prix du Collector
+        var price: Short = ((1000 + 10 * guild.lvl).toShort())//Calcul du prix du Collector
 
         if (this.player.kamas < price) {//Kamas insuffisants
             SocketManager.GAME_SEND_Im_PACKET(this.player, "182")
@@ -5408,7 +5409,7 @@ gameTryCastSpell(packet)
 
     private fun addEnemy(packet: String) {
         var packet = packet
-        if (this.player == null)
+        if (!this::player.isInitialized)
             return
         var guid: Int = -1
         when (packet[2]) {
@@ -5437,7 +5438,7 @@ else -> {packet = packet.substring(2)
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
                     return
                 }
-                guid = Pr.getAccount().id
+                guid = Pr.getAccount()!!.id
                 
 }
 }
@@ -5450,7 +5451,7 @@ else -> {packet = packet.substring(2)
 
     private fun removeEnemy(packet: String) {
         var packet = packet
-        if (this.player == null)
+        if (!this::player.isInitialized)
             return
         var guid: Int = -1
         when (packet[2]) {
@@ -5479,7 +5480,7 @@ else -> {packet = packet.substring(2)
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
                     return
                 }
-                guid = Pr.getAccount().id
+                guid = Pr.getAccount()!!.id
                 
 }
 }
@@ -5878,7 +5879,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
 
                 // FIN DES VERIFS
 
-                var exObj: GameObject = this.player.getObjetByPos2(position)!!//Objet a l'ancienne position!!
+                var exObj: GameObject? = this.player.getObjetByPos2(position)//Objet a l'ancienne position!!
                 var objGUID: Int = obj.template!!.id
                 // CODE OBVI
                 if (obj.template!!.type == 113) {
@@ -6364,7 +6365,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     }
 
     private fun acceptInvitation() {
-        if (this.player == null || this.player.inviting == 0)
+        if (!this::player.isInitialized || this.player.inviting == 0)
             return
 
         var target: Player = World.world.getPlayer(this.player.inviting)!!
@@ -6474,7 +6475,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     }
 
     private fun inviteParty(packet: String) {
-        if (this.player == null)
+        if (!this::player.isInitialized)
             return
 
         var name: String = packet.substring(2)
@@ -6506,7 +6507,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     }
 
     private fun refuseInvitation() {
-        if (this.player == null || this.player.inviting == 0)
+        if (!this::player.isInitialized || this.player.inviting == 0)
             return
 
         var player: Player = World.world.getPlayer(this.player.inviting!!)!!
@@ -6544,7 +6545,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     }
 
     private fun whereIsParty() {
-        if (this.player == null)
+        if (!this::player.isInitialized)
             return
         var g: Party = this.player.party!!
         if (g == null)
@@ -6629,7 +6630,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             return
         }
         var enclosMax: Byte = (Math.floor(this.player.getGuild()!!.lvl.toDouble() / 10) as Byte)
-        var TotalEncloGuild: Byte = (World.world.totalMPGuild(this.player.getGuild()!!.id) as Byte)
+        var TotalEncloGuild: Byte = (World.world.totalMPGuild(this.player.getGuild()!!.id).toByte())
         if (TotalEncloGuild >= enclosMax) {
             SocketManager.GAME_SEND_Im_PACKET(this.player, "1103")
             return
@@ -7003,7 +7004,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     }
 
     fun disconnect() {
-        if (this.account != null && this.player != null)
+        if (this::account.isInitialized && this::player.isInitialized)
             this.account.disconnect(this.player)
     }
 

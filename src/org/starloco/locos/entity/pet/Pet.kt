@@ -5,6 +5,7 @@ import org.starloco.locos.kernel.Constant
 
 import java.util.ArrayList
 import java.util.HashMap
+import org.starloco.locos.common.splitJ
 
 class Pet(
     val templateId: Int,
@@ -49,13 +50,13 @@ class Pet(
         if (this.type == 3 || this.type == 2) {
             if (this.statsUp.contains(";"))//Plusieurs stats
             {
-                for (cut in this.statsUp.split(";"))//On coupe b2|41#49#62 puis 70|63#64
+                for (cut in this.statsUp.splitJ(";"))//On coupe b2|41#49#62 puis 70|63#64
                 {
                     val cut2 = cut.split("|")
                     val statsID = (cut2[0]).toInt(16)
                     val ar = ArrayList<Int>()
 
-                    for (categ in cut2[1].split("#")) {
+                    for (categ in cut2[1].splitJ("#")) {
                         val categID = categ.toInt()
                         ar.add(categID)
                     }
@@ -71,7 +72,7 @@ class Pet(
                 val cut2 = this.statsUp.split("|") //On coupe b2 puis 41#49#62
                 val statsID = (cut2[0]).toInt(16)
                 val ar = ArrayList<Int>()
-                for (categ in cut2[1].split("#")) {
+                for (categ in cut2[1].splitJ("#")) {
                     val categID = categ.toInt()
                     ar.add(categID)
                 }
@@ -84,15 +85,15 @@ class Pet(
         {
             if (this.statsUp.contains(";"))//Plusieurs stats
             {
-                for (cut in this.statsUp.split(";"))//On coupe
+                for (cut in this.statsUp.splitJ(";"))//On coupe
                 {
                     val cut2 = cut.split("|")
                     val statsID = (cut2[0]).toInt(16)
                     val ar = ArrayList<MutableMap<Int, Int>>()
-                    for (soustotal in cut2[1].split("#")) {
+                    for (soustotal in cut2[1].splitJ("#")) {
                         var monsterID = 0
                         var qua = 0
-                        for (Iqua in soustotal.split(",")) {
+                        for (Iqua in soustotal.splitJ(",")) {
                             if (monsterID == 0) {
                                 monsterID = Iqua.toInt()
                             } else {
@@ -112,10 +113,10 @@ class Pet(
                 val cut2 = this.statsUp.split("|") //On coupe 8a puis 64,50#65,50#68,50#72,50#96,50#97,40#99,40#179,40#182,10#181,10#180,1
                 val statsID = (cut2[0]).toInt(16)
                 val ar = ArrayList<MutableMap<Int, Int>>()
-                for (categ in cut2[1].split("#")) {
+                for (categ in cut2[1].splitJ("#")) {
                     var monsterID = 0
                     var qua = 0
-                    for (Iqua in categ.split(",")) {
+                    for (Iqua in categ.splitJ(",")) {
                         if (monsterID == 0) {
                             monsterID = Iqua.toInt()
                         } else {

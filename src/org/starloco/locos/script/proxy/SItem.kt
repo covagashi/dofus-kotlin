@@ -8,6 +8,7 @@ import org.starloco.locos.common.SocketManager
 import org.starloco.locos.`object`.GameObject
 import org.starloco.locos.script.types.MetaTables
 import java.util.stream.Collectors
+import org.starloco.locos.common.splitJ
 
 class SItem(userValue: GameObject) : DefaultUserdata<GameObject>(META_TABLE, userValue) {
     private companion object {
@@ -42,7 +43,7 @@ class SItem(userValue: GameObject) : DefaultUserdata<GameObject>(META_TABLE, use
             if (stats == null || stats.isEmpty()) {
                 return false
             }
-            return stats.split(",").contains(`val`)
+            return stats.splitJ(",").contains(`val`)
         }
 
         @JvmStatic
@@ -56,7 +57,7 @@ class SItem(userValue: GameObject) : DefaultUserdata<GameObject>(META_TABLE, use
 
 
             // TODO: change how Text stats are stored. They are a bit hacky currently,
-            val newStats = stats.split(",")
+            val newStats = stats.splitJ(",")
                 .filter { it != `val` } // Filter out val from stat
                 .joinToString(",")
 

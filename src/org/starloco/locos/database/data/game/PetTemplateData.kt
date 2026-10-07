@@ -13,7 +13,7 @@ class PetTemplateData(dataSource: HikariDataSource?) : FunctionDAO<Pet>(dataSour
         getData("SELECT * FROM " + getTableName() + ";") { result ->
                 while (result.next()) {
                     World.world.addPets(Pet(result.getInt("TemplateID"), result.getInt("Type"), result.getString("Gap"),
-        result.getString("StatsUp"), result.getInt("Max"), result.getInt("Gain"), result.getInt("DeadTemplate"), result.getInt("Epo"), result.getString("jet")))
+        result.getString("StatsUp") ?: "", result.getInt("Max"), result.getInt("Gain"), result.getInt("DeadTemplate"), result.getInt("Epo"), result.getString("jet")))
                 }
         }
         } catch (e: SQLException) {

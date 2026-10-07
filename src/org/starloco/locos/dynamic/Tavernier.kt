@@ -14,6 +14,7 @@ import java.net.URL
 import java.util.ArrayList
 import java.util.Arrays
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Tavernier::class.java)
 
@@ -83,7 +84,7 @@ class Tavernier : Updatable<Void?>(5 * 60_000) {
             str = str.replace(">", "")
             if (!str.matches("(.*)margin(.*)".toRegex()) && !str.matches("(.*)<p>(.*)".toRegex()) && !str.matches("(.*)--(.*)".toRegex()) && str != "p") {
                 if (str.length > 300) {
-                    temp.addAll(listOf(*str.split(".".toRegex()).toTypedArray()))
+                    temp.addAll(listOf(*str.splitJ(".".toRegex()).toTypedArray()))
                 } else temp.add(str)
             }
         }

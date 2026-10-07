@@ -17,6 +17,7 @@ import org.starloco.locos.kernel.Constant
 import org.starloco.locos.`object`.GameObject
 import org.starloco.locos.util.TimerWaiter
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Mount::class.java)
 
@@ -164,7 +165,7 @@ class Mount {
         this.couple = couple
         this.savage = savage
 
-        for (str in objects.split(";")) {
+        for (str in objects.splitJ(";")) {
             if (str.isEmpty()) continue
             try {
                 val gameObject = World.world.getGameObject(str.toInt())

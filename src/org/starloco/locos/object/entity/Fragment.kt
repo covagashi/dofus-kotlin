@@ -5,6 +5,7 @@ import org.starloco.locos.database.data.login.ObjectData
 import org.starloco.locos.game.world.World.Couple
 import org.starloco.locos.`object`.GameObject
 import java.util.ArrayList
+import org.starloco.locos.common.splitJ
 
 class Fragment : GameObject {
 
@@ -21,7 +22,7 @@ class Fragment : GameObject {
 
     private fun parseRunes(runes: String) {
         if (runes.isNotEmpty()) {
-            for (rune in runes.split(";")) {
+            for (rune in runes.splitJ(";")) {
                 val split = rune.split(":")
                 this.runes.add(Couple((split[0]).toInt(), (split[1]).toInt()))
             }

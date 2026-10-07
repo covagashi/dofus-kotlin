@@ -5,6 +5,7 @@ import org.apache.commons.lang.NotImplementedException
 import org.starloco.locos.database.data.FunctionDAO
 import org.starloco.locos.game.world.World
 import java.sql.SQLException
+import org.starloco.locos.common.splitJ
 
 class FullMorphData(dataSource: HikariDataSource?) : FunctionDAO<Any>(dataSource, "full_morphs") {
     override fun loadFully() {
@@ -12,10 +13,10 @@ class FullMorphData(dataSource: HikariDataSource?) : FunctionDAO<Any>(dataSource
         getData("SELECT * FROM " + getTableName() + ";") { result ->
                 while (result.next()) {
         var args: Array<String>? = null
-                    if (result.getString("args") != "0") {
-        args = result.getString("args").split("@")[1].split(",").toTypedArray()
+                    if ((result.getString("args") ?: "") != "0") {
+        args = (result.getString("args") ?: "").split("@")[1].splitJ(",").toTypedArray()
                     }
-        World.world.addFullMorph(result.getInt("id"), result.getString("name"), result.getInt("gfxId"), result.getString("spells"), args)
+        World.world.addFullMorph(result.getInt("id"), result.getString("name") ?: "", result.getInt("gfxId"), result.getString("spells"), args)
                 }
         }
         } catch (e: SQLException) {

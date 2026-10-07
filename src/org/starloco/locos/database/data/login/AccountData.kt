@@ -23,7 +23,7 @@ class AccountData(dataSource: HikariDataSource?) : FunctionDAO<Account>(dataSour
                 if (!result.next()) {
                     null
                 } else {
-                    val acc = Account(result.getInt("guid"), result.getString("account").lowercase(), result.getString("pseudo"), result.getString("reponse"), result.getInt("banned") == 1, result.getString("lastIP"), result.getString("lastConnectionDate"), result.getString("friends"), result.getString("enemy"), result.getInt("points"), result.getLong("subscribe"), result.getLong("muteTime"), result.getString("mutePseudo"), result.getString("lastVoteIP"), result.getString("heurevote"))
+                    val acc = Account(result.getInt("guid"), (result.getString("account") ?: "").lowercase(), result.getString("pseudo") ?: "", result.getString("reponse") ?: "", result.getInt("banned") == 1, result.getString("lastIP") ?: "", result.getString("lastConnectionDate") ?: "", result.getString("friends") ?: "", result.getString("enemy") ?: "", result.getInt("points"), result.getLong("subscribe"), result.getLong("muteTime"), result.getString("mutePseudo") ?: "", result.getString("lastVoteIP") ?: "", result.getString("heurevote") ?: "")
                     World.world.addAccount(acc)
                     // Load account specific data
                     DatabaseManager.get(BankData::class.java).load(acc.id)
@@ -86,7 +86,7 @@ class AccountData(dataSource: HikariDataSource?) : FunctionDAO<Account>(dataSour
             getData("SELECT guid, heurevote, lastVoteIP FROM " + getTableName() + ";") { result ->
                 while (result.next()) {
                     val a = World.world.ensureAccountLoaded(result.getInt("guid"))
-                    a?.updateVote(result.getString("heurevote"), result.getString("lastVoteIP"))
+                    a?.updateVote(result.getString("heurevote") ?: "", result.getString("lastVoteIP") ?: "")
                 }
             }
         } catch (e: SQLException) {

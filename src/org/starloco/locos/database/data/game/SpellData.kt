@@ -36,7 +36,7 @@ class SpellData(dataSource: HikariDataSource?) : FunctionDAO<Spell>(dataSource, 
                         spell.setInfo(result.getInt("sprite"), result.getString("spriteInfos"), result.getString("effectTarget"), result.getInt("type"), result.getShort("duration"))
                         modif = true
                     } else {
-                        spell = Spell(id, result.getString("nom"), result.getInt("sprite"), result.getString("spriteInfos"), result.getString("effectTarget"), result.getInt("type"), result.getShort("duration"), result.getString("invalid_state"), result.getString("needed_state"))
+                        spell = Spell(id, result.getString("nom") ?: "", result.getInt("sprite"), result.getString("spriteInfos"), result.getString("effectTarget"), result.getInt("type"), result.getShort("duration"), result.getString("invalid_state"), result.getString("needed_state"))
                         World.world.addSort(spell)
                     }
                     spell.spellsStats.clear()

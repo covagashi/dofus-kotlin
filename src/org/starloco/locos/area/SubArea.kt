@@ -10,6 +10,7 @@ import org.starloco.locos.script.proxy.SSubArea
 import java.util.ArrayList
 import java.util.HashSet
 import java.util.stream.Collectors
+import org.starloco.locos.common.splitJ
 
 class SubArea(
     val id: Int,
@@ -30,7 +31,7 @@ class SubArea(
 
     init {
         if (nearest.isNotEmpty())
-            for (i in nearest.split(","))
+            for (i in nearest.splitJ(","))
                 this.nearestSubAreas.add(i.toShort())
     }
 

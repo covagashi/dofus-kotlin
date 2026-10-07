@@ -9,6 +9,7 @@ import org.starloco.locos.game.world.World
 import org.starloco.locos.util.TimerWaiter
 import java.util.ArrayList
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Bandit::class.java)
 
@@ -21,7 +22,7 @@ class Bandit(mobs: String, maps: String, time: Long) {
 
     init {
         if (!mobs.equals("", ignoreCase = true)) {
-            for (mob in mobs.split(",")) {
+            for (mob in mobs.splitJ(",")) {
                 var _mob: Int? = null
                 try {
                     _mob = (mob).toInt()
@@ -37,7 +38,7 @@ class Bandit(mobs: String, maps: String, time: Long) {
         }
 
         if (!maps.equals("", ignoreCase = true)) {
-            for (str in maps.split(",")) {
+            for (str in maps.splitJ(",")) {
                 try {
                     val id = (str).toInt()
                     val map = World.world.getMap(id)

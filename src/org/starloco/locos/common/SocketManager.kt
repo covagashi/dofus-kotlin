@@ -1468,7 +1468,7 @@ object SocketManager {
     }
 
     @JvmStatic fun GAME_SEND_FRIENDLIST_PACKET(perso: Player) {
-        var packet: String = "FL" + perso.getAccount().parseFriendList()
+        var packet: String = "FL" + perso.getAccount()!!.parseFriendList()
         send(perso, packet)
         if (perso.wife != 0) {
             var packet2: String = "FS" + perso.get_wife_friendlist()
@@ -1720,7 +1720,7 @@ object SocketManager {
     }
 
     @JvmStatic fun GAME_SEND_ENEMY_LIST(perso: Player) {
-        var packet: String = "iL" + perso.getAccount().parseEnemyList()
+        var packet: String = "iL" + perso.getAccount()!!.parseEnemyList()
         send(perso, packet)
     }
 
@@ -1858,7 +1858,7 @@ object SocketManager {
     }
 
     @JvmStatic fun GAME_SEND_HDVITEM_SELLING(perso: Player, hdvId: Int) {
-        var packet: String = "EL" + perso.getAccount().getHdvEntries(hdvId).stream()
+        var packet: String = "EL" + perso.getAccount()!!.getHdvEntries(hdvId).stream()
                 .filter(Objects::nonNull)
                 .map(BigStoreListing::parseToEL)
                 .collect(Collectors.joining("|"))

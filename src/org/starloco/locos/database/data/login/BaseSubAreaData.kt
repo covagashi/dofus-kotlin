@@ -12,7 +12,7 @@ class BaseSubAreaData(dataSource: HikariDataSource?) : FunctionDAO<SubArea>(data
 		try {
         getData("SELECT * FROM " + getTableName() + ";") { result ->
 				while (result.next()) {
-        var subArea: SubArea = SubArea(result.getInt("id"), result.getString("name"), result.getInt("area"), result.getString("nearest_sub_areas"))
+        var subArea: SubArea = SubArea(result.getInt("id"), result.getString("name") ?: "", result.getInt("area"), result.getString("nearest_sub_areas"))
         World.world.addSubArea(subArea)
 					if (subArea.area != null)
         subArea.area.addSubArea(subArea)

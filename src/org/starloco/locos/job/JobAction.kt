@@ -18,6 +18,7 @@ import org.starloco.locos.util.RandomStats
 import java.util.*
 import java.util.Map.Entry
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(JobAction::class.java)
 
@@ -1175,7 +1176,7 @@ else -> {var type: Int = `object`!!.template!!.type
                 for (effect in  objectFm!!.effects) {
                     if (effect.effectID != 100)
                         continue
-                    var infos: Array<String> = effect.args.split(";").toTypedArray()
+                    var infos: Array<String> = effect.args.splitJ(";").toTypedArray()
                     try {
                         var min: Int = infos[0].toInt(16)
                         var max: Int = infos[1].toInt(16)
@@ -1434,9 +1435,9 @@ else -> {var type: Int = `object`!!.template!!.type
     companion object {
         @JvmField var coefExo: Float = 0.25f
     @JvmStatic fun getStatBaseMaxs(objMod: ObjectTemplate, statsModif: String): Int {
-        var split: Array<String> = objMod.strTemplate.split(",").toTypedArray()
+        var split: Array<String> = objMod.strTemplate.splitJ(",").toTypedArray()
         for (s in  split) {
-            var stats: Array<String> = s.split("#").toTypedArray()
+            var stats: Array<String> = s.splitJ("#").toTypedArray()
             if (stats[0].lowercase().compareTo(statsModif.lowercase()) > 0) {
             	
             } else if (stats[0].lowercase().compareTo(statsModif.lowercase()) == 0) {
@@ -1450,9 +1451,9 @@ else -> {var type: Int = `object`!!.template!!.type
     }
 
     @JvmStatic fun getStatBaseMins(objMod: ObjectTemplate, statsModif: String): Int {
-        var split: Array<String> = objMod.strTemplate.split(",").toTypedArray()
+        var split: Array<String> = objMod.strTemplate.splitJ(",").toTypedArray()
         for (s in  split) {
-            var stats: Array<String> = s.split("#").toTypedArray()
+            var stats: Array<String> = s.splitJ("#").toTypedArray()
             if (stats[0].lowercase().compareTo(statsModif.lowercase()) > 0) {
             } else if (stats[0].lowercase().compareTo(statsModif.lowercase()) == 0) {
                 return stats[1].toInt(16)
@@ -1468,9 +1469,9 @@ else -> {var type: Int = `object`!!.template!!.type
         statsTemplate = World.world.getObjTemplate(objTemplateID)!!.strTemplate
         if (statsTemplate == null || statsTemplate.isEmpty())
             return 0
-        var split: Array<String> = statsTemplate.split(",").toTypedArray()
+        var split: Array<String> = statsTemplate.splitJ(",").toTypedArray()
         for (s in  split) {
-            var stats: Array<String> = s.split("#").toTypedArray()
+            var stats: Array<String> = s.splitJ("#").toTypedArray()
             var statID: Int = stats[0].toInt(16)
             var sig: Boolean = true
             for (a in  Constant.ARMES_EFFECT_IDS)
@@ -1542,9 +1543,9 @@ else -> {var type: Int = `object`!!.template!!.type
         statsTemplate = World.world.getObjTemplate(objTemplateID)!!.strTemplate
         if (statsTemplate == null || statsTemplate.isEmpty())
             return 0
-        var split: Array<String> = statsTemplate.split(",").toTypedArray()
+        var split: Array<String> = statsTemplate.splitJ(",").toTypedArray()
         for (s in  split) {
-            var stats: Array<String> = s.split("#").toTypedArray()
+            var stats: Array<String> = s.splitJ("#").toTypedArray()
             var statID: Int = stats[0].toInt(16)
             var sig: Boolean = true
             for (a in  Constant.ARMES_EFFECT_IDS)
@@ -1683,9 +1684,9 @@ else -> {var type: Int = `object`!!.template!!.type
             return 0
         var Weigth: Int = 0
         var Alto: Int = 0
-        var split: Array<String> = statsModelo.split(",").toTypedArray()
+        var split: Array<String> = statsModelo.splitJ(",").toTypedArray()
         for (s in  split) {
-            var stats: Array<String> = s.split("#").toTypedArray()
+            var stats: Array<String> = s.splitJ("#").toTypedArray()
             var statID: Int = stats[0].toInt(16)
             if (statID == 985 || statID == 988)
                 continue
@@ -1763,9 +1764,9 @@ else -> {var type: Int = `object`!!.template!!.type
 
     @JvmStatic fun getBaseMaxJet(templateID: Int, statsModif: String): Int {
         var t: ObjectTemplate? = World.world.getObjTemplate(templateID)
-        var splitted: Array<String> = t!!.strTemplate.split(",").toTypedArray()
+        var splitted: Array<String> = t!!.strTemplate.splitJ(",").toTypedArray()
         for (s in  splitted) {
-            var stats: Array<String> = s.split("#").toTypedArray()
+            var stats: Array<String> = s.splitJ("#").toTypedArray()
             if (stats[0].compareTo(statsModif) > 0)//Effets n'existe pas de base
             {
             } else if (stats[0].compareTo(statsModif) == 0)//L'effet existe bien !
@@ -1832,9 +1833,9 @@ else -> {var type: Int = `object`!!.template!!.type
     @JvmStatic fun viewBaseStatsItem(obj: GameObject, ItemStats: String): Byte//retourne vrai si le stats existe de base sur l'item
     {
 
-        var splitted: Array<String> = obj.template!!.strTemplate.split(",").toTypedArray()
+        var splitted: Array<String> = obj.template!!.strTemplate.splitJ(",").toTypedArray()
         for (s in  splitted) {
-            var stats: Array<String> = s.split("#").toTypedArray()
+            var stats: Array<String> = s.splitJ("#").toTypedArray()
             if (stats[0].compareTo(ItemStats) > 0)//Effets n'existe pas de base
             {
                 if (stats[0].compareTo("98") == 0
@@ -2212,8 +2213,8 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
             }
 
             //region Initialisation des variables principales
-            var originalSplitStats: Array<String> = gameObject!!.template!!.strTemplate.split(",").toTypedArray()
-            var actualObjectSplitStats: Array<String> = gameObject!!.encodeStats().split(",").toTypedArray() // Liste toutes les stats originale de l'objet
+            var originalSplitStats: Array<String> = gameObject!!.template!!.strTemplate.splitJ(",").toTypedArray()
+            var actualObjectSplitStats: Array<String> = gameObject!!.encodeStats().splitJ(",").toTypedArray() // Liste toutes les stats originale de l'objet
 
             var concernedOriginalJet: String? = null
             var concernedActualJet: String? = null // Jet originale concerner
@@ -2542,7 +2543,7 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
                             PWGLoose = PWGLoose - (PWRGJet - (rune!!.weight * value))
                             if(old < 0) PWGLoose += -old * rune!!.weight
                         }
-                        actualObjectSplitStats = gameObject!!.encodeStats().split(",").toTypedArray()
+                        actualObjectSplitStats = gameObject!!.encodeStats().splitJ(",").toTypedArray()
                         stats = getStatsToLoose(runeTemplate, actualObjectSplitStats, originalSplitStats, blacklist)
                     }
 
@@ -2572,7 +2573,7 @@ Constant.STATS_ADD_R_PVP_NEU -> {r = 50.0
 
                     PWGLoose = PWGLoose - (PWRGJet - (rune!!.weight * value))
                     if(old < 0) PWGLoose += -old * rune!!.weight
-                    actualObjectSplitStats = gameObject!!.encodeStats().split(",").toTypedArray()
+                    actualObjectSplitStats = gameObject!!.encodeStats().splitJ(",").toTypedArray()
                     stats = getStatsToLoose(runeTemplate, actualObjectSplitStats, originalSplitStats, null)
                 }
 

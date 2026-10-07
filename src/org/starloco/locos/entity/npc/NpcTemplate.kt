@@ -14,6 +14,7 @@ import org.starloco.locos.script.ScriptVM
 import java.util.Objects
 import java.util.stream.Collectors
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(NpcTemplate::class.java)
 
@@ -148,8 +149,8 @@ class NpcTemplate(v: Table) {
         private var exchanges: List<Couple<ArrayList<Couple<Int, Int>>, ArrayList<Couple<Int, Int>>>>? = null
 
         init {
-            if (questions.split("|").size > 1) {
-                for (question in questions.split("|")) {
+            if (questions.splitJ("|").size > 1) {
+                for (question in questions.splitJ("|")) {
                     try {
                         initQuestions[question.split(",")[0].toInt()] = question.split(",")[1].toInt()
                     } catch (e: Exception) {
@@ -163,7 +164,7 @@ class NpcTemplate(v: Table) {
             }
 
             if (sales != "") {
-                for (obj in sales.split(",")) {
+                for (obj in sales.splitJ(",")) {
                     try {
                         val template = World.world.getObjTemplate(obj.toInt())
                         if (template != null)
@@ -179,7 +180,7 @@ class NpcTemplate(v: Table) {
                 try {
                     val ex = ArrayList<Couple<ArrayList<Couple<Int, Int>>, ArrayList<Couple<Int, Int>>>>()
                     this.exchanges = ex
-                    for (data in exchanges.split("~")) {
+                    for (data in exchanges.splitJ("~")) {
                         val gives = ArrayList<Couple<Int, Int>>()
                         val gets = ArrayList<Couple<Int, Int>>()
 
@@ -187,12 +188,12 @@ class NpcTemplate(v: Table) {
                         val give = split[1]
                         val get = split[0]
 
-                        for (obj in give.split(",")) {
+                        for (obj in give.splitJ(",")) {
                             split = obj.split(":")
                             gives.add(Couple(split[0].toInt(), split[1].toInt()))
                         }
 
-                        for (obj in get.split(",")) {
+                        for (obj in get.splitJ(",")) {
                             split = obj.split(":")
                             gets.add(Couple(split[0].toInt(), split[1].toInt()))
                         }

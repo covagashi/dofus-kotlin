@@ -186,7 +186,7 @@ class HouseManager {
                     if (World.world.getPlayer(house.value.ownerId) == null)
                         packet += "$name;"
                     else
-                        packet += World.world.getPlayer(house.value.ownerId)!!.getAccount().pseudo + ";"
+                        packet += World.world.getPlayer(house.value.ownerId)!!.getAccount()!!.pseudo + ";"
                     packet += (World.world.getMap(house.value.houseMapId).x.toString() + ","
                             + World.world.getMap(house.value.houseMapId).y
                             + ";")
@@ -199,7 +199,7 @@ class HouseManager {
                     if (World.world.getPlayer(house.value.ownerId) == null)
                         packet += "$name;"
                     else
-                        packet += World.world.getPlayer(house.value.ownerId)!!.getAccount().pseudo + ";"
+                        packet += World.world.getPlayer(house.value.ownerId)!!.getAccount()!!.pseudo + ";"
                     packet += (World.world.getMap(house.value.houseMapId).x.toString() + ","
                             + World.world.getMap(house.value.houseMapId).y
                             + ";")

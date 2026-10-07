@@ -12,6 +12,7 @@ import java.util.Timer
 import java.util.TimerTask
 import java.util.stream.Collectors
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(MonsterGroup::class.java)
 
@@ -89,7 +90,7 @@ class MonsterGroup {
 
         var guid = -1
 
-        for (data in groupData.split(";")) {
+        for (data in groupData.splitJ(";")) {
             if (data.equals("", ignoreCase = true))
                 continue
             val infos = data.split(",")
@@ -121,7 +122,7 @@ class MonsterGroup {
 
         if (objects.isNotEmpty()) {
             this.objects = ArrayList()
-            for (value in objects.split(",")) {
+            for (value in objects.splitJ(",")) {
                 val gameObject = World.world.getGameObject(value.toInt())
                 if (gameObject != null)
                     this.objects!!.add(gameObject)
@@ -136,7 +137,7 @@ class MonsterGroup {
         this.isFix = true
         var guid = -1
         var star = false
-        for (data in groupData.split(";")) {
+        for (data in groupData.splitJ(";")) {
             if (data.equals("", ignoreCase = true))
                 continue
             val infos = data.split(",")
@@ -306,7 +307,7 @@ class MonsterGroup {
         @JvmStatic
         fun parseMobGroupLevels(groupData: String): List<Pair<Int, List<Int>>> {
             val out = LinkedList<Pair<Int, List<Int>>>()
-            groupData.split(";").forEach { s ->
+            groupData.splitJ(";").forEach { s ->
                 val parts = s.split(",")
                 val idMonster = parts[0].toInt()
                 val min = parts[1].toInt()

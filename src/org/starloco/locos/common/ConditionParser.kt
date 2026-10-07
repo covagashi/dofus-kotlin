@@ -90,7 +90,7 @@ class ConditionParser {
             args.add(Argument("MiS", perso.id.toDouble()))//Les pierres d'ames sont lancables uniquement par le lanceur.
             args.add(Argument("MA", perso.getAlignMap().toDouble()))//Pandala
             if (req.contains("PSB"))
-                args.add(Argument("PSB", perso.getAccount().points.toDouble()))//Points Boutique
+                args.add(Argument("PSB", perso.getAccount()!!.points.toDouble()))//Points Boutique
             args.add(Argument("CF", (if (perso.getObjetByPos(Constant.ITEM_POS_PNJ_SUIVEUR) == null) -1 else perso.getObjetByPos(Constant.ITEM_POS_PNJ_SUIVEUR)!!.template!!.id).toDouble()))//Personnage suiveur
             //Autre
             args.add(Argument("Ps", perso.alignment.toDouble()))//Alignement
@@ -139,7 +139,7 @@ class ConditionParser {
     private fun havePj(c: String, p: Player): Boolean {
         if (c.equals("", ignoreCase = true))
             return false
-        for (s in c.split("||")) {
+        for (s in c.splitJ("||")) {
             val k = s.split("==")
             val id: Int
             try {
@@ -264,14 +264,14 @@ class ConditionParser {
                     return true
                 // fallthrough like the original Java switch (no break)
                 val cell = ArrayList<Int>()
-                for (i in "168,197,212,227,242,183,213,214,229,244,245,259".split(","))
+                for (i in "168,197,212,227,242,183,213,214,229,244,245,259".splitJ(","))
                     cell.add((i).toInt())
                 if (cell.contains(perso.curCell.cellId))
                     return true
             }
             8905 -> {
                 val cell = ArrayList<Int>()
-                for (i in "168,197,212,227,242,183,213,214,229,244,245,259".split(","))
+                for (i in "168,197,212,227,242,183,213,214,229,244,245,259".splitJ(","))
                     cell.add((i).toInt())
                 if (cell.contains(perso.curCell.cellId))
                     return true
@@ -282,7 +282,7 @@ class ConditionParser {
 
     private fun haveRO(condition: String, player: Player): Boolean {
         try {
-            for (cond in condition.split("&&")) {
+            for (cond in condition.splitJ("&&")) {
                 val split = cond.split("==")[1].split(",")
                 val id = (split[0]).toInt()
                 val qua = (split[1]).toInt()
@@ -303,7 +303,7 @@ class ConditionParser {
 
     private fun haveRA(condition: String, player: Player): Boolean {
         try {
-            for (cond in condition.split("&&")) {
+            for (cond in condition.splitJ("&&")) {
                 val split = cond.split("==")[1].split(",")
                 val id = (split[0]).toInt()
                 val qua = (split[1]).toInt()
@@ -326,9 +326,9 @@ class ConditionParser {
         var finalLength = 0
 
         if (cond.contains("&&")) {
-            for (cur in cond.split("&&")) {
+            for (cur in cond.splitJ("&&")) {
                 if (cond.contains("==")) {
-                    for (cur2 in cur.split("==")) {
+                    for (cur2 in cur.splitJ("==")) {
                         if (cur2.contains("PO")) {
                             ContainsPO = true
                             continue
@@ -354,7 +354,7 @@ class ConditionParser {
                     }
                 }
                 if (cond.contains("!=")) {
-                    for (cur2 in cur.split("!=")) {
+                    for (cur2 in cur.splitJ("!=")) {
                         if (cur2.contains("PO")) {
                             ContainsPO = true
                             continue
@@ -382,9 +382,9 @@ class ConditionParser {
                 copyCond += "&&"
             }
         } else if (cond.contains("||")) {
-            for (cur in cond.split("||")) {
+            for (cur in cond.splitJ("||")) {
                 if (cond.contains("==")) {
-                    for (cur2 in cur.split("==")) {
+                    for (cur2 in cur.splitJ("==")) {
                         if (cur2.contains("PO")) {
                             ContainsPO = true
                             continue
@@ -410,7 +410,7 @@ class ConditionParser {
                     }
                 }
                 if (cond.contains("!=")) {
-                    for (cur2 in cur.split("!=")) {
+                    for (cur2 in cur.splitJ("!=")) {
                         if (cur2.contains("PO")) {
                             ContainsPO = true
                             continue
@@ -440,7 +440,7 @@ class ConditionParser {
         } else {
             CutFinalLenght = false
             if (cond.contains("==")) {
-                for (cur in cond.split("==")) {
+                for (cur in cond.splitJ("==")) {
                     if (cur.contains("PO"))
                         continue
                     if (cur.contains("!="))
@@ -452,7 +452,7 @@ class ConditionParser {
                 }
             }
             if (cond.contains("!=")) {
-                for (cur in cond.split("!=")) {
+                for (cur in cond.splitJ("!=")) {
                     if (cur.contains("PO"))
                         continue
                     if (cur.contains("=="))
@@ -474,7 +474,7 @@ class ConditionParser {
     fun canPN(cond: String, perso: Player): String//On remplace le PN par 1 et si le nom correspond == 1 sinon == 0
     {
         var copyCond = ""
-        for (cur in cond.split("==")) {
+        for (cur in cond.splitJ("==")) {
             if (cur.contains("PN")) {
                 copyCond += "1=="
                 continue
@@ -502,7 +502,7 @@ class ConditionParser {
                 copyCond = "1==0"
         } else if (cond.contains(">")) {
             if (cond.contains("||")) {
-                for (cur in cond.split("||")) {
+                for (cur in cond.splitJ("||")) {
                     if (!cur.contains(">"))
                         continue
                     val _cur = cur.split(">")

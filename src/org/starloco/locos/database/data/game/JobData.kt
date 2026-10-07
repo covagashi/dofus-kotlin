@@ -14,7 +14,7 @@ class JobData(dataSource: HikariDataSource?) : FunctionDAO<Job>(dataSource, "job
                 while (result.next()) {
         var skills: String = ""
                     if (result.getString("skills") != null)
-        skills = result.getString("skills")
+        skills = result.getString("skills") ?: ""
         World.world.addJob(Job(result.getInt("id"), result.getString("tools"), result.getString("crafts"), skills))
                 }
         }

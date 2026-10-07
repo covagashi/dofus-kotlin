@@ -28,6 +28,7 @@ import java.util.ArrayList
 import java.util.Arrays
 import java.util.Collections
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(ObjectAction::class.java)
 
@@ -75,8 +76,8 @@ class ObjectAction(private val type: String, private val args: String, private v
         var template: ObjectTemplate? = null
         var templates: MutableList<ObjectTemplate?> = ArrayList()
         try {
-            for (type in this.type.split(";")) {
-                val split = args.split("|".toRegex(), 2).toTypedArray()
+            for (type in this.type.splitJ(";")) {
+                val split = args.split("|".toRegex(), limit = 2).toTypedArray()
                 if (this.args.isNotEmpty() && split.size > turn)
                     arg = split[turn]
 
@@ -89,8 +90,8 @@ class ObjectAction(private val type: String, private val args: String, private v
 
                     0 -> {//Teleportation.
                         if (player0.fight != null) return
-                        mapId = arg.split(",".toRegex(), 2).toTypedArray()[0].toShort().toInt()
-                        cellId = arg.split(",".toRegex(), 2).toTypedArray()[1].toInt()
+                        mapId = arg.split(",".toRegex(), limit = 2).toTypedArray()[0].toShort().toInt()
+                        cellId = arg.split(",".toRegex(), limit = 2).toTypedArray()[1].toInt()
                         if (mapId == 8978) {
                             isOk = false
                             send = false
@@ -121,10 +122,10 @@ class ObjectAction(private val type: String, private val args: String, private v
                     }
 
                     3 -> {//Don de vie.
-                        if (this.type.split(";").size > 1 && player.fight != null) return
+                        if (this.type.splitJ(";").size > 1 && player.fight != null) return
                         var isOk1 = true
                         var isOk2 = true
-                        for (arg0 in arg.split(",")) {
+                        for (arg0 in arg.splitJ(",")) {
                             var `val`: Int
                             val statId1: Int
                             if (arg.contains(";")) {
@@ -182,7 +183,7 @@ class ObjectAction(private val type: String, private val args: String, private v
                                 }
                             }
                         }
-                        if (arg.split(",").size <= 2)
+                        if (arg.splitJ(",").size <= 2)
                             if (!isOk1 && !isOk2)
                                 isOk = false
                             else if (isOk1 || isOk2)
@@ -192,7 +193,7 @@ class ObjectAction(private val type: String, private val args: String, private v
 
                     4 -> {//Don de Stats.
                         if (player0.fight != null) return
-                        for (arg0 in arg.split(",")) {
+                        for (arg0 in arg.splitJ(",")) {
                             val statId = arg0.split(";")[0].toInt()
                             val `val` = arg0.split(";")[1].toInt()
                             when (statId) {
@@ -648,7 +649,7 @@ class ObjectAction(private val type: String, private val args: String, private v
 
                     26 -> {//Ajout d'objet.
                         if (player0.fight != null) return
-                        for (i in arg.split(";")) {
+                        for (i in arg.splitJ(";")) {
                             obj = World.world.getObjTemplate(i.split(",")[0].toInt())!!.createNewItem(i.split(",")[1].toInt(), false)
                             if (player.addItem(obj!!, true, false))
                                 World.world.addGameObject(obj)
@@ -772,7 +773,7 @@ class ObjectAction(private val type: String, private val args: String, private v
                         var tour = 0
                         val objects = ArrayList<ObjectTemplate>()
                         var nbrMaxItem = 0
-                        for (i in arg.split(";")) {
+                        for (i in arg.splitJ(";")) {
                             tour++
                             when (tour) {
                                 1 -> {
@@ -881,7 +882,7 @@ class ObjectAction(private val type: String, private val args: String, private v
             isOk = true
         if (isOk)
             effect = true
-        if (this.type.split(";").size > 1)
+        if (this.type.splitJ(";").size > 1)
             isOk = true
         if (objet != -1) {
             if (send)

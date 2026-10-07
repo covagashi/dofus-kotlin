@@ -5,6 +5,7 @@ import org.starloco.locos.game.world.World
 
 import java.util.ArrayList
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(ObjectSet::class.java)
 
@@ -14,7 +15,7 @@ class ObjectSet(val id: Int, items: String, bonuses: String) {
     val itemTemplates = ArrayList<ObjectTemplate>()
 
     init {
-        for (str in items.split(",")) {
+        for (str in items.splitJ(",")) {
             try {
                 val obj = World.world.getObjTemplate(str.trim().toInt()) ?: continue
                 this.itemTemplates.add(obj)
@@ -25,9 +26,9 @@ class ObjectSet(val id: Int, items: String, bonuses: String) {
 
         this.effects.add(Stats())
 
-        for (str in bonuses.split(";")) {
+        for (str in bonuses.splitJ(";")) {
             val S = Stats()
-            for (str2 in str.split(",")) {
+            for (str2 in str.splitJ(",")) {
                 if (!str2.equals("", ignoreCase = true)) {
                     try {
                         val infos = str2.split(":")

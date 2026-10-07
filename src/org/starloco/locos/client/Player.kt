@@ -75,6 +75,7 @@ import java.util.stream.Stream
 
 import org.starloco.locos.kernel.Constant.INCARNAM_SUPERAREA
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Player::class.java)
 
@@ -124,14 +125,18 @@ open class Player : Scripted<SPlayer>, Actor {
     var energy: Int = 0
         set(v) { field = if (v > Player.maxEnergy.toInt()) Player.maxEnergy.toInt() else v }
     var exp: Long = 0
-    var curPdv: Int = 0
+    private var _curPdv: Int = 0
+    var curPdv: Int
         get() {
             refreshLife(false)
-            return field
+            return _curPdv
         }
-    var maxPdv: Int = 0
+        set(v) { _curPdv = v }
+    private var _maxPdv: Int = 0
+    var maxPdv: Int
+        get() = _maxPdv
         set(v) {
-            field = v
+            _maxPdv = v
             SocketManager.GAME_SEND_STATS_PACKET(this)
             if (party != null)
                 SocketManager.GAME_SEND_PM_MOD_PACKET_TO_GROUP(party!!, this)
@@ -166,7 +171,7 @@ open class Player : Scripted<SPlayer>, Actor {
     var aLvl: Int= 0
     var guildMember: GuildMember? = null
     var showFriendConnection: Boolean = false
-    lateinit var canaux: String
+    var canaux: String = ""
     var fight: Fight? = null
         set(v) {
             if(this.setSitted(false) || v != null) {
@@ -212,9 +217,11 @@ open class Player : Scripted<SPlayer>, Actor {
     //Titre
     var currentTitle: Byte= 0
     //Mariage
-    var wife: Int= 0
+    private var _wife: Int = 0
+    var wife: Int
+        get() = _wife
         set(v) {
-            field = v
+            _wife = v
             DatabaseManager.get(PlayerData::class.java).update(this)
         }
     var isOK: Int= 0
@@ -267,7 +274,7 @@ open class Player : Scripted<SPlayer>, Actor {
             if (!useStats) {
                 var fact: Int = 4
                 var maxPdv: Int = this.maxPdv - 55
-                var curPdv: Int = this.curPdv - 55
+                var curPdv: Int = _curPdv - 55
                 if (this.classe == Constant.CLASS_SACRIEUR)
                     fact = 8
                 var coef: Double = maxPdv.toDouble() / fact
@@ -280,7 +287,7 @@ open class Player : Scripted<SPlayer>, Actor {
 
                 var init: Int = 1
                 if (maxPdv != 0)
-                    init = ((coef * ((curPdv.toDouble()) / (maxPdv.toDouble()))) as Int)
+                    init = ((coef * ((curPdv.toDouble()) / (maxPdv.toDouble()))).toInt())
                 if (init < 0)
                     init = 0
                 return init
@@ -305,7 +312,7 @@ open class Player : Scripted<SPlayer>, Actor {
             if (title == "")
                 title = "0"
             if (field != null)
-                for (i in  field.split(","))
+                for (i in  field.splitJ(","))
                     if (i == title)
                         erreur = true
             if (field == null && !erreur)
@@ -416,7 +423,7 @@ open class Player : Scripted<SPlayer>, Actor {
         this.stats = Stats(stats as MutableMap<Int, Int>, true, this)
         this.accID = account
         this.showFriendConnection = seeFriend.toInt() == 1
-        this.wife = wifeGuid
+        _wife = wifeGuid
         this.metierPublic = false
         this.currentTitle = title
         this.changeName = false
@@ -446,7 +453,7 @@ open class Player : Scripted<SPlayer>, Actor {
         this.deathCount = deathCount
         try {
             if (!emotes.isEmpty())
-                for (i in  emotes.split(";"))
+                for (i in  emotes.splitJ(";"))
                     this.addStaticEmote((i).toInt())
             if (!morphMode.equals("")) {
                 if (morphMode.equals("0"))
@@ -478,7 +485,7 @@ open class Player : Scripted<SPlayer>, Actor {
                 }
             }
             if (!zaaps.equals("", ignoreCase = true)) {
-                for (str in  zaaps.split(",")) {
+                for (str in  zaaps.splitJ(",")) {
                     try {
                         this.zaaps.add((str).toInt())
                     } catch (e: Exception) {
@@ -492,7 +499,7 @@ open class Player : Scripted<SPlayer>, Actor {
             this.parseObjects(stuff)
             try {
                 if (parcho != null && !parcho.equals("", ignoreCase = true))
-                    for (stat in  parcho.split(";"))
+                    for (stat in  parcho.splitJ(";"))
                         if (!stat.equals("", ignoreCase = true))
                             this.statsParcho.addOneStat((stat.split(",")[0]).toInt(), (stat.split(",")[1]).toInt())
             } catch (e: Exception) {
@@ -500,7 +507,7 @@ open class Player : Scripted<SPlayer>, Actor {
             }
 
             if (!storeObjets.equals("")) {
-                for (storeObjets in  storeObjets.split("|")) {
+                for (storeObjets in  storeObjets.splitJ("|")) {
                     var infos = storeObjets.split(",")
                     var guid: Int = 0
                     var price: Int = 0
@@ -519,18 +526,18 @@ open class Player : Scripted<SPlayer>, Actor {
                     storeItems[obj.guid] = price
                 }
             }
-            this.maxPdv = (this.level - 1) * 5 + 55 + getTotalStats(false).getEffect(Constant.STATS_ADD_VITA) + getTotalStats(false).getEffect(Constant.STATS_ADD_VIE)
-            if (this.curPdv <= 0)
-                this.curPdv = 1
+            _maxPdv = (this.level - 1) * 5 + 55 + getTotalStats(false).getEffect(Constant.STATS_ADD_VITA) + getTotalStats(false).getEffect(Constant.STATS_ADD_VIE)
+            if (_curPdv <= 0)
+                _curPdv = 1
             if (pdvPer > 100)
-                this.curPdv = (this.maxPdv * 100 / 100)
+                _curPdv = (this.maxPdv * 100 / 100)
             else
-                this.curPdv = (this.maxPdv * pdvPer / 100)
-            if (this.curPdv <= 0)
-                this.curPdv = 1
+                _curPdv = (this.maxPdv * pdvPer / 100)
+            if (_curPdv <= 0)
+                _curPdv = 1
             //Chargement des m�tiers
             if (!jobs.equals("")) {
-                for (aJobData in  jobs.split(";")) {
+                for (aJobData in  jobs.splitJ(";")) {
                     var infos = aJobData.split(",")
                     try {
                         var jobID: Int = (infos[0]).toInt()
@@ -559,7 +566,7 @@ open class Player : Scripted<SPlayer>, Actor {
                 stuff = stuff.substring(0, stuff.length - 1)
             DatabaseManager.get(ObjectData::class.java).loads(stuff.replace("|", ","))
         }
-        for (item in  stuff.split("|")) {
+        for (item in  stuff.splitJ("|")) {
             if (item.equals(""))
                 continue
             var infos = item.split(":")
@@ -593,7 +600,7 @@ open class Player : Scripted<SPlayer>, Actor {
     val items: MutableMap<Int,GameObject>
         @JvmName("getItemsProp") get() = this.objects
     val account: Account
-        @JvmName("getAccountProp") get() = this.getAccount()
+        @JvmName("getAccountProp") get() = this.getAccount()!!
     val guild: Guild?
         @JvmName("getGuildProp") get() = this.getGuild()
     val lang: LangEnum
@@ -719,11 +726,11 @@ open class Player : Scripted<SPlayer>, Actor {
 
 
     fun setPdv(pdv: Int) {
-        this.curPdv = pdv
-        if (this.curPdv >= this.maxPdv)
-            this.curPdv = this.maxPdv
-        if (this.curPdv < 0)
-            this.curPdv = 0
+        _curPdv = pdv
+        if (_curPdv >= this.maxPdv)
+            _curPdv = this.maxPdv
+        if (_curPdv < 0)
+            _curPdv = 0
 
         if (party != null)
             SocketManager.GAME_SEND_PM_MOD_PACKET_TO_GROUP(party!!, this)
@@ -884,7 +891,7 @@ else -> {turn = 30
             }
             DatabaseManager.get(ObjectData::class.java).update(obj)
         }
-        obj = getObjetByPos(Constant.ITEM_POS_PNJ_SUIVEUR)!!
+        obj = getObjetByPos(Constant.ITEM_POS_PNJ_SUIVEUR)
         if (obj != null) {
             obj.stats.addOneStat(Constant.STATS_TURN, -1)
             if (obj.stats.getEffect(Constant.STATS_TURN) <= 0) {
@@ -895,7 +902,7 @@ else -> {turn = 30
             }
             DatabaseManager.get(ObjectData::class.java).update(obj)
         }
-        obj = getObjetByPos(Constant.ITEM_POS_BENEDICTION)!!
+        obj = getObjetByPos(Constant.ITEM_POS_BENEDICTION)
         if (obj != null) {
             obj.stats.addOneStat(Constant.STATS_TURN, -1)
             if (obj.stats.getEffect(Constant.STATS_TURN) <= 0) {
@@ -906,7 +913,7 @@ else -> {turn = 30
             }
             DatabaseManager.get(ObjectData::class.java).update(obj)
         }
-        obj = getObjetByPos(Constant.ITEM_POS_MALEDICTION)!!
+        obj = getObjetByPos(Constant.ITEM_POS_MALEDICTION)
         if (obj != null) {
             obj.stats.addOneStat(Constant.STATS_TURN, -1)
             if (obj.stats.getEffect(Constant.STATS_TURN) <= 0) {
@@ -926,7 +933,7 @@ else -> {turn = 30
             }
             DatabaseManager.get(ObjectData::class.java).update(obj)
         }
-        obj = getObjetByPos(Constant.ITEM_POS_ROLEPLAY_BUFF)!!
+        obj = getObjetByPos(Constant.ITEM_POS_ROLEPLAY_BUFF)
         if (obj != null) {
             obj.stats.addOneStat(Constant.STATS_TURN, -1)
             if (obj.stats.getEffect(Constant.STATS_TURN) <= 0) {
@@ -1079,8 +1086,8 @@ else -> {turn = 30
 
 
 
-    fun getAccount(): Account {
-        return World.world.ensureAccountLoaded(accID)!!
+    fun getAccount(): Account? {
+        return World.world.ensureAccountLoaded(accID)
     }
 
     fun get_spellPts(): Int {
@@ -1505,7 +1512,7 @@ else -> {turn = 30
 
         if (fullMorph["vie"] != null) {
             try {
-                this.maxPdv = (fullMorph["vie"])!!.toInt()
+                _maxPdv = (fullMorph["vie"])!!.toInt()
                 this.setPdv(this.maxPdv)
                 this.pa = (fullMorph["pa"])!!.toInt()
                 this.pm = (fullMorph["pm"])!!.toInt()
@@ -1641,18 +1648,18 @@ else -> {turn = 30
     }
 
     fun OnJoinGame() {
-        getAccount().currentPlayer = this
+        getAccount()!!.currentPlayer = this
         this.online = true
 
-        if (getAccount().gameClient == null)
+        if (getAccount()!!.gameClient == null)
             return
 
-        var client: GameClient = getAccount().gameClient!!
+        var client: GameClient = getAccount()!!.gameClient!!
 
         if(Config.modeHeroic) {
             this.alignment = 0
             var p: Optional<Player> = ArrayList(World.world.onlinePlayers).stream().filter { p1 -> p1 != null && p1.alignment > 0
-                    && p1.getAccount() != null && p1.getAccount().currentIp.equals(getAccount().currentIp, ignoreCase = true) }
+                    && p1.getAccount() != null && p1.getAccount()!!.currentIp.equals(getAccount()!!.currentIp, ignoreCase = true) }
                     .findFirst()
             p.ifPresent { player ->
                 this.alignment = player.alignment
@@ -1701,7 +1708,7 @@ else -> {turn = 30
             if (obj != null)
                 for (sm in  list)
                     if (sm.template.isValidTool(obj.template!!.id))
-                        SocketManager.GAME_SEND_OT_PACKET(getAccount().gameClient!!, sm.template.id)
+                        SocketManager.GAME_SEND_OT_PACKET(getAccount()!!.gameClient!!, sm.template.id)
         }
 
         SocketManager.GAME_SEND_ALIGNEMENT(client, alignment)
@@ -1715,16 +1722,16 @@ else -> {turn = 30
         SocketManager.GAME_SEND_Ow_PACKET(this)
         SocketManager.GAME_SEND_SEE_FRIEND_CONNEXION(client, showFriendConnection)
         SocketManager.GAME_SEND_SPELL_LIST(this)
-        getAccount().sendOnline()
+        getAccount()!!.sendOnline()
 
         //Messages de bienvenue
         SocketManager.GAME_SEND_Im_PACKET(this, "189")
-        if (getAccount().lastConnectionDate != null && !getAccount().lastConnectionDate.equals("") && !getAccount().lastIP.equals(""))
-            SocketManager.GAME_SEND_Im_PACKET(this, "0152;" + getAccount().lastConnectionDate + "~" + getAccount().lastIP)
+        if (getAccount()!!.lastConnectionDate != null && !getAccount()!!.lastConnectionDate.equals("") && !getAccount()!!.lastIP.equals(""))
+            SocketManager.GAME_SEND_Im_PACKET(this, "0152;" + getAccount()!!.lastConnectionDate + "~" + getAccount()!!.lastIP)
 
-        SocketManager.GAME_SEND_Im_PACKET(this, "0153;" + getAccount().currentIp)
+        SocketManager.GAME_SEND_Im_PACKET(this, "0153;" + getAccount()!!.currentIp)
 
-        getAccount().lastIP = getAccount().currentIp
+        getAccount()!!.lastIP = getAccount()!!.currentIp
 
         //Mise a jour du lastConnectionDate
         var actDate: Date = Date()
@@ -1738,13 +1745,13 @@ else -> {turn = 30
         var heure: String = dateFormat.format(actDate)
         dateFormat = SimpleDateFormat("mm")
         var min: String = dateFormat.format(actDate)
-        getAccount().lastConnectionDate = annee + "~" + mois + "~" + jour + "~" + heure + "~" + min
+        getAccount()!!.lastConnectionDate = annee + "~" + mois + "~" + jour + "~" + heure + "~" + min
         if (guildMember != null)
             guildMember!!.lastCo = annee + "~" + mois + "~" + jour + "~" + heure + "~" + min
         //Affichage des prismes
         World.world.showPrismes(this)
         //Actualisation dans la DB
-        DatabaseManager.get(AccountData::class.java).updateLastConnection(getAccount())
+        DatabaseManager.get(AccountData::class.java).updateLastConnection(getAccount()!!)
         SocketManager.GAME_SEND_MESSAGE(this, if (Config.startMessage.isNullOrEmpty()) this.getLang().trans("client.player.onjoingame.startmessage") else Config.startMessage!!)
         for (`object` in  this.objects.values) {
             if (`object`.template!!.type == Constant.ITEM_TYPE_FAMILIER) {
@@ -1789,12 +1796,12 @@ else -> {turn = 30
 
     fun sendGameCreate() {
         this.online = true
-        getAccount().currentPlayer = this
+        getAccount()!!.currentPlayer = this
 
-        if (getAccount().gameClient == null)
+        if (getAccount()!!.gameClient == null)
             return
 
-        var client: GameClient = getAccount().gameClient!!
+        var client: GameClient = getAccount()!!.gameClient!!
         SocketManager.GAME_SEND_GAME_CREATE(client, this.name)
         SocketManager.GAME_SEND_STATS_PACKET(this)
         DatabaseManager.get(PlayerData::class.java).updateLogged(this.id, 1)
@@ -1928,7 +1935,7 @@ else -> {turn = 30
 
         str.append(",")
 
-        `object` = getObjetByPos(Constant.ITEM_POS_COIFFE)!!
+        `object` = getObjetByPos(Constant.ITEM_POS_COIFFE)
 
         if (`object` != null) {
             `object`.encodeStats()
@@ -1943,7 +1950,7 @@ else -> {turn = 30
 
         str.append(",")
 
-        `object` = getObjetByPos(Constant.ITEM_POS_CAPE)!!
+        `object` = getObjetByPos(Constant.ITEM_POS_CAPE)
 
         if (`object` != null) {
             `object`.encodeStats()
@@ -1958,14 +1965,14 @@ else -> {turn = 30
 
         str.append(",")
 
-        `object` = getObjetByPos(Constant.ITEM_POS_FAMILIER)!!
+        `object` = getObjetByPos(Constant.ITEM_POS_FAMILIER)
 
         if (`object` != null)
             str.append(Integer.toHexString(`object`.getAppearanceTemplateId()))
 
         str.append(",")
 
-        `object` = getObjetByPos(Constant.ITEM_POS_BOUCLIER)!!
+        `object` = getObjetByPos(Constant.ITEM_POS_BOUCLIER)
 
         if (`object` != null)
             str.append(Integer.toHexString(`object`.getAppearanceTemplateId()))
@@ -1981,7 +1988,7 @@ else -> {turn = 30
         ASData.append(kamas)
         ASData.append("|").append(capital).append("|").append(spellPts).append("|")
         ASData.append(alignment).append("~").append(alignment).append(",").append(aLvl).append(",").append(getGrade()).append(",").append(honor).append(",").append(deshonor).append(",").append((if (showWings) "1" else "0")).append("|")
-        var pdv: Int = this.curPdv
+        var pdv: Int = _curPdv
         var pdvMax: Int = this.maxPdv
         if (fight != null && !fight!!.isFinish()) {
             var f: Fighter = fight!!.getFighterByPerso(this)
@@ -2082,7 +2089,7 @@ else -> {turn = 30
         var itemSetApplied: ArrayList<Int> = ArrayList()
         synchronized(objects) {
             for (gameObject in  ArrayList(this.objects.values)) {
-                var position: Byte = (gameObject.position as Byte)
+                var position: Byte = (gameObject.position.toByte())
                 if (position.toInt() != Constant.ITEM_POS_NO_EQUIPED) {
                     if (position >= 35 && position <= 48)
                         continue
@@ -2194,20 +2201,20 @@ else -> {turn = 30
             return
         if (regenRate == 0)
             return
-        if (this.curPdv > this.maxPdv) {
-            this.curPdv = this.maxPdv - 1
+        if (_curPdv > this.maxPdv) {
+            _curPdv = this.maxPdv - 1
             if (!refresh)
                 SocketManager.GAME_SEND_STATS_PACKET(this)
             return
         }
 
-        var diff: Int = (time as Int) / regenRate
-        if (diff >= 1 && this.curPdv < this.maxPdv && refresh) {
+        var diff: Int = (time.toInt()) / regenRate
+        if (diff >= 1 && _curPdv < this.maxPdv && refresh) {
             SocketManager.send(this, "ILF" + diff)
             SocketManager.send(this, "ILS" + regenRate)
         }
 
-        setPdv(this.curPdv + diff)
+        setPdv(_curPdv + diff)
     }
 
 
@@ -2215,7 +2222,7 @@ else -> {turn = 30
     fun get_pdvper(): Int {
         refreshLife(false)
         var pdvper: Int = 100
-        pdvper = (100 * this.curPdv) / this.maxPdv
+        pdvper = (100 * _curPdv) / this.maxPdv
         if (pdvper > 100)
             return 100
         return pdvper
@@ -2335,7 +2342,7 @@ else -> {return
     }
 
     fun isMuted(): Boolean {
-        return getAccount().isMuted()
+        return getAccount()!!.isMuted()
     }
 
     fun parseObjetsToDB(): String {
@@ -2557,10 +2564,10 @@ else -> {return
     }
 
     fun refreshStats() {
-        var actPdvPer: Double = (100 * (this.curPdv as Double)) / (this.maxPdv as Double)
+        var actPdvPer: Double = (100 * (_curPdv.toDouble())) / (this.maxPdv.toDouble())
         if (!useStats)
-            this.maxPdv = (this.level - 1) * 5 + 50 + getTotalStats(false).getEffect(Constant.STATS_ADD_VITA)
-        this.curPdv = (Math.round(maxPdv * actPdvPer / 100) as Int)
+            _maxPdv = (this.level - 1) * 5 + 50 + getTotalStats(false).getEffect(Constant.STATS_ADD_VITA)
+        _curPdv = (Math.round(maxPdv * actPdvPer / 100).toInt())
     }
 
     fun levelUp(send: Boolean, addXp: Boolean): Boolean {
@@ -2570,7 +2577,7 @@ else -> {return
         this.level++
         capital += 5
         spellPts++
-        this.maxPdv += 5
+        _maxPdv += 5
         this.setPdv(this.maxPdv)
         if (this.level == 100)
             this.stats.addOneStat(Constant.STATS_ADD_PA, 1)
@@ -2593,7 +2600,7 @@ else -> {return
             up = levelUp(true, false)
         if (isOnline) {
             if (up)
-                SocketManager.GAME_SEND_NEW_LVL_PACKET(getAccount().gameClient!!, this.level)
+                SocketManager.GAME_SEND_NEW_LVL_PACKET(getAccount()!!.gameClient!!, this.level)
             SocketManager.GAME_SEND_STATS_PACKET(this)
         }
         return up
@@ -2623,7 +2630,7 @@ else -> {return
         this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.clear()
         this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.put(Constant.STATS_NIVEAU, level)
         this.getObjetByPos(Constant.ITEM_POS_ARME)
-        SocketManager.GAME_SEND_UPDATE_OBJECT_DISPLAY_PACKET(this, this.getObjetByPos(Constant.ITEM_POS_ARME)!!)
+        SocketManager.GAME_SEND_UPDATE_OBJECT_DISPLAY_PACKET(this, this!!.getObjetByPos(Constant.ITEM_POS_ARME)!!)
         return true
     }
 
@@ -2653,7 +2660,7 @@ else -> {return
         level = this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat[Constant.STATS_NIVEAU]!!
         this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.clear()
         this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.put(Constant.STATS_NIVEAU, level)
-        this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.put(Constant.ERR_STATS_XP, (exp as Int))
+        this.getObjetByPos(Constant.ITEM_POS_ARME)!!.soulStat.put(Constant.ERR_STATS_XP, (exp.toInt()))
         return up
     }
 
@@ -2745,7 +2752,7 @@ else -> {return
             var obj: GameObject? = getObjetByPos(Constant.ITEM_POS_ARME)
             if (obj != null)
                 if (sm.template.isValidTool(obj.template!!.id))
-                    SocketManager.GAME_SEND_OT_PACKET(getAccount().gameClient!!, m.id)
+                    SocketManager.GAME_SEND_OT_PACKET(getAccount()!!.gameClient!!, m.id)
         }
         return pos
     }
@@ -2838,7 +2845,7 @@ else -> {return
         str.append(color2).append(";")
         str.append(color3).append(";")
         str.append(getGMStuffString()).append(";")
-        str.append(this.curPdv).append(",").append(this.maxPdv).append(";")
+        str.append(_curPdv).append(",").append(this.maxPdv).append(";")
         str.append(this.level).append(";")
         str.append(initiative).append(";")
         str.append(getTotalStats(false).getEffect(Constant.STATS_ADD_PROS) + ((Math.ceil(getTotalStats(false).getEffect(Constant.STATS_ADD_CHAN) / 10.0) as Int))).append(";")
@@ -3049,8 +3056,8 @@ else -> {return
     fun teleport(map: GameMap, cell: Int) {
         if (this.fight != null) return
         var PW: GameClient? = null
-        if (getAccount().gameClient != null)
-            PW = getAccount().gameClient
+        if (getAccount()!!.gameClient != null)
+            PW = getAccount()!!.gameClient
         if (map == null)
             return
         if (map.getCase(cell) == null)
@@ -3133,7 +3140,7 @@ else -> {return
     }
 
     fun getBankCost(): Int {
-        return getAccount().bank.size
+        return getAccount()!!.bank.size
     }
 
     fun openBank() {
@@ -3162,7 +3169,7 @@ else -> {return
 
             val kamas: Long = this.kamas
             val remaining: Long = kamas - cost
-            val bank: Long = this.getAccount().getBankKamas()
+            val bank: Long = this.getAccount()!!.getBankKamas()
             val total: Long = bank + kamas
             if (remaining < 0) {
 
@@ -3200,7 +3207,7 @@ else -> {return
 }
 "[bankCost]" -> {return getBankCost().toString() + ""
 }
-"[points]" -> {return this.getAccount().points.toString() + ""
+"[points]" -> {return this.getAccount()!!.points.toString() + ""
 }
 "[nbrOnline]" -> {return Config.gameServer!!.getClients().size.toString() + ""
 }
@@ -3216,25 +3223,25 @@ else -> {return str
         SocketManager.send(this, "ILS" + 2000)
         this.regenRate = 2000
         this.curMap.addPlayer(this)
-        if (getAccount().gameClient != null)
+        if (getAccount()!!.gameClient != null)
             SocketManager.GAME_SEND_STATS_PACKET(this)
         this.fight = null
         this.away = false
     }
 
     fun getBankKamas(): Long {
-        return getAccount().getBankKamas()
+        return getAccount()!!.getBankKamas()
     }
 
     fun setBankKamas(i: Long) {
-        var account: Account = getAccount()
+        var account: Account = getAccount()!!
         account.setBankKamas(i)
         DatabaseManager.get(BankData::class.java).update(account)
     }
 
     fun parseBankPacket(): String {
         var packet: StringBuilder = StringBuilder()
-        for (entry in  getAccount().bank)
+        for (entry in  getAccount()!!.bank)
             packet.append("O").append(entry.encodeItem()).append(";")
         if (getBankKamas() != 0L)
             packet.append("G").append(getBankKamas())
@@ -3265,7 +3272,7 @@ else -> {return str
         if (PersoObj == null || PersoObj.position.toInt() != Constant.ITEM_POS_NO_EQUIPED) // Si c'est un item �quip� ...
             return
 
-        var account: Account = getAccount()
+        var account: Account = getAccount()!!
         var BankObj: GameObject? = getSimilarBankItem(PersoObj)
         var newQua: Int = PersoObj.quantity - qua
         if (BankObj == null) // Ajout d'un nouvel objet dans la banque
@@ -3312,11 +3319,11 @@ else -> {return str
         }
         SocketManager.GAME_SEND_Ow_PACKET(this)
         DatabaseManager.get(PlayerData::class.java).update(this)
-        DatabaseManager.get(BankData::class.java).update(getAccount())
+        DatabaseManager.get(BankData::class.java).update(getAccount()!!)
     }
 
     private fun getSimilarBankItem(exGameObject: GameObject): GameObject? {
-        var account: Account = getAccount()
+        var account: Account = getAccount()!!
         if(account.bank != null)
             for (gameObject in  account.bank)
                 if (gameObject != null && World.world.conditionManager.stackIfSimilar(gameObject, exGameObject, true))
@@ -3330,7 +3337,7 @@ else -> {return str
         var BankObj: GameObject? = World.world.getGameObject(guid)
 
         //Si le joueur n'a pas l'item dans sa banque ...
-        var index: Int = getAccount().bank.indexOf(BankObj)
+        var index: Int = getAccount()!!.bank.indexOf(BankObj)
         if (index == -1)
             return
 
@@ -3342,7 +3349,7 @@ else -> {return str
             //S'il ne reste rien en banque
             if (newQua <= 0) {
                 //On retire l'item de la banque
-                getAccount().bank.removeAt(index)
+                getAccount()!!.bank.removeAt(index)
                 //On l'ajoute au joueur
 
                 objects[guid] = BankObj!!
@@ -3375,7 +3382,7 @@ else -> {return str
             //S'il ne reste rien en banque
             if (newQua <= 0) {
                 //On retire l'item de la banque
-                getAccount().bank.removeAt(index)
+                getAccount()!!.bank.removeAt(index)
                 World.world.removeGameObject(BankObj!!.guid)
                 //On Modifie la quantit� de l'item du sac du joueur
                 PersoObj.quantity = PersoObj.quantity + BankObj!!.quantity
@@ -3402,7 +3409,7 @@ else -> {return str
         SocketManager.GAME_SEND_Ow_PACKET(this)
 
         DatabaseManager.get(PlayerData::class.java).update(this)
-        DatabaseManager.get(BankData::class.java).update(getAccount())
+        DatabaseManager.get(BankData::class.java).update(getAccount()!!)
     }
 
     /** * MountPark * * @param target */
@@ -3646,7 +3653,7 @@ else -> {return str
         str.append(";")
         str.append("?;")
         str.append(this.name).append(";")
-        if (getAccount().isFriendWith(guid)) {
+        if (getAccount()!!.isFriendWith(guid)) {
             str.append(this.level).append(";")
             str.append(alignment).append(";")
         } else {
@@ -3664,7 +3671,7 @@ else -> {return str
         str.append(";")
         str.append("?;")
         str.append(this.name).append(";")
-        if (getAccount().isFriendWith(guid)) {
+        if (getAccount()!!.isFriendWith(guid)) {
             str.append(this.level).append(";")
             str.append(alignment).append(";")
         } else {
@@ -4153,13 +4160,13 @@ else -> {return str
     }
 
     fun isDispo(sender: Player): Boolean {
-        return !isAbsent && (!isInvisible || getAccount().isFriendWith(sender.getAccount().id))
+        return !isAbsent && (!isInvisible || getAccount()!!.isFriendWith(sender.getAccount()!!.id))
 
     }
 
 
     fun setCurrentTitle(i: Int) {
-        currentTitle = (i as Byte)
+        currentTitle = (i.toByte())
     }
 
     //FIN CLONAGE
@@ -4413,7 +4420,7 @@ else -> {return str
         ArrayList(this.items.values).filter(Objects::nonNull).forEach({ `object` -> this.removeItem(`object`.guid, `object`.quantity, true, false) })
         this.setFuneral()
         this.deathCount++
-        this.deadLevel = (this.level as Short)
+        this.deadLevel = (this.level.toShort())
         this.deadType = type
         this.killByTypeId = id
     }
@@ -5039,8 +5046,8 @@ else -> {return str
     fun teleportWithoutBlocked(newMapID: Int, newCellID: Int)//Aucune condition genre <<en_prison>> etc
     {
         var PW: GameClient? = null
-        if (getAccount().gameClient != null) {
-            PW = getAccount().gameClient
+        if (getAccount()!!.gameClient != null) {
+            PW = getAccount()!!.gameClient
         }
         if (World.world.getMap(newMapID) == null) {
             GameServer.a()
@@ -5239,7 +5246,7 @@ else -> {mapID = 8534
                 collector.delCollector(collector.id)
                 DatabaseManager.get(CollectorData::class.java).delete(collector)
             }
-            DatabaseManager.get(PlayerData::class.java).update(getAccount().currentPlayer!!)
+            DatabaseManager.get(PlayerData::class.java).update(getAccount()!!.currentPlayer!!)
             SocketManager.GAME_SEND_EV_PACKET(getGameClient()!!)
             away = false
         } }, 5, TimeUnit.MINUTES)
@@ -5289,7 +5296,7 @@ else -> {mapID = 8534
 
 
     fun getGameClient(): GameClient? {
-        return if (this.getAccount() != null) this.getAccount().gameClient else null
+        return if (this.getAccount() != null) this.getAccount()!!.gameClient else null
     }
 
     fun send(packet: String) {
@@ -5309,7 +5316,7 @@ else -> {mapID = 8534
     }
 
     fun isSubscribe(): Boolean {
-        return !Config.subscription || this.getAccount().isSubscribe()
+        return !Config.subscription || this.getAccount()!!.isSubscribe()
     }
 
     fun isMissingSubscription(): Boolean {
@@ -5363,28 +5370,28 @@ else -> {mapID = 8534
     }
 
     fun addQuestProgression(qProgress: QuestProgress) {
-        getAccount().addQuestProgression(qProgress)
+        getAccount()!!.addQuestProgression(qProgress)
     }
 
     fun delQuestProgress(qProgress: QuestProgress) {
-        getAccount().delQuestProgress(qProgress)
+        getAccount()!!.delQuestProgress(qProgress)
     }
 
     fun getQuestProgress(questId: Int): QuestProgress? {
-        return getAccount().getQuestProgress(this.id, questId)
+        return getAccount()!!.getQuestProgress(this.id, questId)
     }
 
     fun getQuestProgressForCurrentStep(stepId: Int): Optional<QuestProgress> {
-        return getAccount().getQuestProgressions(this.id).filter({ qp -> qp.getCurrentStep() == stepId }).findFirst()
+        return getAccount()!!.getQuestProgressions(this.id).filter({ qp -> qp.getCurrentStep() == stepId }).findFirst()
     }
 
 
     fun getQuestProgressions(): Stream<QuestProgress> {
-        return getAccount().getQuestProgressions(this.id)
+        return getAccount()!!.getQuestProgressions(this.id)
     }
 
     fun sendQuestStatus(questId: Int) {
-        var qp: QuestProgress? = getAccount().getQuestProgress(this.id, questId)
+        var qp: QuestProgress? = getAccount()!!.getQuestProgress(this.id, questId)
 
         if(qp == null) {
             throw NullPointerException("sendQuestStatus called for non current quest")
@@ -5415,7 +5422,7 @@ else -> {mapID = 8534
     }
 
     fun encodeQuestList(): String {
-        return "QL+" + getAccount().getQuestProgressions(this.id).
+        return "QL+" + getAccount()!!.getQuestProgressions(this.id).
             map { qp ->
                 var qi: QuestInfo? = DataScriptVM.getInstance()!!.handlers.questInfo(this, qp.questId, qp.getCurrentStep())
 
@@ -5427,7 +5434,7 @@ else -> {mapID = 8534
     }
 
     fun saveQuestProgress() {
-        getAccount().saveQuestProgress()
+        getAccount()!!.saveQuestProgress()
     }
 
 
@@ -5443,7 +5450,7 @@ else -> {mapID = 8534
         for (player in  this.curMap.players) {
             if(player == null) continue
 
-            var `object`: GameObject = player.getObjetByPos(Constant.ITEM_POS_ARME)!!
+            var `object`: GameObject? = player.getObjetByPos(Constant.ITEM_POS_ARME)
             if (`object` == null) {
                 if (unequip) {
                     for(target in  this.curMap.players)
@@ -5522,7 +5529,7 @@ else -> {mapID = 8534
         }
 
         this.Savestats = this.maxPdv.toString() + "," + this.pa + "," + this.pm + ","  + this.vitalite + "," + this.sagesse + "," + this.terre + "," + this.feu + "," + this.eau + "," + this.air + "," + this.initiative
-        this.maxPdv = 1000
+        _maxPdv = 1000
         this.setPdv(this.maxPdv)
         this.pa = 6
         this.pm = 4
@@ -5558,7 +5565,7 @@ else -> {mapID = 8534
         sortsPlaces.putAll(saveSortsPlaces)
         var stats: List<String> = this.Savestats.split(",")
 
-        this.maxPdv = (stats[0]).toInt()
+        _maxPdv = (stats[0]).toInt()
         this.pa = (stats[1]).toInt()
         this.pm = (stats[2]).toInt()
         this.vitalite = (stats[3]).toInt()
@@ -5594,8 +5601,8 @@ else -> {mapID = 8534
 
     fun consumeCurrency(cur: Currency, qua: Long): Boolean {
         if(cur == Currency.KAMAS) return modKamasDisplay(-qua)
-        if(cur == Currency.POINTS) return getAccount().modPoints(-qua)
-        if(cur.isItem()) return removeItemByTemplateId(cur.item().id, (qua as Int), false)
+        if(cur == Currency.POINTS) return getAccount()!!.modPoints(-qua)
+        if(cur.isItem()) return removeItemByTemplateId(cur.item().id, (qua.toInt()), false)
         throw RuntimeException("unknown currency type")
     }
 

@@ -47,6 +47,7 @@ import java.util.*
 import java.util.Map.Entry
 import java.util.stream.Collectors
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(CommandAdmin::class.java)
 
@@ -271,7 +272,7 @@ var init1: Player? = null
                 mess += player!!.level.toString() + " "
                 mess += player!!.curMap.id.toString() + "(" + player!!.curMap.x.toString() + "/" + player!!.curMap.y.toString() + ") "
                 mess += if (player!!.fight == null) "" else "Combat "
-                mess += player!!.getAccount().currentIp
+                mess += player!!.getAccount()!!.currentIp
 
                 this.sendMessage(mess)
             }
@@ -299,7 +300,7 @@ var init1: Player? = null
                 mess += player!!.level.toString() + " "
                 mess += player!!.curMap.id.toString() + "(" + player!!.curMap.x.toString() + "/" + player!!.curMap.y.toString() + ") "
                 mess += if (player!!.fight == null) "" else "Combat "
-                mess += player!!.getAccount().currentIp
+                mess += player!!.getAccount()!!.currentIp
 
                 this.sendMessage(mess)
             }
@@ -325,7 +326,7 @@ var init1: Player? = null
                 mess += player!!.level.toString() + " "
                 mess += player!!.curMap.id.toString() + "(" + player!!.curMap.x.toString() + "/" + player!!.curMap.y.toString() + ") "
                 mess += if (player!!.fight == null) "" else "Combat "
-                mess += player!!.getAccount().currentIp
+                mess += player!!.getAccount()!!.currentIp
 
                 this.sendMessage(mess)
             }
@@ -526,7 +527,7 @@ var init1: Player? = null
                 return
             }
 
-            player!!.getAccount().mute(time, this.player!!.name)
+            player!!.getAccount()!!.mute(time, this.player!!.name)
             this.sendSuccessMessage("You've mute the player " + player!!.name.toString() + " for " + time.toString() + "minute(s) effective for all players of this account !")
 
             if (!player.isOnline)
@@ -557,7 +558,7 @@ var init1: Player? = null
                 return
             }
 
-            var ip: String = player!!.getAccount().lastIP
+            var ip: String = player!!.getAccount()!!.lastIP
 
             if (ip.equals("",ignoreCase = true)) {
                 this.sendErrorMessage("Sorry but the server don't have any IP of this account, check another account please.")
@@ -595,7 +596,7 @@ var init1: Player? = null
                 return
             }
 
-            var ip: String = player!!.getAccount().lastIP
+            var ip: String = player!!.getAccount()!!.lastIP
 
             if (ip.equals("",ignoreCase = true)) {
                 this.sendErrorMessage("Sorry but the server don't have any IP of this account, check another account please.")
@@ -633,7 +634,7 @@ var init1: Player? = null
                 return
             }
 
-            player!!.getAccount().unMute()
+            player!!.getAccount()!!.unMute()
             this.sendSuccessMessage("You've unmute the player " + player!!.name.toString() + " effective for all players of this account !")
 
             if (!player.isOnline)
@@ -776,8 +777,8 @@ var init1: Player? = null
                 return
             }
 
-            player!!.getAccount().isBanned = true
-            ((DatabaseManager.get(AccountData::class.java) as AccountData)).updateBannedTime(player!!.getAccount(), System.currentTimeMillis() + 86400000 * if (days.toInt() == 0) 999 else days.toInt())
+            player!!.getAccount()!!.isBanned = true
+            ((DatabaseManager.get(AccountData::class.java) as AccountData)).updateBannedTime(player!!.getAccount()!!, System.currentTimeMillis() + 86400000 * if (days.toInt() == 0) 999 else days.toInt())
 
             if (player!!.fight == null) {
                 if (player!!.getGameClient() != null)
@@ -785,7 +786,7 @@ var init1: Player? = null
             } else {
                 SocketManager.send(player!!, "Im1201;" + this.player!!.name)
             }
-            this.sendSuccessMessage("You've kick and ban the player " + player!!.name.toString() + "(Acc: " + player!!.getAccount().name.toString() + ") for " + if (days.toInt() == 0) "unlimited" else days.toString() + " day(s).")
+            this.sendSuccessMessage("You've kick and ban the player " + player!!.name.toString() + "(Acc: " + player!!.getAccount()!!.name.toString() + ") for " + if (days.toInt() == 0) "unlimited" else days.toString() + " day(s).")
             return
         } else if (command.equals("BANACCOUNT", ignoreCase = true)) {
             var mess: String = "Le compte est introuvable"
@@ -847,8 +848,8 @@ var init1: Player? = null
                             player!!.getGameClient()!!.kick()
                         return
                     }
-                    player!!.getAccount().isBanned = true
-                    ((DatabaseManager.get(AccountData::class.java) as AccountData)).update(player!!.getAccount())
+                    player!!.getAccount()!!.isBanned = true
+                    ((DatabaseManager.get(AccountData::class.java) as AccountData)).update(player!!.getAccount()!!)
                     if (player!!.fight == null) {
                         if (player!!.getGameClient() != null)
                             player!!.getGameClient()!!.kick()
@@ -906,7 +907,7 @@ var P: Player? = null
                 this.sendMessage("Le personnage n'a pas ete trouve.")
                 return
             }
-            var IP: String = P!!.getAccount().lastIP
+            var IP: String = P!!.getAccount()!!.lastIP
             if (IP.equals("",ignoreCase = true)) {
                 this.sendMessage("L'IP est invalide.")
                 return
@@ -973,7 +974,7 @@ var P: Player? = null
                 this.sendMessage(mess)
                 return
             }
-            var cBank: Account = perso!!.getAccount()
+            var cBank: Account = perso!!.getAccount()!!
             var mess: String = "==========\n" + "Liste d'items dans la banque :"
             this.sendMessage(mess)
             for (entry in  cBank.bank) {
@@ -1206,14 +1207,14 @@ var P: Player? = null
                 var mess: String = "Le personnage n'existe pas."
                 this.sendMessage(mess)
                 return
-            } else if (perso!!.getAccount().lastIP.equals("", ignoreCase = true)) {
+            } else if (perso!!.getAccount()!!.lastIP.equals("", ignoreCase = true)) {
                 var mess: String = "Aucune IP."
                 this.sendMessage(mess)
                 return
             }
-            var accounts: List<Account> = World.world.getAccountsByIp(perso!!.getAccount().lastIP)
+            var accounts: List<Account> = World.world.getAccountsByIp(perso!!.getAccount()!!.lastIP)
             var mess: String = "Whois sur le joueur : " + name.toString() + "\n"
-            mess += "Derniere IP : " + perso!!.getAccount().lastIP.toString() + "\n"
+            mess += "Derniere IP : " + perso!!.getAccount()!!.lastIP.toString() + "\n"
             var i: Int = 1
             for (a in  accounts) {
                 var persos: String = ""
@@ -1520,7 +1521,7 @@ Thread.State.TERMINATED -> {news++
                 this.sendMessage("Le nom du personnage n'est pas bon.")
                 return
             }
-            ((DatabaseManager.get(BanIpData::class.java) as BanIpData)).delete(perso!!.getAccount().currentIp)
+            ((DatabaseManager.get(BanIpData::class.java) as BanIpData)).delete(perso!!.getAccount()!!.currentIp)
             this.sendMessage("L'IP a ete debanni.")
             return
         } else if (command.equals("UNBAN", ignoreCase = true)) {
@@ -1535,8 +1536,8 @@ Thread.State.TERMINATED -> {news++
                 this.sendMessage("Le personnage n'a pas de compte.")
                 return
             }
-            P!!.getAccount().isBanned = false
-            ((DatabaseManager.get(AccountData::class.java) as AccountData)).update(P!!.getAccount())
+            P!!.getAccount()!!.isBanned = false
+            ((DatabaseManager.get(AccountData::class.java) as AccountData)).update(P!!.getAccount()!!)
             this.sendMessage("Vous avez debanni " + P!!.name.toString() + ".")
             return
         } else if (command.equals("EXIT", ignoreCase = true)) {
@@ -2194,7 +2195,7 @@ else -> {
             return
         } else if (command.equals("LINEM", ignoreCase = true)) {
             var line: String = "|"
-            for(split in  infos[1].split(",")) {
+            for(split in  infos[1].splitJ(",")) {
                 var id: Int = split.toInt()
                 var monster: Monster? = World.world.getMonstre(id)
 
@@ -2379,7 +2380,7 @@ else -> {
                 return
             }
 
-            player!!.getAccount().addGift(template, quantity.toShort(), jp.toByte())
+            player!!.getAccount()!!.addGift(template, quantity.toShort(), jp.toByte())
             this.sendMessage(name.toString() + " a reeu le cadeau : " + template.toString() + ".")
             return
         } else if (command.equals("SHOWPOINTS", ignoreCase = true)) {
@@ -2391,7 +2392,7 @@ else -> {
                 this.sendMessage(mess)
                 return
             }
-            this.sendMessage(perso!!.name.toString() + " possede " + perso!!.getAccount().points.toString() + " points boutique.")
+            this.sendMessage(perso!!.name.toString() + " possede " + perso!!.getAccount()!!.points.toString() + " points boutique.")
             return
         } else if (command.equals("ADDNPC", ignoreCase = true)) {
             var id: Int = 0
@@ -2415,7 +2416,7 @@ else -> {
                     || this.player!!.orientation == 6)
                 str += " mais est invisible (orientation diagonale invalide)"
             str += "."
-            if (((DatabaseManager.get(NpcData::class.java) as NpcData)).insert(Pair(npc!!, (this.player!!.curMap.id as Int))))
+            if (((DatabaseManager.get(NpcData::class.java) as NpcData)).insert(Pair(npc!!, (this.player!!.curMap.id.toInt()))))
                 this.sendMessage(str)
             else
                 this.sendMessage("Erreur lors de la sauvegarde de la position.")
@@ -2440,7 +2441,7 @@ else -> {
             this.player!!.curMap.removeNpcOrMobGroup(id)
 
             var str: String = "Le PNJ a ete supprime."
-            ((DatabaseManager.get(NpcData::class.java) as NpcData)).delete(Pair(npc!!, (this.player!!.curMap.id as Int)))
+            ((DatabaseManager.get(NpcData::class.java) as NpcData)).delete(Pair(npc!!, (this.player!!.curMap.id.toInt())))
             this.sendMessage(str)
             return
         } else if (command.equals("SETSTATS", ignoreCase = true)) {
@@ -2605,7 +2606,7 @@ else -> {
                     perso = this.player!!
             }
 
-            perso!!.getAccount().modPoints(count.toLong())
+            perso!!.getAccount()!!.modPoints(count.toLong())
             if (perso!!.isOnline)
                 SocketManager.GAME_SEND_STATS_PACKET(perso)
             var mess: String = "Vous venez de donner " + count.toString() + " points boutique e " + perso!!.name.toString() + "."

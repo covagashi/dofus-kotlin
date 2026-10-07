@@ -13,6 +13,7 @@ import org.starloco.locos.kernel.Constant
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.TreeMap
+import org.starloco.locos.common.splitJ
 
 class Guild {
 
@@ -122,7 +123,7 @@ class Guild {
     }
 
     private fun decompileSpell(spells: String) {
-        for (split in spells.split("|".toRegex()))
+        for (split in spells.splitJ("|".toRegex()))
             this.spells[(split.split(";")[0]).toInt()] = World.world.getSort((split.split(";")[0]).toInt())!!.getStatsByLevel((split.split(";")[1]).toInt())
     }
 
@@ -144,7 +145,7 @@ class Guild {
     }
 
     private fun decompileStats(statsStr: String) {
-        for (split in statsStr.split("|".toRegex()))
+        for (split in statsStr.splitJ("|".toRegex()))
             this.stats[(split.split(";")[0]).toInt()] = (split.split(";")[1]).toInt()
     }
 

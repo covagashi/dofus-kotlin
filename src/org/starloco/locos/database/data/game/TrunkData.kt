@@ -23,7 +23,7 @@ class TrunkData(dataSource: HikariDataSource?) : FunctionDAO<Trunk>(dataSource, 
         trunk.setObjects(objects)
         trunk.kamas = result.getInt("kamas").toLong()
         trunk.ownerId = result.getInt("owner_id")
-        trunk.key = result.getString("key")
+        trunk.key = result.getString("key") ?: ""
                     }
                 }
         }

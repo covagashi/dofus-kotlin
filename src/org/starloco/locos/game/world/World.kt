@@ -54,6 +54,7 @@ import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
 import kotlin.math.abs
 import kotlin.math.floor
+import org.starloco.locos.common.splitJ
 
 class World private constructor() : Scripted<SWorld> {
     private val scriptVal: SWorld = SWorld(this)
@@ -445,7 +446,7 @@ class World private constructor() : Scripted<SWorld> {
                             chances = _c
                     }
                     if (areaChances.key != "") {// Si la superArea n'est pas null
-                        for (ar in areaChances.key.split(",")) {
+                        for (ar in areaChances.key.splitJ(",")) {
                             val Area = _areas[ar.toInt()] ?: continue
                             for (Map in Area.getMaps()) {
                                 if (Map == null)
@@ -466,7 +467,7 @@ class World private constructor() : Scripted<SWorld> {
                     {
                         for (area in areaChances.value.entries) {
                             val areas = area.key
-                            for (sub in areas.split(",")) {
+                            for (sub in areas.splitJ(",")) {
                                 var subArea: SubArea? = null
                                 try {
                                     subArea = _subAreas[sub.toInt()]
@@ -1381,7 +1382,7 @@ class World private constructor() : Scripted<SWorld> {
         var chal: String
         while (compteur < 100 && toReturn.size < nombreChal) {
             compteur++
-            i = Formulas.getRandomValue(1, challenges.split(";").size)
+            i = Formulas.getRandomValue(1, challenges.splitJ(";").size)
             chal = challenges.split(";")[i - 1]// challenge au hasard dans la liste
 
             if (!toReturn.contains(chal))// si le challenge n'y etait pas encore

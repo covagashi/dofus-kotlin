@@ -27,7 +27,7 @@ class PlayerData(dataSource: HikariDataSource?) : FunctionDAO<Player>(dataSource
 
     @Throws(SQLException::class)
     private fun buildFromResultSet(result: ResultSet): Player {
-        return Player(result.getInt("id"), result.getString("name"), result.getInt("groupe"), result.getInt("sexe"),
+        return Player(result.getInt("id"), result.getString("name") ?: "", result.getInt("groupe"), result.getInt("sexe"),
             result.getInt("class"), result.getInt("color1"), result.getInt("color2"), result.getInt("color3"), result.getLong("kamas"),
             result.getInt("spellboost"), result.getInt("capital"), result.getInt("energy"), result.getInt("level"), result.getLong("xp"),
             result.getInt("size"), result.getInt("gfx"), result.getByte("alignement"), result.getInt("account"), this.getStats(result),
@@ -36,8 +36,8 @@ class PlayerData(dataSource: HikariDataSource?) : FunctionDAO<Player>(dataSource
             result.getInt("pdvper"), result.getString("spells"), result.getString("savepos"), result.getString("jobs"),
             result.getInt("mountxpgive"), result.getInt("mount"), result.getInt("honor"), result.getInt("deshonor"),
             result.getInt("alvl"), result.getString("zaaps"), result.getByte("title"), result.getInt("wife"),
-            result.getString("morphMode"), result.getString("allTitle"), result.getString("emotes"), result.getLong("prison"),
-            false, result.getString("parcho"), result.getLong("timeDeblo"), result.getBoolean("noall"),
+            result.getString("morphMode") ?: "", result.getString("allTitle") ?: "", result.getString("emotes") ?: "", result.getLong("prison"),
+            false, result.getString("parcho") ?: "", result.getLong("timeDeblo"), result.getBoolean("noall"),
             result.getString("deadInformation"), result.getByte("deathCount"), result.getLong("totalKills"))
     }
 
@@ -264,7 +264,7 @@ class PlayerData(dataSource: HikariDataSource?) : FunctionDAO<Player>(dataSource
     fun loadTitles(guid: Int): String {
         try {
             return getData<String>("SELECT * FROM " + getTableName() + " WHERE id = '" + guid + "';") { result ->
-                if (!result.next()) "" else result.getString("allTitle")
+                if (!result.next()) "" else result.getString("allTitle") ?: ""
             } ?: ""
         } catch (e: SQLException) {
             super.sendError(e)

@@ -27,6 +27,7 @@ import java.util.function.Function
 import java.util.stream.Collectors
 import java.util.stream.Stream
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Account::class.java)
 
@@ -78,7 +79,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
         else this.heureVote = (heureVote).toLong()
 
         if (friends != null && !friends.equals("", ignoreCase = true)) {
-            for (f in friends.split(";")) {
+            for (f in friends.splitJ(";")) {
                 try {
                     this.friends.add((f).toInt())
                 } catch (e: Exception) {
@@ -87,7 +88,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
             }
         }
         if (enemy != null && !enemy.equals("", ignoreCase = true)) {
-            for (e in enemy.split(";")) {
+            for (e in enemy.splitJ(";")) {
                 try {
                     this.enemys.add((e).toInt())
                 } catch (e1: Exception) {
@@ -166,7 +167,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
     fun getPlayers(): Map<Int, Player> {
         return World.world.players.stream()
             .filter(Objects::nonNull)
-            .filter { player -> player.getAccount() != null && player.getAccount().id == this.id }
+            .filter { player -> player.getAccount() != null && player.getAccount()!!.id == this.id }
             .collect(Collectors.toMap(Player::id, Function.identity()))
     }
 
@@ -215,7 +216,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
     fun sendOnline() {
         for (id in this.friends) {
             val player = World.world.getPlayer(id)
-            if (player != null && player.showFriendConnection && player.isOnline && player.getAccount().isFriendWith(this.id))
+            if (player != null && player.showFriendConnection && player.isOnline && player.getAccount()!!.isFriendWith(this.id))
                 SocketManager.GAME_SEND_FRIEND_ONLINE(this.currentPlayer!!, player)
         }
     }
@@ -438,7 +439,7 @@ class Account(guid: Int, val name: String, val pseudo: String,
             this.bankKamas = kamas.toLong()
 
             if (items != "") {
-                for (item in items!!.split("|")) {
+                for (item in items!!.splitJ("|")) {
                     if (item != "") {
                         val obj = World.world.getGameObject((item).toInt())
                         if (obj != null)

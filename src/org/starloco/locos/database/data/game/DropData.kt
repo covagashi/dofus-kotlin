@@ -17,7 +17,7 @@ class DropData(dataSource: HikariDataSource?) : FunctionDAO<World.Drop>(dataSour
         getData("SELECT * FROM " + getTableName() + ";") { result ->
                 while (result.next()) {
         val MT: Monster? = World.world.getMonstre(result.getInt("monsterId"))
-        var action: String = result.getString("action")
+        var action: String = result.getString("action") ?: ""
         var condition: String = ""
         var percents: ArrayList<Double> = getPercents(result)
                     if (action != "-1" && action != "1" && action.contains(":")) {

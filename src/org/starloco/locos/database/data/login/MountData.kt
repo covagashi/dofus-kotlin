@@ -22,7 +22,7 @@ class MountData(dataSource: HikariDataSource?) : FunctionDAO<Mount>(dataSource, 
             return getData<Mount?>("SELECT * FROM " + getTableName() + " WHERE `id` = " + id + ";") { result ->
                 if (result.next()) {
                     val mount = Mount(result.getInt("id"), result.getInt("color"), result.getInt("sex"), result.getInt("amour"), result.getInt("endurance"), result.getInt("level"), result.getLong("xp"),
-                        result.getString("name"), result.getInt("fatigue"), result.getInt("energy"), result.getInt("reproductions"), result.getInt("maturity"), result.getInt("serenity"), result.getString("objects"),
+                        result.getString("name") ?: "", result.getInt("fatigue"), result.getInt("energy"), result.getInt("reproductions"), result.getInt("maturity"), result.getInt("serenity"), result.getString("objects"),
                         result.getString("ancestors"), result.getString("capacitys"), result.getInt("size"), result.getInt("cell"), result.getShort("map").toInt(), result.getInt("owner"), result.getInt("orientation"),
                         result.getLong("fecundatedDate"), result.getInt("couple"), result.getInt("savage"))
                     World.world.addMount(mount)

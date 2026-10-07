@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Function
 import java.util.stream.Collectors
 import java.util.stream.Stream
+import org.starloco.locos.common.splitJ
 
 class BigStore(hdvID: Int, taxe: Float, duration: Short, maxItemCompte: Short, lvlMax: Short, strCategory: String) {
 
@@ -44,7 +45,7 @@ class BigStore(hdvID: Int, taxe: Float, duration: Short, maxItemCompte: Short, l
     val taxe: Float = taxe
     val duration: Short = duration
     val maxAccountItem: Short = maxItemCompte
-    private val categories: List<Int> = strCategory.split(",").map { it.toInt() }
+    private val categories: List<Int> = strCategory.splitJ(",").map { it.toInt() }
     val lvlMax: Short = lvlMax
     private val nextLineID = AtomicInteger(1)
     // K: LineID, V: Pair<TemplateID, Stats>

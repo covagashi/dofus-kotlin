@@ -5,6 +5,7 @@ import org.starloco.locos.entity.mount.Mount
 import org.starloco.locos.game.world.World
 import org.starloco.locos.guild.Guild
 import java.util.concurrent.CopyOnWriteArrayList
+import org.starloco.locos.common.splitJ
 
 class MountPark(
     val map: Int,
@@ -32,7 +33,7 @@ class MountPark(
 
     init {
         if (cellOfObjectStr.isNotEmpty()) {
-            for (cases in cellOfObjectStr.split(";")) {
+            for (cases in cellOfObjectStr.splitJ(";")) {
                 val cellId = cases.toInt()
                 if (cellId > 0)
                     this.cellOfObject.add(cellId)
@@ -46,7 +47,7 @@ class MountPark(
         this.price = price
         this.parseBreedObjects(objects)
         //chargement de la liste des dragodinde dans l'table
-        for (i in raising.split(";")) {
+        for (i in raising.splitJ(";")) {
             try {
                 val mount = World.world.getMountById(i.toInt())
                 if (mount != null) this.etable.add(mount)
@@ -55,7 +56,7 @@ class MountPark(
         }
         this.parseDurabilityObjects(objDurab)
         if (etable.isNotEmpty())
-            for (dd in etable.split(";")) {
+            for (dd in etable.splitJ(";")) {
                 try {
                     this.raising.add(dd.toInt())
                     val mount = World.world.getMountById(dd.toInt())
@@ -65,7 +66,7 @@ class MountPark(
                 }
             }
 
-        for (firstCut in etable.split(";"))//PosseseurID,DragoID;PosseseurID2,DragoID2;PosseseurID,DragoID3
+        for (firstCut in etable.splitJ(";"))//PosseseurID,DragoID;PosseseurID2,DragoID2;PosseseurID,DragoID3
         {
             try {
                 val secondCut = firstCut.split(",")
@@ -116,7 +117,7 @@ class MountPark(
 
     private fun parseBreedObjects(objects: String) {
         if (objects.isNotEmpty()) {
-            for (obj in objects.split("|")) {
+            for (obj in objects.splitJ("|")) {
                 val info = obj.split(";")
                 val cellId = info[0].toInt()
                 val objectId = info[1].toInt()
@@ -131,7 +132,7 @@ class MountPark(
 
     private fun parseDurabilityObjects(objects: String) {
         if (objects.isNotEmpty()) {
-            for (obj in objects.split("|")) {
+            for (obj in objects.splitJ("|")) {
                 val info = obj.split(";")
                 val cellId = info[0].toInt()
                 val durability = info[1].toInt()

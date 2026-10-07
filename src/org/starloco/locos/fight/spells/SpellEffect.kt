@@ -113,9 +113,9 @@ var cell: GameCase? = null
 							var damageReturn: Int
 							try {
 								if ((args[1]).toInt() != -1) {
-									damageReturn = ((factor * Formulas.getRandomValue((args[0]).toInt(), (args[1]).toInt())) as Int)
+									damageReturn = ((factor * Formulas.getRandomValue((args[0]).toInt(), (args[1]).toInt())).toInt())
 								} else {
-									damageReturn = ((factor * (args[0]).toInt()) as Int)
+									damageReturn = ((factor * (args[0]).toInt()).toInt())
 								}
 							} catch (e: Exception) {
 								return finalDommage
@@ -854,7 +854,7 @@ else -> {GameServer.a()
 
 					if (level < 0.1) level = 0.1
 
-					var finalDmg: Int = (((8+ factor * level) * a) as Int)
+					var finalDmg: Int = (((8+ factor * level) * a).toInt())
 					if (finalDmg < 1) finalDmg = 1
 					if (finalDmg > target.getPdv()) finalDmg = target.getPdv()
 
@@ -1215,7 +1215,7 @@ else -> {
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage)
 				//Vol de vie
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -1292,7 +1292,7 @@ else -> {
 				var vale: Int = caster!!.getPdv() / 100 * dmg//Valeur des d�gats
 				//retrait de la r�sist fixe
 				vale -= resF
-				var reduc: Int = ((((vale as Float)) / (100 as Float)) as Int) * resP//Reduc %resis
+				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP//Reduc %resis
 				vale -= reduc
 				if (vale < 0)
 					vale = 0
@@ -1350,7 +1350,7 @@ else -> {
 				var vale: Int = caster!!.getPdv() / 100 * dmg//Valeur des d�gats
 				//retrait de la r�sist fixe
 				vale -= resF
-				var reduc: Int = ((((vale as Float)) / (100 as Float)) as Int) * resP//Reduc %resis
+				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP//Reduc %resis
 				vale -= reduc
 				if (vale < 0)
 					vale = 0
@@ -1409,7 +1409,7 @@ else -> {
 				var vale: Int = caster!!.getPdv() / 100 * dmg//Valeur des d�gats
 				//retrait de la r�sist fixe
 				vale -= resF
-				var reduc: Int = ((((vale as Float)) / (100 as Float)) as Int) * resP//Reduc %resis
+				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP//Reduc %resis
 				vale -= reduc
 				if (vale < 0)
 					vale = 0
@@ -1466,7 +1466,7 @@ else -> {
 				var vale: Int = caster!!.getPdv() / 100 * dmg//Valeur des d�gats
 				//retrait de la r�sist fixe
 				vale -= resF
-				var reduc: Int = ((((vale as Float)) / (100 as Float)) as Int) * resP//Reduc %resis
+				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP//Reduc %resis
 				vale -= reduc
 				if (vale < 0)
 					vale = 0
@@ -1524,7 +1524,7 @@ else -> {
 				var vale: Int = caster!!.getPdv() / 100 * dmg//Valeur des d�gats
 				//retrait de la r�sist fixe
 				vale -= resF
-				var reduc: Int = ((((vale as Float)) / (100 as Float)) as Int) * resP//Reduc %resis
+				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP//Reduc %resis
 				vale -= reduc
 				var armor: Int = 0
 				for (SE in  target.getBuffsByEffectID(105)) {
@@ -1616,7 +1616,7 @@ else -> {
 				target.removePdv(caster!!, finalDommage)
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage + "," + Constant.getColorByElement(Constant.ELEMENT_EAU))
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -1660,7 +1660,7 @@ else -> {
 				target.removePdv(caster!!, finalDommage)
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage + "," + Constant.getColorByElement(Constant.ELEMENT_EAU))
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -1708,7 +1708,7 @@ else -> {
 				target.removePdv(caster!!, finalDommage)
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage + "," + Constant.ELEMENT_TERRE)
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -1749,7 +1749,7 @@ else -> {
 				target.removePdv(caster!!, finalDommage)
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage + "," + Constant.ELEMENT_TERRE)
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -1797,7 +1797,7 @@ else -> {
 				target.removePdv(caster!!, finalDommage)
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage + "," + Constant.ELEMENT_AIR)
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -1839,7 +1839,7 @@ else -> {
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage + "," + Constant.ELEMENT_AIR)
 
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -1887,7 +1887,7 @@ else -> {
 				target.removePdv(caster!!, finalDommage)
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage + "," + Constant.getColorByElement(Constant.ELEMENT_FEU))
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -1929,7 +1929,7 @@ else -> {
 				target.removePdv(caster!!, finalDommage)
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage + "," + Constant.getColorByElement(Constant.ELEMENT_FEU))
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -1978,7 +1978,7 @@ else -> {
 
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage + "," + Constant.ELEMENT_NEUTRE)
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -2021,7 +2021,7 @@ else -> {
 				finalDommage = -(finalDommage)
 				SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 100, caster!!.id.toString() + "", target.id.toString() + "," + finalDommage + "," + Constant.ELEMENT_NEUTRE)
 
-				var heal: Int = ((-finalDommage) as Int) / 2
+				var heal: Int = ((-finalDommage).toInt()) / 2
 				if ((caster!!.getPdv() + heal) > caster!!.getPdvMax())
 					heal = caster!!.getPdvMax() - caster!!.getPdv()
 				caster!!.removePdv(caster!!, -heal)
@@ -4056,7 +4056,7 @@ var MG: MonsterGrade? = null
 				dmg = getMaxMinSpell(target, dmg)
 				var vale: Int = caster!!.getPdv() / 100 * dmg// Valor de da�os
 				vale -= resF
-				var reduc: Int = ((((vale as Float)) / (100 as Float)) as Int) * resP// Reduc
+				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP// Reduc
 				// %resis
 				vale -= reduc
 				if (vale < 0)
@@ -4078,14 +4078,14 @@ var MG: MonsterGrade? = null
 	private fun applyEffect_672(targets: ArrayList<Fighter>, fight: Fight) {
 		//Punition
 		//Formule de barge ? :/ Clair que ca punie ceux qui veulent l'utiliser x_x
-		var vale: Double= ((Formulas.getRandomJet(caster, null, jet) as Double) / (100 as Double))
+		var vale: Double= ((Formulas.getRandomJet(caster, null, jet).toDouble()) / (100 as Double))
 		var pdvMax: Int = caster!!.baseMaxPdv()
-		var pVie: Double = (caster!!.getPdv() as Double) / (caster!!.getPdvMax() as Double)
-		var rad: Double = (2 as Double) * Math.PI * ((pVie - 0.5) as Double)
+		var pVie: Double = (caster!!.getPdv().toDouble()) / (caster!!.getPdvMax().toDouble())
+		var rad: Double = (2 as Double) * Math.PI * ((pVie - 0.5).toDouble())
 		var cos: Double = Math.cos(rad)
 		var taux: Double = (Math.pow((cos + 1).toDouble(), 2.0)) / 4.0
 		var dgtMax: Double = vale * pdvMax
-		var dgt: Int = ((taux * dgtMax) as Int)
+		var dgt: Int = ((taux * dgtMax).toInt())
 
 		for (target in  targets) {
 					var target = target

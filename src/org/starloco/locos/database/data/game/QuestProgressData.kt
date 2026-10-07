@@ -8,6 +8,7 @@ import org.starloco.locos.quest.QuestProgress
 import java.sql.SQLException
 import java.util.Objects
 import java.util.stream.Collectors
+import org.starloco.locos.common.splitJ
 
 class QuestProgressData(dataSource: HikariDataSource?) : FunctionDAO<QuestProgress>(dataSource, "quest_progress") {
 
@@ -24,7 +25,7 @@ class QuestProgressData(dataSource: HikariDataSource?) : FunctionDAO<QuestProgre
                     val pId = result.getInt("player_id")
                     val qId = result.getInt("quest_id")
                     val sId = result.getInt("current_step")
-                    val completedObjectives = result.getString("completed_objectives").split("|")
+                    val completedObjectives = result.getString("completed_objectives").splitJ("|")
                         .filter { s -> s.isNotEmpty() }.map { it.toInt() }.toMutableSet()
                     val finished = result.getBoolean("finished")
                     val qp = QuestProgress(id, pId, qId, sId, completedObjectives, finished)

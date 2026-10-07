@@ -47,11 +47,11 @@ class EventData(dataSource: HikariDataSource?) : FunctionDAO<Event>(dataSource, 
 
     private fun getEventById(id: Byte, result: ResultSet): Event? {
         val maxPlayers = result.getByte("maxPlayers")
-        val name = result.getString("name")
-        val description = result.getString("description")
+        val name = result.getString("name") ?: ""
+        val description = result.getString("description") ?: ""
         return when (id.toInt()) {
             // 1: Smiley - TODO: Remettre l'event smiley
-            // return EventSmiley(id, result.getByte("maxPlayers"), result.getString("name"), result.getString("description"))
+            // return EventSmiley(id, result.getByte("maxPlayers"), result.getString("name") ?: "", result.getString("description") ?: "")
             2 -> EventFindMe(id, maxPlayers, name, description) // Trouve-moi
             else -> null
         }

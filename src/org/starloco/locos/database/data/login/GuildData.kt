@@ -19,7 +19,7 @@ class GuildData(dataSource: HikariDataSource?) : FunctionDAO<Guild>(dataSource, 
         try {
             return getData<Guild?>("SELECT * FROM " + getTableName() + " WHERE `id` = " + id + ";") { result ->
                 if (result.next()) {
-                    val guild = Guild(result.getInt("id"), result.getString("name"), result.getString("emblem"), result.getInt("lvl"), result.getLong("xp"), result.getInt("capital"), result.getInt("maxCollectors"), result.getString("spells"), result.getString("stats"), result.getLong("date"))
+                    val guild = Guild(result.getInt("id"), result.getString("name") ?: "", result.getString("emblem"), result.getInt("lvl"), result.getLong("xp"), result.getInt("capital"), result.getInt("maxCollectors"), result.getString("spells"), result.getString("stats"), result.getLong("date"))
                     World.world.addGuild(guild)
                     guild
                 } else {

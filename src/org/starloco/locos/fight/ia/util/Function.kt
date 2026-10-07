@@ -1684,7 +1684,7 @@ when (SE.effectID) {
 
                 if (cell!!.firstFighter == null && cell!!.isWalkable(true, true, -1) && id != cellEnd) {
                     if (PathFinding.casesAreInSameLine(fight.map!!, id, cellEnd, 'z', spell.maxPO)) {
-                        if (spell.hasLDV() && !Formulas.checkLos(fight.map, (cell!!.getId() as Short), (cellEnd as Short)))
+                        if (spell.hasLDV() && !Formulas.checkLos(fight.map, (cell!!.getId().toShort()), (cellEnd.toShort())))
                             break
 
                         cells.add(id)

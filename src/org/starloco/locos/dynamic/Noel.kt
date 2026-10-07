@@ -5,6 +5,7 @@ import org.starloco.locos.common.Formulas
 import org.starloco.locos.common.SocketManager
 import org.starloco.locos.game.world.World
 import org.starloco.locos.`object`.GameObject
+import org.starloco.locos.common.splitJ
 
 object Noel {
 
@@ -23,7 +24,7 @@ object Noel {
         } else if (value >= 5000 && value < 10000) {//Manuel du tailleur
             template = 966
         } else if (value >= 10000 && value < 100000) {//All objects
-            template = (objectOne.split(",")[Formulas.getRandomValue(0, objectOne.split(",").size - 1)]).toInt()
+            template = (objectOne.split(",")[Formulas.getRandomValue(0, objectOne.splitJ(",").size - 1)]).toInt()
         }
         val obj = World.world.getObjTemplate(template)!!.createNewItem(1, false)
         if (player.addItem(obj!!, true, false))
@@ -42,7 +43,7 @@ object Noel {
         } else if (value >= 5000 && value < 10000) {//Manuel du tailleur
             template = 966
         } else if (value >= 10000 && value < 100000) {//All objects
-            template = (objectTwo.split(",")[Formulas.getRandomValue(0, objectTwo.split(",").size - 1)]).toInt()
+            template = (objectTwo.split(",")[Formulas.getRandomValue(0, objectTwo.splitJ(",").size - 1)]).toInt()
         }
         val obj = World.world.getObjTemplate(template)!!.createNewItem(1, false)
         if (player.addItem(obj!!, true, false))
@@ -61,7 +62,7 @@ object Noel {
         } else if (value >= 5000 && value < 10000) {//Manuel du tailleur
             template = 966
         } else if (value >= 10000 && value < 100000) {//All objects
-            template = (objectTree.split(",")[Formulas.getRandomValue(0, objectTree.split(",").size - 1)]).toInt()
+            template = (objectTree.split(",")[Formulas.getRandomValue(0, objectTree.splitJ(",").size - 1)]).toInt()
         }
         val obj = World.world.getObjTemplate(template)!!.createNewItem(1, false)
         if (player.addItem(obj!!, true, false))
@@ -80,7 +81,7 @@ object Noel {
         } else if (value >= 5000 && value < 10000) {//Manuel du tailleur
             template = 966
         } else if (value >= 10000 && value < 100000) {//All objects
-            template = (objectFour.split(",")[Formulas.getRandomValue(0, objectFour.split(",").size - 1)]).toInt()
+            template = (objectFour.split(",")[Formulas.getRandomValue(0, objectFour.splitJ(",").size - 1)]).toInt()
         }
         val obj = World.world.getObjTemplate(template)!!.createNewItem(1, false)
         if (player.addItem(obj!!, true, false))
@@ -99,7 +100,7 @@ object Noel {
         } else if (value >= 5000 && value < 10000) {//Manuel du tailleur
             template = 966
         } else if (value >= 10000 && value < 100000) {//All objects
-            template = (objectFive.split(",")[Formulas.getRandomValue(0, objectFive.split(",").size - 1)]).toInt()
+            template = (objectFive.split(",")[Formulas.getRandomValue(0, objectFive.splitJ(",").size - 1)]).toInt()
         }
         val obj = World.world.getObjTemplate(template)!!.createNewItem(1, false)
         if (player.addItem(obj!!, true, false))

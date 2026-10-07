@@ -11,6 +11,7 @@ import org.starloco.locos.factory.EventDispatcherFactory
 import org.starloco.locos.game.filter.PacketFilter
 import org.starloco.locos.game.world.World
 import org.starloco.locos.kernel.Config
+import org.starloco.locos.common.splitJ
 
 class GameHandler : IoHandler {
 
@@ -24,7 +25,7 @@ class GameHandler : IoHandler {
     }
 
     override fun messageReceived(arg0: IoSession, arg1: Any) {
-        val client = arg0.getAttribute("client") as GameClient
+        val client = arg0.getAttribute("client") as GameClient?
         var packet = arg1 as String
 
         if (client != null) {
@@ -39,7 +40,7 @@ class GameHandler : IoHandler {
             for (p in s) {
                 var p = p
                 if (p[0] == 'ù') {
-                    if (p.split("ù").size < 3) continue
+                    if (p.splitJ("ù").size < 3) continue
                     p = p.split("ù")[2]
                 }
                 try {
@@ -87,7 +88,7 @@ class GameHandler : IoHandler {
     }
 
     override fun messageSent(arg0: IoSession, arg1: Any) {
-        val client = arg0.getAttribute("client") as GameClient
+        val client = arg0.getAttribute("client") as GameClient?
 
         if (client != null) {
             if (Config.debug) {
@@ -113,7 +114,7 @@ class GameHandler : IoHandler {
     }
 
     fun kick(arg0: IoSession) {
-        val client = arg0.getAttribute("client") as GameClient
+        val client = arg0.getAttribute("client") as GameClient?
         if (client != null) {
             client.disconnect()
             client.kick()

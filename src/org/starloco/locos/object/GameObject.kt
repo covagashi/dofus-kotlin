@@ -20,6 +20,7 @@ import java.util.Collections
 import java.util.HashMap
 import kotlin.math.floor
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(GameObject::class.java)
 
@@ -111,7 +112,7 @@ open class GameObject {
 
         var dj1 = ""
         if (!strStats.equals("")) {
-            for (split in strStats.split(",")) {
+            for (split in strStats.splitJ(",")) {
                 try {
                     if (split.equals(""))
                         continue
@@ -356,7 +357,7 @@ open class GameObject {
             } else if (key == Constant.STATS_NAME_DJ) {
                 if (value == "0d0+0")
                     continue
-                for (i in value!!.split(",")) {
+                for (i in value!!.splitJ(",")) {
                     stats.append(",").append(Integer.toHexString(key)).append("###").append(i)
                 }
                 continue
@@ -508,7 +509,7 @@ open class GameObject {
             } else if (key == Constant.STATS_GRADE_TRAQUE || key == Constant.STATS_ALIGNEMENT_TRAQUE || key == Constant.STATS_NIVEAU_TRAQUE) {
                 stats.append(Integer.toHexString(key)).append("#0#0#").append(value).append("#0")
             } else if (key == Constant.STATS_NAME_DJ) {
-                for (i in value!!.split(","))
+                for (i in value!!.splitJ(","))
                     stats.append(",").append(Integer.toHexString(key)).append("#0#0#").append(i)
             } else if (key == Constant.CAPTURE_MONSTRE) {
                 stats.append(Integer.toHexString(key)).append("#0#0#").append(value)

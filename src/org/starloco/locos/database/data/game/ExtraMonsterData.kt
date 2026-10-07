@@ -10,7 +10,9 @@ class ExtraMonsterData(dataSource: HikariDataSource?) : FunctionDAO<Any>(dataSou
     override fun loadFully() {
         try {
         getData("SELECT * from extra_monster") { result ->
+        while (result.next()) {
         World.world.addExtraMonster(result.getInt("idMob"), result.getString("superArea"), result.getString("subArea"), result.getInt("chances"))
+                }
                 }
         } catch (e: SQLException) {
         super.sendError(e)

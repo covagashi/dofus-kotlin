@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.Date
+import org.starloco.locos.common.splitJ
 
 object CommandPlayer {
 
@@ -60,7 +61,7 @@ object CommandPlayer {
             } else if (command(msg, "transfert")) {
                 return commandTransfert(player, msg)
             } else if (command(msg, "banque")) {
-                if (!player.getAccount().isSubscribeWithoutCondition()) {
+                if (!player.getAccount()!!.isSubscribeWithoutCondition()) {
                     player.sendMessage(player.getLang().trans("command.commandplayer.life.nosubscribe"))
                     return true
                 }
@@ -72,7 +73,7 @@ object CommandPlayer {
                 if (player.isInPrison() || player.fight != null)
                     return true
                 val count = byteArrayOf(0)
-                World.world.onlinePlayers.stream().filter { p -> p != player && p.party == null && p.getAccount().currentIp == player.getAccount().currentIp && p.fight == null && !p.isInPrison() }.forEach { p ->
+                World.world.onlinePlayers.stream().filter { p -> p != player && p.party == null && p.getAccount()!!.currentIp == player.getAccount()!!.currentIp && p.fight == null && !p.isInPrison() }.forEach { p ->
                     if (count[0].toInt() <= 8) {
                         if (player.party == null) {
                             val party = Party(player, p)
@@ -103,7 +104,7 @@ object CommandPlayer {
             } else if (command(msg, "auction")) {
                 if (player.cantTP() || player.dead.toInt() != 0 || player.isGhost || player.away || player.fight != null)
                     return true
-                AuctionManager.getInstance().onPlayerCommand(player, msg.split(" ").toTypedArray())
+                AuctionManager.getInstance().onPlayerCommand(player, msg.splitJ(" ").toTypedArray())
                 return true
             } else {
                 player.sendMessage(player.getLang().trans("command.commandplayer.default"))
@@ -179,7 +180,7 @@ object CommandPlayer {
 
         val bank = info.size >= 2 && info[1].equals("bank", ignoreCase = true)
 
-        for (obj in ArrayList(if (bank) player.getAccount().bank else player.items.values)) {
+        for (obj in ArrayList(if (bank) player.getAccount()!!.bank else player.items.values)) {
             if (info.size == 2) {
                 if (obj == null || obj.template == null || !obj.template!!.strTemplate.isEmpty())
                     continue

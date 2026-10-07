@@ -18,7 +18,7 @@ class ObjectActionData(dataSource: HikariDataSource?) : FunctionDAO<ObjectAction
         var id: Int = result.getInt("template")
         var template: ObjectTemplate? = World.world.getObjTemplate(id)
                     if (template != null)
-        template.addAction(ObjectAction(result.getString("type"), result.getString("args"), ""))
+        template.addAction(ObjectAction(result.getString("type") ?: "", result.getString("args") ?: "", ""))
                 }
         }
         } catch (e: SQLException) {

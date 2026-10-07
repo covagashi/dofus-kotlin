@@ -12,6 +12,7 @@ import org.starloco.locos.kernel.Main
 import java.util.ArrayList
 import java.util.HashMap
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Spell::class.java)
 
@@ -88,14 +89,14 @@ class Spell(
 
             if (effectTargets.split(":").size > 1)
                 ccET = effectTargets.split(":")[1]
-            for (num in nET.split(";")) {
+            for (num in nET.splitJ(";")) {
                 try {
                     this.effectTargets.add((num).toInt())
                 } catch (e: Exception) {
                     this.effectTargets.add(0)
                 }
             }
-            for (num in ccET.split(";")) {
+            for (num in ccET.splitJ(";")) {
                 try {
                     effectTargetsCC.add((num).toInt())
                 } catch (e: Exception) {
@@ -108,13 +109,13 @@ class Spell(
     private fun parseStates(invalidState: String?, neededState: String?) {
         if (invalidState != null && invalidState.isNotEmpty()) {
             this.invalidStates = ArrayList()
-            for (state in invalidState.split(",")) {
+            for (state in invalidState.splitJ(",")) {
                 this.invalidStates!!.add((state).toByte())
             }
         }
         if (neededState != null && neededState.isNotEmpty()) {
             this.neededStates = ArrayList()
-            for (state in neededState.split(",")) {
+            for (state in neededState.splitJ(",")) {
                 this.neededStates!!.add((state).toByte())
             }
         }
@@ -147,7 +148,7 @@ class Spell(
 
         private fun parseEffect(e: String): ArrayList<SpellEffect> {
             val effets = ArrayList<SpellEffect>()
-            val splt = e.split("|")
+            val splt = e.split("|").dropLastWhile { it.isEmpty() }
             for (a in splt) {
                 try {
                     if (e == "-1")

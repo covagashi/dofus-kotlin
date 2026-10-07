@@ -57,6 +57,7 @@ import org.starloco.locos.script.DataScriptVM
 import org.starloco.locos.script.ScriptVM
 import org.starloco.locos.util.TimerWaiter
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Fight::class.java)
 
@@ -1051,7 +1052,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
             var challengeNumber: Int = if (false || SoulStone.isInArenaMap(this.mapOld.id)) 2 else 1
 
             for (chalInfos in  World.world.getRandomChallenge(challengeNumber, challenges)) {
-                chalInfo = chalInfos.split(",").toTypedArray()
+                chalInfo = chalInfos.splitJ(",").toTypedArray()
                 challengeID = (chalInfo[0]).toInt()
                 challengeXP = (chalInfo[1]).toInt()
                 challengeDP = (chalInfo[2]).toInt()
@@ -1468,7 +1469,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                     player.spec = false
                     SocketManager.send(player, packet)
 
-                    if (player.getAccount().isBanned)
+                    if (player.getAccount()!!.isBanned)
                         player.getGameClient()!!.kick()
                 }
 
@@ -1524,10 +1525,10 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
 
                 if (player.curCell.isWalkableFight())
                     player.teleport(player.curMap, player.curMap.randomFreeCellId)
-                if (player.getAccount().isBanned)
+                if (player.getAccount()!!.isBanned)
                     player.getGameClient()!!.kick()
                 if (fighter.isDeconnected())
-                    player.getAccount().disconnect(player)
+                    player.getAccount()!!.disconnect(player)
                 if (player.morphMode)
                     SocketManager.GAME_SEND_SPELL_LIST(player)
                 if (player != null) {
@@ -1831,7 +1832,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
 
             for (f in  this.getFighters(7))
                 if (f.player != null)
-                    if (perso.getAccount().currentIp.compareTo(f.player!!.getAccount().currentIp) == 0)
+                    if (perso.getAccount()!!.currentIp.compareTo(f.player!!.getAccount()!!.currentIp) == 0)
                         multiIp = true
             if (multiIp) {
                 SocketManager.GAME_SEND_MESSAGE(perso, perso.getLang().trans("fight.join.with.sameip"))
@@ -3403,7 +3404,7 @@ var curMax0: Fighter? = null
                 packet.append(min).append(";").append(max).append(";").append(max).append(";;")
                 
 }
-788 -> {var args: Array<String> = effect.args.split(";").toTypedArray()
+788 -> {var args: Array<String> = effect.args.splitJ(";").toTypedArray()
 
                 if (args[0].equals("125")) {
                     // Chatiment vitalessque
@@ -3776,7 +3777,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                     player.spec = false
                     player.send(packet)
 
-                    if (player.getAccount().isBanned)
+                    if (player.getAccount()!!.isBanned)
                         player.getGameClient()!!.kick()
                 }
 
@@ -3823,10 +3824,10 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
 
                 if (player.curCell.isWalkableFight())
                     player.teleport(player.curMap, player.curMap.randomFreeCellId)
-                if (player.getAccount().isBanned)
+                if (player.getAccount()!!.isBanned)
                     player.getGameClient()!!.kick()
                 if (fighter.isDeconnected())
-                    player.getAccount().disconnect(player)
+                    player.getAccount()!!.disconnect(player)
                 if (player.morphMode)
                     SocketManager.GAME_SEND_SPELL_LIST(player)
                 if (player.party != null && player.party!!.master != null && player.party!!.master!!.id == player.id) {
@@ -3864,7 +3865,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
 
         player.afterFight = true
 
-        var weapon: GameObject = player.getObjetByPos(Constant.ITEM_POS_ARME)!!
+        var weapon: GameObject? = player.getObjetByPos(Constant.ITEM_POS_ARME)
         if (weapon != null) {
             if (Constant.STATS_RESIST in weapon.txtStat) {
                 var statNew: Int = weapon.txtStat[Constant.STATS_RESIST]!!.toInt(16) - 1
@@ -3898,7 +3899,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                     player.teleportOldMap()
 
         if (this.type == Constant.FIGHT_TYPE_PVM) {
-            var obj: GameObject = player.getObjetByPos(Constant.ITEM_POS_FAMILIER)!!
+            var obj: GameObject? = player.getObjetByPos(Constant.ITEM_POS_FAMILIER)
             if (obj != null) {
                 var souls: MutableMap<Int,Int> = HashMap()
 
@@ -3930,7 +3931,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
         if (player.morphMode && player.donjon)
             player.unsetFullMorph()
 
-        var arme: GameObject = player.getObjetByPos(Constant.ITEM_POS_ARME)!!
+        var arme: GameObject? = player.getObjetByPos(Constant.ITEM_POS_ARME)
 
         if (arme != null) {
             if (Constant.STATS_RESIST in arme.txtStat) {
@@ -3947,7 +3948,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
         }
 
         if (player.getObjetByPos(Constant.ITEM_POS_FAMILIER) != null && this.type != Constant.FIGHT_TYPE_CHALLENGE) {
-            var obj: GameObject = player.getObjetByPos(Constant.ITEM_POS_FAMILIER)!!
+            var obj: GameObject? = player.getObjetByPos(Constant.ITEM_POS_FAMILIER)
             if (obj != null) {
                 var pets: PetEntry = World.world.getPetsEntry(obj.guid)!!
                 if (pets != null)
@@ -4187,7 +4188,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                                     this.capturer.remove(f)
                                     continue
                                 }
-                                var playerSoulStone: Couple<Int,Int> = Formulas.decompPierreAme(f.player!!.getObjetByPos(Constant.ITEM_POS_ARME)!!)// R�cup�re les stats de la pierre �quipp�
+                                var playerSoulStone: Couple<Int,Int> = Formulas.decompPierreAme(f!!.player!!.getObjetByPos(Constant.ITEM_POS_ARME)!!)// R�cup�re les stats de la pierre �quipp�
 
                                 if (playerSoulStone.second < maxLvl) {// Si la pierre est trop faible
                                     this.capturer.remove(f)
@@ -4704,7 +4705,7 @@ else -> {itsOk = true
                                         }
                                         
 }
-8 -> {var split: Array<String> = drop.getCondition()!!.split(",").toTypedArray()
+8 -> {var split: Array<String> = drop.getCondition()!!.splitJ(",").toTypedArray()
                                         quantity = Formulas.getRandomValue((split[0]).toInt(), (split[1]).toInt())
                                         itsOk = true
                                         
@@ -4727,7 +4728,7 @@ else -> {itsOk = true
                             var temporary: ArrayList<Drop> = ArrayList(dropsMeats)
                             temporary.shuffle()
 
-                            var weapon: GameObject = player.getObjetByPos(Constant.ITEM_POS_ARME)!!
+                            var weapon: GameObject? = player.getObjetByPos(Constant.ITEM_POS_ARME)
                             var ok: Boolean = weapon != null && weapon.stats.getEffect(795) == 1
 
                             if (ok) {
@@ -4914,7 +4915,7 @@ else -> {itsOk = true
                             xpPlayer = XP.get()
                             if (xpPlayer != 0L) {
                                 if (player.morphMode) {
-                                    var obj: GameObject = player.getObjetByPos(Constant.ITEM_POS_ARME)!!
+                                    var obj: GameObject? = player.getObjetByPos(Constant.ITEM_POS_ARME)
                                     if (obj != null)
                                         if (Constant.isIncarnationWeapon(obj.template!!.id))
                                             if (player.addXpIncarnations(xpPlayer))
@@ -4961,7 +4962,7 @@ else -> {itsOk = true
 
                         if (this.type == Constant.FIGHT_TYPE_AGRESSION) {
                             if (this.init1.player!!.alignment != 0 && this.init0.player!!.alignment != 0) {
-                                if (this.init1.player!!.getAccount().currentIp.compareTo(this.init0.player!!.getAccount().currentIp) != 0 || Config.allowMulePvp)
+                                if (this.init1.player!!.getAccount()!!.currentIp.compareTo(this.init0.player!!.getAccount()!!.currentIp) != 0 || Config.allowMulePvp)
                                     winH = Formulas.calculHonorWin(winners, loosers, i, false)
                                 if (player.deshonor > 0)
                                     winD = -1
@@ -5106,7 +5107,7 @@ else -> {itsOk = true
                     var winD: Int = 0
                     if (this.type == Constant.FIGHT_TYPE_AGRESSION) {
                         if (this.init1.player!!.alignment != 0 && this.init0.player!!.alignment != 0)
-                            if (this.init1.player!!.getAccount().currentIp.compareTo(this.init0.player!!.getAccount().currentIp) != 0 || Config.allowMulePvp)
+                            if (this.init1.player!!.getAccount()!!.currentIp.compareTo(this.init0.player!!.getAccount()!!.currentIp) != 0 || Config.allowMulePvp)
                                 winH = Formulas.calculHonorWin(winners, loosers, i, false)
 
                         if (player == null)

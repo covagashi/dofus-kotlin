@@ -29,6 +29,7 @@ import org.starloco.locos.`object`.entity.SoulStone
 import java.util.*
 import java.util.Map.Entry
 import org.slf4j.LoggerFactory
+import org.starloco.locos.common.splitJ
 
 private val log = LoggerFactory.getLogger(Action::class.java)
 
@@ -306,7 +307,7 @@ open class Action {
                     var tID: Int = (args.split(",")[0]).toInt()
                     var count: Int = (args.split(",")[1]).toInt()
                     var send: Boolean = true
-                    if (args.split(",").size > 2)
+                    if (args.splitJ(",").size > 2)
                         send = args.split(",")[2].equals("1")
 
                     //Si on ajoute
@@ -821,7 +822,7 @@ Constant.STATS_ADD_INTE -> {messID = 14
                     var mapId1: Int = (args.split(":", limit = 2)[1]).toInt()
                     if (player.curMap.id != mapId1)
                         return true
-                    for (MobAndLevel in  args.split(":", limit = 2)[0].split("|")) {
+                    for (MobAndLevel in  args.split(":", limit = 2)[0].splitJ("|")) {
                         var monsterID: Int = -1
                         var monsterLevel: Int = -1
                         var MobOrLevel: List<String> = MobAndLevel.split(",")
@@ -954,7 +955,7 @@ var tempP: Player? = null
                     for (victime in  World.world.onlinePlayers) {
                         if (victime == null || victime == player)
                             continue
-						if (victime.getAccount().currentIp.compareTo(player.getAccount().currentIp) == 0)
+						if (victime.getAccount()!!.currentIp.compareTo(player.getAccount()!!.currentIp) == 0)
                             continue
                         if (victime.alignment == player.alignment || victime.alignment == 0 || victime.alignment == 3 || !victime.showWings)
                             continue
@@ -1004,7 +1005,7 @@ var tempP: Player? = null
                 if (player.fight != null)
                     return true
                 try {
-                    for (MobAndLevel in  args.split("|")) {
+                    for (MobAndLevel in  args.splitJ("|")) {
                         var monsterID: Int = -1
                         var lvlMin: Int = -1
                         var lvlMax: Int = -1
@@ -1080,7 +1081,7 @@ var tempP: Player? = null
                     return true
 
                 var arrays: ArrayList<Couple<Short,Int>> = ArrayList()
-                for (i in  args.split(";"))
+                for (i in  args.splitJ(";"))
                     arrays.add(Couple((i.split(",")[0]).toShort(), (i.split(",")[1]).toInt()))
 
                 var couple: Couple<Short,Int> = arrays[Formulas.random.nextInt(arrays.size)]
@@ -1213,7 +1214,7 @@ var tempP: Player? = null
 116 -> {var EPO: GameObject? = World.world.getGameObject(itemID)
                 if (EPO == null)
                     return true
-                var pets: GameObject = player.getObjetByPos(Constant.ITEM_POS_FAMILIER)!!
+                var pets: GameObject? = player.getObjetByPos(Constant.ITEM_POS_FAMILIER)
                 if (pets == null)
                     return true
                 var MyPets: PetEntry? = World.world.getPetsEntry(pets!!.guid)
@@ -1238,7 +1239,7 @@ var tempP: Player? = null
                 }
                 
 }
-171 -> {var type2: Short = ((args.split(",")[0]).toInt() as Short)
+171 -> {var type2: Short = ((args.split(",")[0]).toInt().toShort())
                 var mapId2: Int = (args.split(",")[1]).toInt()
                 if (player.alignment > 0)
                     return true
@@ -1610,8 +1611,8 @@ var tempP: Player? = null
 }
 230 -> {try {
                     var pts: Int = args.toInt()
-                    var ptsTotal: Long = player.getAccount().points + pts
-                    player.getAccount().modPoints(pts.toLong())
+                    var ptsTotal: Long = player.getAccount()!!.points + pts
+                    player.getAccount()!!.modPoints(pts.toLong())
                     if (player.isOnline)
                         SocketManager.GAME_SEND_STATS_PACKET(player)
                     SocketManager.GAME_SEND_MESSAGE(player, player.getLang().trans("other.action.apply.shop", pts, ptsTotal))
@@ -1655,7 +1656,7 @@ var tempP: Player? = null
                         || pMap == 10134 || pMap == 10135 || pMap == 10136
                         || pMap == 10137 || pMap == 10138) {
                     try {
-                        for (MobAndLevel in  args.split("|")) {
+                        for (MobAndLevel in  args.splitJ("|")) {
                             var monsterID: Int = -1
                             var monsterLevel: Int = -1
                             var MobOrLevel: List<String> = MobAndLevel.split(",")
@@ -1685,7 +1686,7 @@ var tempP: Player? = null
                     var tID: Int = (args.split(",")[0]).toInt()
                     var count: Int = (args.split(",")[1]).toInt()
                     var send: Boolean = true
-                    if (args.split(",").size > 2)
+                    if (args.splitJ(",").size > 2)
                         send = args.split(",")[2].equals("1")
                     var pMap2: Int = player.curMap.id
                     if (pMap2 == 10131 || pMap2 == 10132 || pMap2 == 10133
@@ -2463,14 +2464,14 @@ var tempP: Player? = null
                 var key0: Boolean = false
                 if(player.hasItemTemplate(10207, 1, false)) {
                     var stats: String? = player.getItemTemplate(10207)!!.txtStat[Constant.STATS_NAME_DJ]
-                    for(key in  stats!!.split(",")) {
+                    for(key in  stats!!.splitJ(",")) {
                         if (key.toInt(16) == 8073) key0 = true
                     }
 
                     if(key0){
                         var replace: String = java.lang.Integer.toHexString(8073)
                 newStats = ""
-                        for (i in  stats!!.split(","))
+                        for (i in  stats!!.splitJ(","))
                             if (!i.equals(replace))
                                 newStats += (if (newStats.isEmpty()) i else "," + i)
                         player.getItemTemplate(10207)!!.txtStat.remove(Constant.STATS_NAME_DJ)
@@ -2606,7 +2607,7 @@ var tempP: Player? = null
                         try {
                             var ok1: Boolean = false
                 var ok2 = false
-                            for (i in  stats!!.split(",")) {
+                            for (i in  stats!!.splitJ(",")) {
                                 if(java.lang.Integer.toHexString(7511).equals(i)) {
                                     statsReplace1 = i
                                     ok1 = true
@@ -2623,7 +2624,7 @@ var tempP: Player? = null
                         if(ok) {
                             if (!statsReplace1.isEmpty()) {
                                 var newStats: String = ""
-                                for (i in  stats!!.split(","))
+                                for (i in  stats!!.splitJ(","))
                                     if (!i.equals(statsReplace1))
                                         newStats += (if (newStats.isEmpty()) i else "," + i)
                                 `object`.txtStat.remove(Constant.STATS_NAME_DJ)
@@ -2632,7 +2633,7 @@ var tempP: Player? = null
                             }
                             if (!statsReplace2.isEmpty()) {
                                 var newStats: String = ""
-                                for (i in  stats!!.split(","))
+                                for (i in  stats!!.splitJ(","))
                                     if (!i.equals(statsReplace2))
                                         newStats += (if (newStats.isEmpty()) i else "," + i)
                                 `object`.txtStat.remove(Constant.STATS_NAME_DJ)
@@ -2979,10 +2980,10 @@ var tempP: Player? = null
 }
 996 -> {var curMap: GameMap = player.curMap
                 var mapSecure: ArrayList<Int> = ArrayList<Int>()
-                for (i in  args.split(","))
+                for (i in  args.splitJ(","))
                     mapSecure.add(i.toInt())
 
-                if (!mapSecure.contains((curMap.id as Int))) {
+                if (!mapSecure.contains((curMap.id.toInt()))) {
                     SocketManager.GAME_SEND_Im_PACKET(player, "182")
                     return true
                 }
@@ -3066,7 +3067,7 @@ var tempP: Player? = null
                 player.teleport(mapId, cell, true)
                 
 }
-1002 -> {for(s in  this.args.split(";")) {
+1002 -> {for(s in  this.args.splitJ(";")) {
                     var s1: List<String> = s.split(",")
                     var template: ObjectTemplate? = World.world.getObjTemplate(s1[0].toInt())
                     if(template != null) {
