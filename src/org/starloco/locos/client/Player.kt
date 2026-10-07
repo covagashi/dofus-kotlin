@@ -327,7 +327,7 @@ open class Player : Scripted<SPlayer>, Actor {
     var regenRate: Int= 2000
     private var regenTime: Long = -1                                                //-1 veut dire que la personne ne c'est jamais connecte
     var isInPrivateArea: Boolean= false
-    lateinit var start: Start
+    var start: Start? = null
     var groupId: Int = 0
     @JvmField var isInvisible: Boolean= false
     var changeName: Boolean = false
@@ -1403,7 +1403,7 @@ else -> {turn = 30
     fun boostSpell(spellID: Int): Boolean {
         if (getSortStatBySortIfHas(spellID) == null)
             return false
-        var AncLevel: Int = getSortStatBySortIfHas(spellID).level
+        var AncLevel: Int = getSortStatBySortIfHas(spellID)!!.level
         if (AncLevel == 6)
             return false
         if (spellPts >= AncLevel && World.world.getSort(spellID)!!.getStatsByLevel(AncLevel + 1)!!.reqLevel <= this.level) {
@@ -1437,7 +1437,7 @@ else -> {turn = 30
         if (getSortStatBySortIfHas(spellID) == null) {
             return false
         }
-        var AncLevel: Int = getSortStatBySortIfHas(spellID).level
+        var AncLevel: Int = getSortStatBySortIfHas(spellID)!!.level
         if (AncLevel <= 1)
             return false
 
@@ -1604,8 +1604,8 @@ else -> {turn = 30
             .forEach(sortsPlaces::remove)
     }
 
-    fun getSortStatBySortIfHas(spellID: Int): Spell.SortStats {
-        return sorts[spellID]!!
+    fun getSortStatBySortIfHas(spellID: Int): Spell.SortStats? {
+        return sorts[spellID]
     }
 
     fun parseALK(): String {
@@ -1991,7 +1991,7 @@ else -> {turn = 30
         var pdv: Int = _curPdv
         var pdvMax: Int = this.maxPdv
         if (fight != null && !fight!!.isFinish()) {
-            var f: Fighter = fight!!.getFighterByPerso(this)
+            var f: Fighter? = fight!!.getFighterByPerso(this)
             if (f != null) {
                 pdv = f.getPdv()
                 pdvMax = f.getPdvMax()
@@ -2117,7 +2117,7 @@ else -> {turn = 30
         var stats: Stats = Stats(false, null)
         if (this.fight != null)
             if (this.fight!!.getFighterByPerso(this) != null)
-                for (entry in  this.fight!!.getFighterByPerso(this).getFightBuff())
+                for (entry in  this.fight!!.getFighterByPerso(this)!!.getFightBuff())
                     stats.addOneStat(entry.effectID, entry.value)
 
         for (entry in buffs.entries)
@@ -3736,7 +3736,7 @@ else -> {return str
         }
         //on envoie les packets
         if (fight != null && fight!!.state == 2) {
-            SocketManager.GAME_SEND_ALTER_FIGHTER_MOUNT(fight!!, fight!!.getFighterByPerso(this), id, fight!!.getTeamId(id), fight!!.getOtherTeamId(id))
+            SocketManager.GAME_SEND_ALTER_FIGHTER_MOUNT(fight!!, fight!!.getFighterByPerso(this)!!, id, fight!!.getTeamId(id), fight!!.getOtherTeamId(id))
         } else {
             SocketManager.GAME_SEND_ALTER_GM_PACKET(curMap, this)
         }

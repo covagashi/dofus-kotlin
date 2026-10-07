@@ -145,7 +145,7 @@ class ObjectAction(private val type: String, private val args: String, private v
                                         `val` = player.maxPdv - player.curPdv
                                     player.setPdv(player.curPdv + `val`)
                                     if (player.fight != null)
-                                        player.fight!!.getFighterByPerso(player).setPdv(player.curPdv)
+                                        player.fight!!.getFighterByPerso(player)!!.setPdv(player.curPdv)
                                     SocketManager.GAME_SEND_STATS_PACKET(player)
                                     SocketManager.GAME_SEND_Im_PACKET(player, "01;$`val`")
                                     sureIsOk = true
@@ -262,7 +262,7 @@ class ObjectAction(private val type: String, private val args: String, private v
                             return
                         }
                         id0 = arg.toInt()
-                        val oldLevel = player.getSortStatBySortIfHas(id0).level
+                        val oldLevel = player.getSortStatBySortIfHas(id0)!!.level
                         if (player.getSortStatBySortIfHas(id0) == null) {
                             isOk = false
                             return

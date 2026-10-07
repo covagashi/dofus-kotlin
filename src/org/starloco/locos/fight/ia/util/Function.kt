@@ -1524,13 +1524,13 @@ when (SE.effectID) {
      */
 
     fun moveToAttack(fight: Fight, caster: Fighter, target: Fighter?, spell: SortStats?): Boolean {
-        return target != null && moveToAttack(fight, caster, target.cell!!, spell!!, true)
+        return target != null && moveToAttack(fight, caster, target.cell, spell, true)
     }
     /**
      * Move if needed to cast his spell
      * If can launch his spell, he don't move
      */
-    fun moveToAttack(fight: Fight, caster: Fighter, cellTarget: GameCase, spell: SortStats, doneMove: Boolean): Boolean {
+    fun moveToAttack(fight: Fight, caster: Fighter, cellTarget: GameCase?, spell: SortStats?, doneMove: Boolean): Boolean {
         var cellTarget2: GameCase? = cellTarget
         if (fight == null || caster == null || caster.getCurPm(fight) <= 0)
             return false

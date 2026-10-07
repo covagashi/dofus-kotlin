@@ -4009,8 +4009,8 @@ gameTryCastSpell(packet)
                 removeAction(GA)
                 return
             }
-            if(this.player.curMap.id == 6824 && this.player.start != null && targetCell.getId() == 325 && !this.player.start.leave) {
-                this.player.start.leave = true
+            if(this.player.curMap.id == 6824 && this.player.start != null && targetCell.getId() == 325 && !this.player.start!!.leave) {
+                this.player.start!!.leave = true
                 SocketManager.GAME_SEND_GA_PACKET(this, "", "0", "", "")
                 removeAction(GA)
                 return
@@ -4080,10 +4080,10 @@ gameTryCastSpell(packet)
             this.player.setSitted(false)
             this.player.away = true
         } else {
-            val fighter: Fighter = this.player.fight!!.getFighterByPerso(this.player)
+            val fighter: Fighter? = this.player.fight!!.getFighterByPerso(this.player)
             if (fighter != null) {
                 GA.args = path
-                this.player.fight!!.cast(this.player.fight!!.getFighterByPerso(this.player), {  -> this.player.fight!!.onFighterMovement(fighter, GA) }, null)
+                this.player.fight!!.cast(this.player.fight!!.getFighterByPerso(this.player)!!, {  -> this.player.fight!!.onFighterMovement(fighter!!, GA) }, null)
             }
         }
     }
@@ -4100,11 +4100,11 @@ gameTryCastSpell(packet)
             val fight: Fight? = this.player.fight
 
             if (fight != null) {
-                var SS: Spell.SortStats = this.player.getSortStatBySortIfHas(id)
+                var SS: Spell.SortStats? = this.player.getSortStatBySortIfHas(id)
 
                 if (SS != null)
                     if(this.player.fight!!.curAction.isEmpty())
-                        this.player.fight!!.cast(this.player.fight!!.getFighterByPerso(this.player), {  -> this.player.fight!!.tryCastSpell(this.player.fight!!.getFighterByPerso(this.player), SS, cellId) }, SS)
+                        this.player.fight!!.cast(this.player.fight!!.getFighterByPerso(this.player)!!, {  -> this.player.fight!!.tryCastSpell(this.player.fight!!.getFighterByPerso(this.player)!!, SS, cellId) }, SS)
             }
         } catch (e: NumberFormatException) {
             log.error(packet + "\n" + e)
@@ -4116,7 +4116,7 @@ gameTryCastSpell(packet)
             if(packet.contains("undefined")) return
             val cell: Int = (packet.substring(5)).toInt()
             if (this.player.fight != null && this.player.fight!!.curAction.isEmpty())
-                this.player.fight!!.cast(this.player.fight!!.getFighterByPerso(this.player), {  -> this.player.fight!!.tryCaC(this.player, cell) }, null)
+                this.player.fight!!.cast(this.player.fight!!.getFighterByPerso(this.player)!!, {  -> this.player.fight!!.tryCaC(this.player, cell) }, null)
         } catch (e: Exception) {
             log.error("unexpected error", e)
         }
@@ -6122,7 +6122,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
                 if (obj.template!!.panoId > 0)
                     SocketManager.GAME_SEND_OS_PACKET(this.player, obj.template!!.panoId)
                 if (this.player.fight != null)
-                    SocketManager.GAME_SEND_ON_EQUIP_ITEM_FIGHT(this.player, this.player.fight!!.getFighterByPerso(this.player), this.player.fight!!)
+                    SocketManager.GAME_SEND_ON_EQUIP_ITEM_FIGHT(this.player, this.player.fight!!.getFighterByPerso(this.player)!!, this.player.fight!!)
             }
 
             // Start craft secure show/hide
@@ -6131,9 +6131,9 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
             }
             // End craft secure show/hide
             if(this.player.fight != null) {
-                var target: Fighter = this.player.fight!!.getFighterByPerso(this.player)
+                var target: Fighter? = this.player.fight!!.getFighterByPerso(this.player)
                 this.player.fight!!.getFighters(7).stream().filter({ fighter -> fighter != null && fighter.player != null }).forEach({ fighter -> fighter.player!!.send(this.player.curMap.getFighterGMPacket(this.player)) })
-                target.setPdv(this.player.curPdv)
+                target!!.setPdv(this.player.curPdv)
                 SocketManager.GAME_SEND_STATS_PACKET(this.player)
             }
 
@@ -6829,7 +6829,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             var id: Int = (packet.substring(2)).toInt()
 
             if (this.player.boostSpell(id)) {
-                SocketManager.GAME_SEND_SPELL_UPGRADE_SUCCESS(this, id, this.player.getSortStatBySortIfHas(id).level)
+                SocketManager.GAME_SEND_SPELL_UPGRADE_SUCCESS(this, id, this.player.getSortStatBySortIfHas(id)!!.level)
                 SocketManager.GAME_SEND_STATS_PACKET(this.player)
             } else {
                 SocketManager.GAME_SEND_SPELL_UPGRADE_FAILED(this)
@@ -6847,7 +6847,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
         if(id == -1)
             this.player.exchangeAction = null
         if (this.player.forgetSpell(id)) {
-            SocketManager.GAME_SEND_SPELL_UPGRADE_SUCCESS(this, id, this.player.getSortStatBySortIfHas(id).level)
+            SocketManager.GAME_SEND_SPELL_UPGRADE_SUCCESS(this, id, this.player.getSortStatBySortIfHas(id)!!.level)
             SocketManager.GAME_SEND_STATS_PACKET(this.player)
             this.player.exchangeAction = null
         }
@@ -6874,7 +6874,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             position = (parts[1]).toInt(); // May return -1
         }
 
-        var spellStats: Spell.SortStats = this.player.getSortStatBySortIfHas(spellID)
+        var spellStats: Spell.SortStats? = this.player.getSortStatBySortIfHas(spellID)
         if (spellStats != null) {
             this.player.setSpellShortcuts(spellID, position)
 

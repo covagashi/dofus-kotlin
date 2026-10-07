@@ -108,8 +108,8 @@ open class Fight {
     var collectorProtect: Boolean = false
     var curAction: String = ""
     lateinit var monsterGroup: MonsterGroup
-    lateinit var collector: Collector
-    lateinit var prism: Prism
+    var collector: Collector? = null
+    var prism: Prism? = null
     var map: GameMap? = null
     lateinit var mapOld: GameMap
     lateinit var init0: Fighter
@@ -120,7 +120,7 @@ open class Fight {
     private var defenders: String = ""
     private var trainerWinner: Int= -1
     private var nextId: Int= -100
-    private lateinit var monsterGroup2: MonsterGroup
+    private var monsterGroup2: MonsterGroup? = null
 
     val winners: MutableList<Fighter> = ArrayList()
     val losers: MutableList<Fighter> = ArrayList()
@@ -508,7 +508,7 @@ open class Fight {
 
         var str: String = ""
         if (this.collector != null)
-            str = "A" + this.collector.getFullName().toString() + "|.|" + World.world.getMap(collector.map).x.toString() + "|" + World.world.getMap(collector.map).y
+            str = "A" + this.collector!!.getFullName().toString() + "|.|" + World.world.getMap(collector!!.map).x.toString() + "|" + World.world.getMap(collector!!.map).y
 
         for (z in  World.world.getGuild(guildId)!!.getPlayers()) {
             if (z == null)
@@ -880,21 +880,21 @@ open class Fight {
         this.launchTime = -1
         this.startTime = System.currentTimeMillis()
         if (this.collector != null && this.collectorProtect) {
-            var protectors: ArrayList<Player> = ArrayList(collector.defenseFight.values)
+            var protectors: ArrayList<Player> = ArrayList(collector!!.defenseFight.values)
             for (player in  protectors) {
                 if (player.fight == null && !player.away) {
                     player.setOldPosition()
 
                     if (player.curMap.id != this.mapOld.id) {
-                        player.teleport(this.mapOld.id, this.collector.cell)
+                        player.teleport(this.mapOld.id, this.collector!!.cell)
                     }
 
-                    TimerWaiter.addNext({ this.joinCollectorFight(player!!, collector) }, 1000)
+                    TimerWaiter.addNext({ this.joinCollectorFight(player!!, collector!!) }, 1000)
                 } else {
                     SocketManager.GAME_SEND_MESSAGE(player, player.getLang().trans("fight.startfight.collector.error"))
-                    collector.delDefenseFight(player)
+                    collector!!.delDefenseFight(player)
                 }
-                player.send("gITP-" + collector.id.toString() + "|" + Integer.toString(player.id, 36))
+                player.send("gITP-" + collector!!.id.toString() + "|" + Integer.toString(player.id, 36))
             }
 
             this.collectorProtect = true
@@ -911,7 +911,7 @@ open class Fight {
             if (this.getMobGroup().isFix && checkTimer && this.mapOld.id != 6826 && this.mapOld.id != 10332 && this.mapOld.id != 7388)
                 this.mapOld.spawnAfterTimeGroupFix(this.getMobGroup().cellId);// Respawn d'un groupe fix
             if (Config.modeHeroic)
-                if (this.getMobGroup().isFix && this.checkTimer)
+                if (!this.getMobGroup().isFix && this.checkTimer)
                     this.mapOld.spawnAfterTimeGroup();// Respawn d'un groupe
         }
 
@@ -919,7 +919,7 @@ open class Fight {
             for (z in  World.world.players) {
                 if (z == null)
                     continue
-                if (z.alignment == prism.alignment) {
+                if (z.alignment == prism!!.alignment) {
                     Prism.parseAttack(z)
                     Prism.parseDefense(z)
                 }
@@ -927,7 +927,7 @@ open class Fight {
         }
 
         if (type == Constant.FIGHT_TYPE_PVT && collector != null)
-            collector.inFight = 2.toByte()
+            collector!!.inFight = 2.toByte()
 
         state = Constant.FIGHT_STATE_ACTIVE
         startTime = System.currentTimeMillis()
@@ -1276,10 +1276,10 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                                         SocketManager.GAME_SEND_MESSAGE(player, player.getLang().trans("fight.end.collector"))
                                     }
 
-                                    this.collector.inFight = 0.toByte()
-                                    this.collector._inFightID = -1
+                                    this.collector!!.inFight = 0.toByte()
+                                    this.collector!!._inFightID = -1
 
-                                    World.world.getMap(this.collector.map).players.stream().filter { it != null }
+                                    World.world.getMap(this.collector!!.map).players.stream().filter { it != null }
                                             .forEach { player -> SocketManager.GAME_SEND_MAP_PERCO_GMS_PACKETS(player!!.gameClient!!, player.curMap) }
                                 }
                                 map = null
@@ -1386,7 +1386,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
 
     private fun onPlayerLooseHonor(player: Player) {
         if (type == Constant.FIGHT_TYPE_AGRESSION || type == Constant.FIGHT_TYPE_CONQUETE) {
-            val caster: Fighter = this.getFighterByPerso(player)
+            val caster: Fighter? = this.getFighterByPerso(player)
             if (caster == null || caster.hasLeft()) return
             var winners: ArrayList<Fighter> = ArrayList(this.getTeam(if (caster.team == 0) 2 else 1).values)
             var loosers: ArrayList<Fighter> = ArrayList(this.getTeam(caster.team + 1).values)
@@ -1712,7 +1712,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                 return
             }
 
-            if (this.curAction.equals("")) {
+            if (!this.curAction.equals("")) {
                 TimerWaiter.addNext({ this.endTurn(onAction, current) }, 100)
                 return
             }
@@ -1790,7 +1790,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
             onFighterDie(current, init0)
         }
 
-        if (type == Constant.FIGHT_TYPE_PVM && !allChallenges.isEmpty() && current.isInvocation()
+        if (type == Constant.FIGHT_TYPE_PVM && !allChallenges.isEmpty() && !current.isInvocation()
                 && !(current is CloneFighter) && !(current is CollectorFighter) && current.team == 0 || type == Constant.FIGHT_TYPE_DOPEUL
                 && !allChallenges.isEmpty() && !current.isInvocation() && !(current is CloneFighter) && !(current is CollectorFighter) && current.team == 0) {
             for (c in  allChallenges.entries) {
@@ -1815,7 +1815,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
     }
 
     fun playerPass(player: Player) {
-        val fighter: Fighter = getFighterByPerso(player)
+        val fighter: Fighter? = getFighterByPerso(player)
         if (fighter != null)
             if (fighter.canPlay() && this.curAction.isEmpty())
                 this.endTurn(false, fighter)
@@ -1851,7 +1851,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
             if (onlyGroup0) {
                 var g: Party? = this.init0.player!!.party
                 if (g != null) {
-                    if (g.players.contains(perso)) {
+                    if (!g.players.contains(perso)) {
                         SocketManager.GAME_SEND_GA903_ERROR_PACKET(perso.getGameClient()!!, 'f', guid)
                         return
                     }
@@ -1909,7 +1909,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
             if (onlyGroup1) {
                 var g: Party? = this.init1.player!!.party
                 if (g != null) {
-                    if (g.players.contains(perso)) {
+                    if (!g.players.contains(perso)) {
                         SocketManager.GAME_SEND_GA903_ERROR_PACKET(perso.getGameClient()!!, 'f', guid)
                         return
                     }
@@ -1982,7 +1982,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
             }
         }
         if (prism != null)
-            World.world.players.stream().filter { it != null }.filter({ z -> z.alignment == prism.alignment }).forEach { Prism.parseAttack(perso) }
+            World.world.players.stream().filter { it != null }.filter({ z -> z.alignment == prism!!.alignment }).forEach { Prism.parseAttack(perso) }
     }
 
     @Synchronized private fun joinCollectorFight(player: Player, collector: Collector) {
@@ -2017,13 +2017,13 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
         if (cell == null)
             return
 
-        var prismTeam: Int = if (this.prism.id in this.team0) 0 else 1
+        var prismTeam: Int = if (this.prism!!.id in this.team0) 0 else 1
 
         if (prismTeam == team) {
-            if (player.alignment != this.prism.alignment)
+            if (player.alignment != this.prism!!.alignment)
                 return
         } else {
-            if (player.alignment == this.prism.alignment)
+            if (player.alignment == this.prism!!.alignment)
                 return
         }
 
@@ -2088,7 +2088,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                 if (c.value == null)
                     continue
                 SocketManager.GAME_SEND_CHALLENGE_PERSO(p, c.value.parseToPacket())
-                if (c.value.loose())
+                if (!c.value.loose())
                     c.value.challengeSpecLoose(p)
             }
         }
@@ -2205,7 +2205,7 @@ var curMax0: Fighter? = null
         var team2_ready: Boolean = false
 
         do {
-            if (team1_ready) {
+            if (!team1_ready) {
                 team1_ready = true
                 var team: Map<Int,Fighter> = this.team0
                 for (entry in  team.entries) {
@@ -2221,7 +2221,7 @@ var curMax0: Fighter? = null
                         start0 = curMaxIni0
                 }
             }
-            if (team2_ready) {
+            if (!team2_ready) {
                 team2_ready = true
                 for (entry in  this.team1.entries) {
                     if (this.haveFighterInOrdreJeu(entry.value))
@@ -2271,7 +2271,7 @@ var curMax0: Fighter? = null
         if (current == null)
             return
 
-        var caster: Fighter = getFighterByPerso(perso)
+        var caster: Fighter? = getFighterByPerso(perso)
 
         if (caster == null)
             return
@@ -2391,7 +2391,7 @@ var curMax0: Fighter? = null
     @Synchronized fun tryCastSpell(fighter: Fighter, spell: SortStats, cell: Int): Int {
         val current: Fighter? = this.getFighterByGameOrder()
 
-        if (current == null || spell == null || this.curAction.isEmpty() || current.id != fighter.id) {
+        if (current == null || spell == null || !this.curAction.isEmpty() || current.id != fighter.id) {
             return 10
         }
 
@@ -2543,7 +2543,7 @@ var curMax0: Fighter? = null
     }
 
 
-    fun canCastSpell1(caster: Fighter, spell: SortStats, cell: GameCase, targetCell: Int): Boolean {
+    fun canCastSpell1(caster: Fighter, spell: SortStats?, cell: GameCase, targetCell: Int): Boolean {
         val current: Fighter? = this.getFighterByGameOrder()
 
         if (current == null)
@@ -2692,7 +2692,7 @@ var curMax0: Fighter? = null
             return false
         }
 
-        var t: Fighter = cell.firstFighter!!
+        var t: Fighter? = cell.firstFighter
         var numLunchT: Int = spell.getMaxLaunchByTarget()
 
         if (caster.getType() == 1 && player != null && spell.spellID in player.objectsClassSpell)
@@ -2751,10 +2751,10 @@ var curMax0: Fighter? = null
 
         if (numLunch - LaunchedSpell.getNbLaunch(caster, spell.spellID) <= 0 && numLunch > 0)
             return false
-        if (this.checkKrakenState(caster, spell))
+        if (!this.checkKrakenState(caster, spell))
             return false
 
-        var t: Fighter = cell.firstFighter!!
+        var t: Fighter? = cell.firstFighter
         var numLunchT: Int = spell.getMaxLaunchByTarget()
 
         return !(numLunchT - LaunchedSpell.getNbLaunchTarget(caster, t, spell.spellID) <= 0 && numLunchT > 0)
@@ -2943,7 +2943,7 @@ var curMax0: Fighter? = null
             }
             //endregion
 
-            if (target.hasLeft()) {
+            if (!target.hasLeft()) {
                 deadList.add(target)
             }
             target.setIsDead(true)
@@ -3033,7 +3033,7 @@ var curMax0: Fighter? = null
                         // pr�cedent pour que le startTurn passe au suivant
 
                         if (current.id == target.id) {
-                            if (target.canPlay()) {
+                            if (!target.canPlay()) {
                                 this@Fight.curAction = ""
                                 this@Fight.curPlayer = curPlayer - 1
                                 this@Fight.endTurn(false, current)
@@ -3091,23 +3091,23 @@ var curMax0: Fighter? = null
                 SocketManager.GAME_SEND_FIGHT_PLAYER_DIE_TO_FIGHT(this, 7, target.id)
                 SocketManager.GAME_SEND_GTL_PACKET_TO_FIGHT(this, 7)
 
-                if (target.canPlay() && current.id == target.id && current.hasLeft())
+                if (target.canPlay() && current.id == target.id && !current.hasLeft())
                     this@Fight.endTurn(false, current)
             } else {
                 SocketManager.GAME_SEND_FIGHT_PLAYER_DIE_TO_FIGHT(this, 7, target.id)
                 SocketManager.GAME_SEND_GTL_PACKET_TO_FIGHT(this, 7)
 
-                if (target.canPlay() && current.id == target.id && current.hasLeft())
+                if (target.canPlay() && current.id == target.id && !current.hasLeft())
                     this@Fight.endTurn(false, current)
             }
 
             if (target is CollectorFighter) {// Le percepteur viens de mourrir on met fin au cbt
-                this@Fight.getFighters(target.getTeam2()).stream().filter({ f -> f.isDead }).forEach { f -> 
+                this@Fight.getFighters(target.getTeam2()).stream().filter({ f -> !f.isDead }).forEach { f -> 
                     this@Fight.onFighterDie(f, target)
                     this@Fight.verifIfTeamAllDead()
                 }}
             if (target is PrismFighter) {
-                this@Fight.getFighters(target.getTeam2()).stream().filter({ f -> f.isDead }).forEach { f -> 
+                this@Fight.getFighters(target.getTeam2()).stream().filter({ f -> !f.isDead }).forEach { f -> 
                     this@Fight.onFighterDie(f, target)
                     this@Fight.verifIfTeamAllDead()
                 }}
@@ -3169,13 +3169,13 @@ var curMax0: Fighter? = null
         return fighters
     }
 
-    fun getFighterByPerso(player: Player): Fighter {
+    fun getFighterByPerso(player: Player): Fighter? {
         var fighter: Fighter? = null
         if (this.team0[player.id] != null)
             fighter = this.team0[player.id]
         if (this.team1[player.id] != null)
             fighter = this.team1[player.id]
-        return fighter!!
+        return fighter
     }
 
     private fun getRandomCell(cells: List<GameCase>): GameCase? {
@@ -3186,7 +3186,7 @@ var curMax0: Fighter? = null
         do {
             cell = cells[Formulas.random.nextInt(cells.size)]
             limit++
-        } while ((cell == null || cell.fighters.isEmpty()) && limit < 80)
+        } while ((cell == null || cell.fighters.isNotEmpty()) && limit < 80)
 
         if (limit == 80)
             return null
@@ -3194,9 +3194,9 @@ var curMax0: Fighter? = null
     }
 
     @Synchronized fun exchangePlace(player: Player, cell: Int) {
-        var fighter: Fighter = getFighterByPerso(player)
+        var fighter: Fighter? = getFighterByPerso(player)
 
-        if (fighter == null || collector != null && this.collectorProtect && collector.defenseFight != null && collector.defenseFight.containsValue(player))
+        if (fighter == null || collector != null && this.collectorProtect && collector!!.defenseFight != null && collector!!.defenseFight.containsValue(player))
             return
 
         var team: Int = fighter.team
@@ -3218,7 +3218,7 @@ var curMax0: Fighter? = null
     }
 
     fun isOccuped(cell: Int): Boolean {
-        return map!!.getCase(cell) == null || map!!.getCase(cell)!!.fighters.isEmpty()
+        return map!!.getCase(cell) == null || map!!.getCase(cell)!!.fighters.isNotEmpty()
     }
 
     fun getNextLowerFighterGuid(): Int {
@@ -3273,8 +3273,8 @@ var curMax0: Fighter? = null
         if (this.state == Constant.FIGHT_STATE_INIT)
             return true
 
-        val current: Fighter = this.getFighterByGameOrder()!!
-        val target: Fighter = this.getFighterByPerso(player)
+        val current: Fighter? = this.getFighterByGameOrder()
+        val target: Fighter? = this.getFighterByPerso(player)
 
         if (target == null)
             return false
@@ -3300,7 +3300,7 @@ var curMax0: Fighter? = null
             return false
         }
         if (check) {
-            if (player.fight!!.getFighterByPerso(player).isDeconnected())
+            if (player.fight!!.getFighterByPerso(player)!!.isDeconnected())
                 SocketManager.GAME_SEND_Im_PACKET_TO_FIGHT(this, 7, "1182;" + target.getPacketsName().toString() + "~20")
             target.Disconnect()
         }
@@ -3310,8 +3310,8 @@ var curMax0: Fighter? = null
     }
 
     fun onPlayerReconnection(player: Player): Boolean {
-        val current: Fighter = this.getFighterByGameOrder()!!
-        val target: Fighter = getFighterByPerso(player)
+        val current: Fighter? = this.getFighterByGameOrder()
+        val target: Fighter? = getFighterByPerso(player)
 
         if (target == null || this.state == Constant.FIGHT_STATE_FINISHED)
             return false
@@ -3349,10 +3349,10 @@ var curMax0: Fighter? = null
                 SocketManager.GAME_SEND_GAMETURNSTART_PACKET(player, current.id, ((System.currentTimeMillis() - launchTime)).toInt())
 
             if (this.type == Constant.FIGHT_TYPE_PVM || this.type == Constant.FIGHT_TYPE_DOPEUL && !this.allChallenges.isEmpty()) {
-                this.allChallenges.values.stream().filter({ challenge -> challenge != null && challenge.loose() })
+                this.allChallenges.values.stream().filter({ challenge -> challenge != null && !challenge.loose() })
                         .forEach { challenge -> 
                             SocketManager.GAME_SEND_CHALLENGE_PERSO(player, challenge.parseToPacket())
-                            if (challenge.loose())
+                            if (!challenge.loose())
                                 challenge.challengeSpecLoose(player)
                         }}
             for (f1 in  getFighters(3)) {
@@ -3462,7 +3462,7 @@ else -> {packet.append(effect.value).append(";;;;")
                 if (f == null || f.player == null)
                     continue
                 var perso: Player = f.player!!
-                if (perso.ready)
+                if (!perso.ready)
                     vale = false
             }
             if (vale)
@@ -3471,13 +3471,13 @@ else -> {packet.append(effect.value).append(";;;;")
         }
 
         for (a in 0 until this.team0.size)
-            if (this.team0[this.team0.keys.toTypedArray()[a]]!!.player!!.ready)
+            if (!this.team0[this.team0.keys.toTypedArray()[a]]!!.player!!.ready)
                 vale = false
 
         if (type != 4 && type != 5 && type != 7
                 && type != Constant.FIGHT_TYPE_CONQUETE)
             for (a in 0 until this.team1.size)
-                if (this.team1[this.team1.keys.toTypedArray()[a]]!!.player!!.ready)
+                if (!this.team1[this.team1.keys.toTypedArray()[a]]!!.player!!.ready)
                     vale = false
 
         if (type == 5 || type == 2)
@@ -3669,7 +3669,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                 this.mapOld.removeFight(this.id)
                 SocketManager.GAME_SEND_MAP_FIGHT_COUNT_TO_MAP(World.world.getMap(this.map!!.id))
 
-                val str: String = if (this.prism != null) this.prism.map.toString() + "|" + this.prism.x.toString() + "|" + this.prism.y else ""
+                val str: String = if (this.prism != null) this.prism!!.map.toString() + "|" + this.prism!!.x.toString() + "|" + this.prism!!.y else ""
 
                 this.map = null
                 this.orderPlaying = null
@@ -3693,7 +3693,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                         }
                         /** Prism **/
                         if (fighter.prism != null) {
-                            World.world.players.stream().filter { it != null }.filter({ player -> player.alignment == prism.alignment })
+                            World.world.players.stream().filter { it != null }.filter({ player -> player.alignment == prism!!.alignment })
                                     .forEach { player -> SocketManager.SEND_CS_SURVIVRE_MESSAGE_PRISME(player, str)  }
 
                             fighter.prism!!.fight = null
@@ -3721,7 +3721,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                             this.mapOld.RemoveNpc(fighter.collector!!.id)
                             SocketManager.GAME_SEND_ERASE_ON_MAP_TO_MAP(mapOld, fighter.collector!!.id)
                             fighter.collector!!.reloadTimer()
-                            this.collector.delCollector(fighter.collector!!.id)
+                            this.collector!!.delCollector(fighter.collector!!.id)
                             (DatabaseManager.get(CollectorData::class.java) as CollectorData).delete(fighter.collector!!)
                         }
 
@@ -3737,12 +3737,12 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                                     continue
                                 }
 
-                                if (player.alignment == prism.alignment)
+                                if (player.alignment == prism!!.alignment)
                                     SocketManager.SEND_CD_MORT_MESSAGE_PRISME(player, str)
 
                                 SocketManager.GAME_SEND_am_ALIGN_PACKET_TO_SUBAREA(player, subarea.id.toString() + "|-1|0")
 
-                                if (prism.conquestArea != -1) {
+                                if (prism!!.conquestArea != -1) {
                                     SocketManager.GAME_SEND_aM_ALIGN_PACKET_TO_AREA(player, subarea.area!!.id.toString() + "|-1")
                                     subarea.area!!.prismId =(0)
                                     subarea.area!!.alignement =(0)
@@ -3895,7 +3895,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
 
         if (this.type == Constant.FIGHT_TYPE_PVT)
             if (player.guildMember != null)
-                if (this.collector.guildId == player.guildMember!!.guild.id)
+                if (this.collector!!.guildId == player.guildMember!!.guild.id)
                     player.teleportOldMap()
 
         if (this.type == Constant.FIGHT_TYPE_PVM) {
@@ -4018,8 +4018,8 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
         SocketManager.GAME_SEND_GAMEACTION_TO_FIGHT(this, 7, this.curAction)
         SocketManager.GAME_SEND_GAF_PACKET_TO_FIGHT(this, 7, 2, current.id)
 
-        if (this.curAction.equals("casting")) {
-            val fighter: Fighter = getFighterByPerso(player)
+        if (!this.curAction.equals("casting")) {
+            val fighter: Fighter = getFighterByPerso(player) ?: return
             val currentCell: Int = fighter.cell!!.cellId
 
             this.checkTraps(fighter)
@@ -4331,7 +4331,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
             var starFactor: Double = if (this.getMobGroup() != null) (((this.getMobGroup().getStarBonus()).toDouble() / 100.0) + 1) else 1.0
 
             for (fighter in  winners) {
-                if(fighter.canLoot()) {
+                if(!fighter.canLoot()) {
                     continue
                 }
                 totalProspecting += fighter.getPros()
@@ -4354,9 +4354,9 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
             var kamas: Couple<Int,Int>
 
             if (this.type == Constant.FIGHT_TYPE_PVT && win == 1) {
-                var kamasCollector: Int = (Math.ceil((collector.kamas).toDouble() / (winners.size.toDouble()))).toInt()
+                var kamasCollector: Int = (Math.ceil((collector!!.kamas).toDouble() / (winners.size.toDouble()))).toInt()
                 kamas = Couple(kamasCollector, kamasCollector)
-                dropsCollector = ArrayList(this.collector.getDrops())
+                dropsCollector = ArrayList(this.collector!!.getDrops())
             } else {
                 var minKamas: Int = 0
                 var maxKamas: Int = 0
@@ -4391,7 +4391,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
             while (temporary1.size < winners.size) {
                 var currentProspecting: Int = -1
                 for (fighter in  winners) {
-                    if (fighter.getTotalStats().getEffect(Constant.STATS_ADD_PROS) > currentProspecting && temporary1.contains(fighter)) {
+                    if (fighter.getTotalStats().getEffect(Constant.STATS_ADD_PROS) > currentProspecting && !temporary1.contains(fighter)) {
                         higherFighter = fighter
                         currentProspecting = fighter.getTotalStats().getEffect(Constant.STATS_ADD_PROS)
                     }
@@ -4567,7 +4567,7 @@ Constant.FIGHT_TYPE_PVM -> {try {
                         if (this.type == Constant.FIGHT_TYPE_PVT && win == 1) {
                             if (player != null && memberGuild != 0)
                                 if (player.guildMember != null)
-                                    xpGuild = (Math.floor(this.collector.xp.toDouble() / memberGuild)).toLong()
+                                    xpGuild = (Math.floor(this.collector!!.xp.toDouble() / memberGuild)).toLong()
                         } else {
                             xpGuild = Formulas.getGuildXpWin(i, XP)
                         }
@@ -4875,7 +4875,7 @@ else -> {itsOk = true
                             }
 
                             if (Config.modeHalloween) {
-                                if ((bouftou > 0 || tofu > 0) && player.hasEquiped(976)) {
+                                if ((bouftou > 0 || tofu > 0) && !player.hasEquiped(976)) {
                                     if (bouftou > tofu) {
                                         drops.append(if (drops.length > 0) "," else "").append("8169~1")
                                         player.setMalediction(8169)
@@ -5373,7 +5373,7 @@ Constant.FIGHT_TYPE_CONQUETE -> {infos.append(this.init0.player!!.alignment).app
                 infos.append(this.getTeamSizeWithoutInvocation(this.team0.values)).append(";")
                 // Team2
                 infos.append("0,")
-                infos.append(prism.alignment).append(",")
+                infos.append(prism!!.alignment).append(",")
                 infos.append(this.getTeamSizeWithoutInvocation(this.team1.values)).append(";")
                 
 }
@@ -5402,7 +5402,7 @@ Constant.FIGHT_TYPE_PVT -> {infos.append("0,")
 
     fun getTeamSizeWithoutInvocation(fighters: Collection<Fighter>): Int {
         var i: Int = 0
-        for (fighter in  fighters) if (fighter.isInvocation()) i++
+        for (fighter in  fighters) if (!fighter.isInvocation()) i++
         return i
     }
 
@@ -5516,13 +5516,13 @@ Constant.FIGHT_TYPE_PVT -> {infos.append("0,")
                         fight.init0.id, fight.monsterGroup.id, fight.init0.player!!.curCell.cellId + 1, "0;-1", fight.monsterGroup.cellId, "1;-1")
             } else if (fight.type == Constant.FIGHT_TYPE_PVT) {
                 SocketManager.GAME_SEND_GAME_ADDFLAG_PACKET_TO_PLAYER(player, 5,
-                        fight.init0.id, fight.collector.id, fight.init0.player!!.curCell.cellId + 1, "0;-1", fight.collector.cell, "3;-1")
+                        fight.init0.id, fight.collector!!.id, fight.init0.player!!.curCell.cellId + 1, "0;-1", fight.collector!!.cell, "3;-1")
             } else if (fight.type == Constant.FIGHT_TYPE_CONQUETE) {
                 SocketManager.GAME_SEND_GAME_ADDFLAG_PACKET_TO_PLAYER(player, 0,
-                        fight.init0.id, fight.prism.id, fight.init0.player!!.curCell.cellId, "0;" + fight.init0.player!!.alignment, fight.prism.cell, "0;" + fight.prism.alignment)
+                        fight.init0.id, fight.prism!!.id, fight.init0.player!!.curCell.cellId, "0;" + fight.init0.player!!.alignment, fight.prism!!.cell, "0;" + fight.prism!!.alignment)
             }
             SocketManager.GAME_SEND_REFRESH_TEAM_PACKET_TO_MAP(map, fight.init0.id, fight.team0.values)
-            var id: Int = if (fight.init1 == null) if (fight.collector == null) if (fight.prism == null) -1 else fight.prism.id else fight.collector.id else fight.init1.id
+            var id: Int = if (fight.init1 == null) if (fight.collector == null) if (fight.prism == null) -1 else fight.prism!!.id else fight.collector!!.id else fight.init1.id
             SocketManager.GAME_SEND_REFRESH_TEAM_PACKET_TO_MAP(map, id, fight.team1.values)
         }}
     }

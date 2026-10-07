@@ -790,7 +790,7 @@ class Formulas {
         fun totalCaptChance(pierreChance: Int, p: Player): Int {
             var sortChance = 0
 
-            when (p.getSortStatBySortIfHas(413).level) {
+            when (p.getSortStatBySortIfHas(413)!!.level) {
                 1 -> sortChance = 1
                 2 -> sortChance = 3
                 3 -> sortChance = 6
@@ -828,7 +828,7 @@ class Formulas {
                              Doree: Boolean, p: Player): Int {
             var sortChance = 0
             var ddChance = 0
-            when (p.getSortStatBySortIfHas(414).level) {
+            when (p.getSortStatBySortIfHas(414)!!.level) {
                 1 -> sortChance = 15
                 2 -> sortChance = 20
                 3 -> sortChance = 25
