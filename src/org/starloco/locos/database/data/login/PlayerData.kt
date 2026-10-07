@@ -310,7 +310,7 @@ class PlayerData(dataSource: HikariDataSource?) : FunctionDAO<Player>(dataSource
         var p: PreparedStatement? = null
         try {
             p = getPreparedStatement("UPDATE " + getTableName() + " SET `groupe` = ? WHERE `id`= ?")
-            val id = if (perso.getGroup() != null) perso.getGroup().id else -1
+            val id = if (perso.getGroup() != null) perso.getGroup()!!.id else -1
             p?.setInt(1, id)
             p?.setInt(2, perso.id)
             execute(p)

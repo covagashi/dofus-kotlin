@@ -472,7 +472,7 @@ object CommandPlayer {
             if (target.getGroup() == null || target.isInvisible)
                 continue
 
-            message += "\n- <b><a href='asfunction:onHref,ShowPlayerPopupMenu," + target.name + "'>[" + target.getGroup().name + "] " + target.name + "</a></b>"
+            message += "\n- <b><a href='asfunction:onHref,ShowPlayerPopupMenu," + target.name + "'>[" + target.getGroup()!!.name + "] " + target.name + "</a></b>"
             vide = false
         }
         if (vide)

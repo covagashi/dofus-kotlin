@@ -3195,7 +3195,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                         return
                     }
                     if (target.getGroup() != null && this.player.getGroup() == null) {
-                        if (!target.getGroup().isPlayer) {
+                        if (!target.getGroup()!!.isPlayer) {
                             SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this, 'E')
                             return
                         }
@@ -6490,7 +6490,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             return
         }
         if (target.getGroup() != null && this.player.getGroup() == null) {
-            if (!target.getGroup().isPlayer) {
+            if (!target.getGroup()!!.isPlayer) {
                 SocketManager.GAME_SEND_MESSAGE(this.player, this.player.getLang().trans("game.gameclient.inviteparty.noauthorize"))
                 return
             }

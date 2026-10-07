@@ -45,10 +45,10 @@ object SocketManager {
 
     @JvmStatic fun send(player: Player, packet: String) {
         if (player != null && player.getAccount() != null)
-            SocketManager.send(player.getGameClient()!!, packet)
+            SocketManager.send(player.getGameClient(), packet)
     }
 
-    @JvmStatic fun send(client: GameClient, packet: String) {
+    @JvmStatic fun send(client: GameClient?, packet: String) {
         if (client != null && client.getSession() != null && !client.getSession().isClosing() && client.getSession().isConnected()) {
             client.send(packet)
         }

@@ -95,14 +95,14 @@ class CommandAdmin(player: Player) : AdminUser(player) {
 
             if (cmd.equals("", ignoreCase = true)) {
                 this.sendMessage("\nVous avez actuellement le groupe GM " + this.player!!.getGroup()!!.name.toString() + ".\nCommandes disponibles :\n")
-                for (commande in  this.player!!.getGroup().getCommands()) {
+                for (commande in  this.player!!.getGroup()!!.getCommands()) {
                     var args: String = if ((commande.args != null && !commande.args.equals("", ignoreCase = true))) (" + " + commande.args) else ("")
                     var desc: String = if ((commande.desc != null && !commande.desc.equals("", ignoreCase = true))) (commande.desc) else ("")
                     this.sendMessage("<u>" + commande.name + args.toString() + "</u> - " + desc)
                 }
             } else {
                 this.sendMessage("\nVous avez actuellement le groupe GM " + this.player!!.getGroup()!!.name.toString() + ".\nCommandes recherches :\n")
-                for (commande in  this.player!!.getGroup().getCommands()) {
+                for (commande in  this.player!!.getGroup()!!.getCommands()) {
                     if (commande.name.contains(cmd.uppercase())) {
                         var args: String = if ((commande.args != null && !commande.args.equals("", ignoreCase = true))) (" + " + commande.args) else ("")
                         var desc: String = if ((commande.desc != null && !commande.desc.equals("", ignoreCase = true))) (commande.desc) else ("")

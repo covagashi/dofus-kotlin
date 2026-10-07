@@ -674,8 +674,8 @@ open class Player : Scripted<SPlayer>, Actor {
 
     fun isDead(): Byte = dead
 
-    fun getGroup(): Group {
-        return Group.byId(this.groupId)!!
+    fun getGroup(): Group? {
+        return Group.byId(this.groupId)
     }
 
     fun setGroupe(groupId: Int, reload: Boolean) {
@@ -1874,7 +1874,7 @@ else -> {turn = 30
             } else {
                 if (currentTitle.toInt() == 2)
                     setCurrentTitle(0)
-                var g: Group = this.getGroup()
+                var g: Group? = this.getGroup()
                 var level: Int = this.level
                 if (g != null)
                     if (!g.isPlayer || this.size <= 0) // Si c'est un groupe non joueur ou que l'on est invisible on cache l'aura
