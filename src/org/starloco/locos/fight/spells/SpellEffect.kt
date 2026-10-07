@@ -2695,7 +2695,7 @@ else -> {
 		for (target in  targets) {
 					var target = target
 			if (target.hasBuff(788)) {
-				var buff: SpellEffect = target.getBuff(788)!!
+				var buff: SpellEffect? = target.getBuff(788)
 				if (buff != null && buff.value == 101) {
 					target.addBuff(111, value, buff.turns, true, buff.spell, args, target, false, true)
 					SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, effectID, (target.id).toString(), target.id.toString() + ",+" + value)
@@ -4242,7 +4242,7 @@ var MG: MonsterGrade? = null
 		var casterCell: GameCase = caster!!.cell!!
 		var dir: Char = PathFinding.getDirBetweenTwoCase(casterCell.getId(), cell!!.getId(), fight.map, true)
 		var targetCellId: Int = PathFinding.GetCaseIDFromDirection(casterCell.getId(), dir, fight.map, true)
-		var targetCell: GameCase = fight.map!!.getCase(targetCellId)!!
+		var targetCell: GameCase? = fight.map!!.getCase(targetCellId)
 
 		if (targetCell == null || targetCell.fighters.isEmpty())
 			return

@@ -158,7 +158,7 @@ class Function private constructor() {
             return false
         if (F.getCurPm(fight) <= 0)
             return false
-        var map: GameMap = fight.map!!
+        var map: GameMap? = fight.map
         if (map == null)
             return false
         var cell: GameCase? = F.cell
@@ -233,7 +233,7 @@ class Function private constructor() {
         if (fight == null || F == null || T == null || dist < 1)
             return -1
 
-        var map: GameMap = fight.map!!
+        var map: GameMap? = fight.map
         var cell: GameCase? = F.cell
         var cell2: GameCase? = T.cell
         var temp: GameCase? = null
@@ -970,7 +970,7 @@ class Function private constructor() {
             return 0
         if (F.getCurPm(fight) <= 0)
             return 0
-        var map: GameMap = fight.map!!
+        var map: GameMap? = fight.map
         if (map == null)
             return 0
         var cell: GameCase? = F.cell
@@ -1056,7 +1056,7 @@ class Function private constructor() {
             return 0
         if (F.getCurPm(fight) <= 0)
             return 0
-        var map: GameMap = fight.map!!
+        var map: GameMap? = fight.map
         if (map == null)
             return 0
         var cell: GameCase? = F.cell
@@ -1535,7 +1535,7 @@ when (SE.effectID) {
         if (fight == null || caster == null || caster.getCurPm(fight) <= 0)
             return false
 
-        var map: GameMap = fight.map!!
+        var map: GameMap? = fight.map
         var cell: GameCase? = caster.cell
 
         if (map == null || cell == null || cellTarget2 == null)
@@ -1836,7 +1836,7 @@ when (SE.effectID) {
         var dirs: CharArray = charArrayOf('b', 'd', 'f', 'h')
         if(fight == null || launch == null) return cells
 
-        val map: GameMap = fight.map!!
+        val map: GameMap? = fight.map
         if(map == null) return available
 
         for (dir in  dirs) {

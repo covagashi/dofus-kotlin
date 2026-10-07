@@ -787,7 +787,7 @@ Constant.STATS_ADD_INTE -> {messID = 14
                     return true
                 if (Job < 1)
                     return true
-                var m2: JobStat = player.getMetierByID(Job)!!
+                var m2: JobStat? = player.getMetierByID(Job)
                 if (m2 == null)
                     return true
                 player.unlearnJob(m2!!.id)
@@ -3025,7 +3025,7 @@ var tempP: Player? = null
 
                     if (metierArgs.isMaging()) // Si c'est du FM
                     {
-                        var metierBase: JobStat = player.getMetierByID(World.world.getMetierByMaging(metierID))!!
+                        var metierBase: JobStat? = player.getMetierByID(World.world.getMetierByMaging(metierID))
                         if (metierBase == null)
                             return true; // Si la base n'existe pas
                         if (metierBase.get_lvl() < 65) {

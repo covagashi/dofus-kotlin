@@ -139,7 +139,7 @@ var init1: Player? = null
             init2.fight = fight!!
             return
         } else if (command.equals("ONLINE", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 1) {//Si un nom de perso est specifie
                 try {
                     perso = World.world.getPlayerByName(infos[1])
@@ -186,7 +186,7 @@ var init1: Player? = null
             var mapID: Int = P!!.curMap.id
             var cellID: Int = P!!.curCell.getId()
 
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[2])
@@ -220,7 +220,7 @@ var init1: Player? = null
             this.sendMessage("Le personnage " + P!!.name.toString() + " a ete expulse de son combat.")
             return
         } else if (command.equals("DEBUG", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 1)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[1])
@@ -242,7 +242,7 @@ var init1: Player? = null
             this.sendMessage(str)
             return
         } else if (command.equals("JOBLEFT", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             try {
                 perso = World.world.getPlayerByName(infos[1])
             } catch (e: Exception) {
@@ -350,7 +350,7 @@ var init1: Player? = null
                 this.sendMessage(str)
                 return
             }
-            var P: Player? = this.player!!
+            var P: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 P = World.world.getPlayerByName(infos[2])
@@ -395,7 +395,7 @@ var init1: Player? = null
                 this.sendMessage(str)
                 return
             }
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 3)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[3])
@@ -425,7 +425,7 @@ var init1: Player? = null
                 this.sendMessage(str)
                 return
             }
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[2])
@@ -442,7 +442,7 @@ var init1: Player? = null
             this.sendMessage(str)
             return
         } else if (command.equals("FREEZE", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 1) {
                 perso = World.world.getPlayerByName(infos[1])
             }
@@ -934,7 +934,7 @@ var P: Player? = null
             this.sendMessage("L'IP " + IP.toString() + " a ete banni.")
             return
         } else if (command.equals("SHOWITEM", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             var name: String? = null
             try {
                 name = infos[1]
@@ -960,7 +960,7 @@ var P: Player? = null
             this.sendMessage(mess)
             return
         } else if (command.equals("SHOWBANK", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             var name: String? = null
             try {
                 name = infos[1]
@@ -986,7 +986,7 @@ var P: Player? = null
             this.sendMessage(mess)
             return
         } else if (command.equals("SHOWSTORE", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             var name: String? = null
             try {
                 name = infos[1]
@@ -1012,7 +1012,7 @@ var P: Player? = null
             this.sendMessage(mess)
             return
         } else if (command.equals("SHOWMOUNT", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             var name: String? = null
             try {
                 name = infos[1]
@@ -1077,7 +1077,7 @@ var P: Player? = null
                 this.sendMessage(str)
                 return
             }
-            var target: Player? = this.player!!
+            var target: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 target = World.world.getPlayerByName(infos[2])
@@ -1117,7 +1117,7 @@ var P: Player? = null
                 // ok
             }
 
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[2])
@@ -1144,7 +1144,7 @@ var P: Player? = null
                 // ok
             }
 
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[2])
@@ -1164,7 +1164,7 @@ var P: Player? = null
             this.sendMessage(str)
             return
         } else if (command.equals("NOAGRO", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             var name: String? = null
             try {
                 name = infos[1]
@@ -1318,7 +1318,7 @@ var P: Player? = null
             this.sendMessage(mess)
             return
         } else if (command.equals("DELJOB", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             infos = msg.split(" ", limit = 3)
             var job: Int = -1
             try {
@@ -1339,7 +1339,7 @@ var P: Player? = null
             }
             if (job < 1)
                 return
-            var jobStats: JobStat = perso!!.getMetierByID(job)!!
+            var jobStats: JobStat? = perso!!.getMetierByID(job)
             if (jobStats == null)
                 return
             perso!!.unlearnJob(jobStats.id)
@@ -1427,7 +1427,7 @@ Thread.State.TERMINATED -> {news++
             return
         } else if (command.equals("ENDFIGHTNULL", ignoreCase = true)) {
             var name: String = if (infos.size > 2) infos[2] else ""
-            var target: Player? = if (!name.isEmpty()) World.world.getPlayerByName(name ?: "") else this.player!!
+            var target: Player? = if (!name.isEmpty()) World.world.getPlayerByName(name ?: "") else this.player
 
             //team 1 = red, team 0 = blue
             if(target != null && target.fight != null) {
@@ -1443,7 +1443,7 @@ Thread.State.TERMINATED -> {news++
         } else if (command.equals("ENDFIGHT", ignoreCase = true)) {
             var i: Byte
             var name: String = if (infos.size > 2) infos[2] else ""
-            var target: Player? = if (!name.isEmpty()) World.world.getPlayerByName(name ?: "") else this.player!!
+            var target: Player? = if (!name.isEmpty()) World.world.getPlayerByName(name ?: "") else this.player
 
             try {
                 i = infos[1].toByte()
@@ -1469,7 +1469,7 @@ Thread.State.TERMINATED -> {news++
                     var player: Player? = client.player
                     if (player == null)
                         continue
-                    var f: Fight = player!!.fight!!
+                    var f: Fight? = player!!.fight
                     if (f == null)
                         continue
                     try {
@@ -1562,7 +1562,7 @@ Thread.State.TERMINATED -> {news++
                 var xpTable: ExperienceTables.ExperienceTable = World.world.experiences!!.players
                 if (count > xpTable.maxLevel()) count = xpTable.maxLevel()
 
-                var player: Player? = this.player!!
+                var player: Player? = this.player
 
                 if (infos.size == 3) {
                     player = World.world.getPlayerByName(infos[2])
@@ -1594,7 +1594,7 @@ Thread.State.TERMINATED -> {news++
                 this.sendMessage("Valeur inutile.")
                 return
             }
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size == 3)//Si le nom du perso est specifie
             {
                 var name: String = infos[2]
@@ -1728,7 +1728,7 @@ Thread.State.TERMINATED -> {news++
                 this.sendMessage(str)
                 return
             }
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[2])
@@ -1952,7 +1952,7 @@ else -> {
                 this.sendMessage(str)
                 return
             }
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[2])
@@ -1979,7 +1979,7 @@ else -> {
                 this.sendMessage(str)
                 return
             }
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[2])
@@ -2008,7 +2008,7 @@ else -> {
                 this.sendMessage(str)
                 return
             }
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[2])
@@ -2039,7 +2039,7 @@ else -> {
                     count = 0
                 if (count > 100)
                     count = 100
-                var perso: Player? = this.player!!
+                var perso: Player? = this.player
                 if (infos.size == 3)//Si le nom du perso est specifie
                 {
                     var name: String = infos[2]
@@ -2074,7 +2074,7 @@ else -> {
                 this.sendMessage(str)
                 return
             }
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 3)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[3])
@@ -2084,7 +2084,7 @@ else -> {
                     return
                 }
             }
-            var SM: JobStat = perso!!.getMetierByID(job)!!
+            var SM: JobStat? = perso!!.getMetierByID(job)
             if (SM == null) {
                 var str: String = "Le joueur ne possede pas le metier demande."
                 this.sendMessage(str)
@@ -2110,7 +2110,7 @@ else -> {
                 this.sendMessage(str)
                 return
             }
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[2])
@@ -2125,7 +2125,7 @@ else -> {
             this.sendMessage(str)
             return
         } else if (command.equals("UNLSPELL", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 2)//Si un nom de perso est specifie
             {
                 perso = World.world.getPlayerByName(infos[2])
@@ -2224,7 +2224,7 @@ else -> {
             }
             return
         } else if (command.equals("RES", ignoreCase = true)) {
-            var player: Player? = this.player!!
+            var player: Player? = this.player
 
             if(infos.size > 1) {
                 player = World.world.getPlayerByName(infos[1])
@@ -2262,7 +2262,7 @@ else -> {
             Config.gameServer!!.kickAll(true)
             return
         } else if (command.equals("RESET", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 1) {
                 perso = World.world.getPlayerByName(infos[1])
             }
@@ -2281,7 +2281,7 @@ else -> {
             this.sendMessage("Vous avez restat tout le monde")
             return
         } else if (command.equals("RENAMEPERSO", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 1)
                 perso = World.world.getPlayerByName(infos[1])
             if (perso == null) {
@@ -2384,7 +2384,7 @@ else -> {
             this.sendMessage(name.toString() + " a reeu le cadeau : " + template.toString() + ".")
             return
         } else if (command.equals("SHOWPOINTS", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 1)
                 perso = World.world.getPlayerByName(infos[1])
             if (perso == null) {
@@ -2496,7 +2496,7 @@ else -> {
             this.sendMessage(s)
             return
         } else if (command.equals("EMOTE", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             var emoteId: Int = 0
             try {
                 emoteId = infos[1].toInt()
@@ -2518,7 +2518,7 @@ else -> {
             this.sendMessage(mess)
             return
         } else if (command.equals("CREATEGUILD", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size > 1) {
                 perso = World.world.getPlayerByName(infos[1])
             }
@@ -2565,7 +2565,7 @@ else -> {
             this.sendMessage("Le paquet a ete envoye : " + msg.substring(8 + infos[1].length).toString() + " e " + infos[1].toString() + ".")
             return
         } else if (command.equals("TITRE", ignoreCase = true)) {
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             var TitleID: Byte = 0
             try {
                 TitleID = infos[1].toByte()
@@ -2597,7 +2597,7 @@ else -> {
                 this.sendMessage("Valeur inutile.")
                 return
             }
-            var perso: Player? = this.player!!
+            var perso: Player? = this.player
             if (infos.size == 3)//Si le nom du perso est specifie
             {
                 var name: String = infos[2]
@@ -2804,7 +2804,7 @@ else -> {
                 return
             }
 
-            var qp: QuestProgress = p.getQuestProgress(id)!!
+            var qp: QuestProgress? = p.getQuestProgress(id)
             if (qp == null) {
                 this.sendMessage("Le personnage n'a pas la quete.")
                 return

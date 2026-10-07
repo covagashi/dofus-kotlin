@@ -519,7 +519,7 @@ open class Player : Scripted<SPlayer>, Actor {
                         continue
                     }
 
-                    var obj: GameObject = World.world.getGameObject(guid)!!
+                    var obj: GameObject? = World.world.getGameObject(guid)
                     if (obj == null)
                         continue
 
@@ -579,7 +579,7 @@ open class Player : Scripted<SPlayer>, Actor {
                 continue
             }
 
-            var obj: GameObject = World.world.getGameObject(guid)!!
+            var obj: GameObject? = World.world.getGameObject(guid)
             if (obj != null)
                 objects[obj.guid] = obj
         }
@@ -819,8 +819,8 @@ else -> {objTemplate = id
             this.deleteItem(guid)
         }
 
-        var obj: GameObject = World.world.getObjTemplate(objTemplate)!!.createNewMalediction()!!
-        this.addItem(obj, false, false)
+        var obj: GameObject? = World.world.getObjTemplate(objTemplate)!!.createNewMalediction()
+        this.addItem(obj!!, false, false)
         World.world.addGameObject(obj)
         if (this.fight != null) {
             SocketManager.GAME_SEND_ALTER_GM_PACKET(this.curMap, this)
@@ -841,7 +841,7 @@ else -> {objTemplate = id
             return
         }
 
-        var obj: GameObject = World.world.getObjTemplate(id)!!.createNewFollowPnj(1)!!
+        var obj: GameObject? = World.world.getObjTemplate(id)!!.createNewFollowPnj(1)
         if (obj != null)
             if (this.addItem(obj, false, false))
                 World.world.addGameObject(obj)
@@ -871,8 +871,8 @@ else -> {turn = 30
 }
 }
 
-        var obj: GameObject = World.world.getObjTemplate(id)!!.createNewCandy(turn)!!
-        this.addItem(obj, false, false)
+        var obj: GameObject? = World.world.getObjTemplate(id)!!.createNewCandy(turn)
+        this.addItem(obj!!, false, false)
         World.world.addGameObject(obj)
         SocketManager.GAME_SEND_Ow_PACKET(this)
         SocketManager.GAME_SEND_STATS_PACKET(this)
@@ -994,7 +994,7 @@ else -> {turn = 30
         if (spells.isEmpty())
             return ""
         for (key in  spells.keys) {
-            var SS: Spell.SortStats = spells[key]!!
+            var SS: Spell.SortStats? = spells[key]
             if (SS == null)
                 continue
             packet.append(SS.spellID).append(";").append(SS.level).append(";")
@@ -1032,7 +1032,7 @@ else -> {turn = 30
                 var id: Int = (parts[0]).toInt()
                 var lvl: Int = (parts[1]).toInt()
 
-                var ss: Spell.SortStats = World.world.getSort(id)!!.getStatsByLevel(lvl)!!
+                var ss: Spell.SortStats? = World.world.getSort(id)!!.getStatsByLevel(lvl)
                 if(ss == null) throw IllegalStateException(("player has unknown spell: %d/%d").format( id, lvl))
                 spells[id] = World.world.getSort(id)!!.getStatsByLevel(lvl)!!
 
@@ -1154,7 +1154,7 @@ else -> {turn = 30
 
 
     fun canLearnJob(jobID: Int, sendIm: Boolean): Boolean {
-        var job: Job = World.world.getMetier(jobID)!!
+        var job: Job? = World.world.getMetier(jobID)
         if(job == null) return false
 
 
@@ -1186,7 +1186,7 @@ else -> {turn = 30
                 return false
             }
 
-            var baseJobStats: JobStat = metiers[World.world.getMetierByMaging(jobID)]!!
+            var baseJobStats: JobStat? = metiers[World.world.getMetierByMaging(jobID)]
             if(baseJobStats == null || baseJobStats.get_lvl() < MIN_JOB_FOR_SPECIALTY) {
                 if(sendIm) {
                     SocketManager.GAME_SEND_Im_PACKET(this, "111")
@@ -1199,7 +1199,7 @@ else -> {turn = 30
     }
 
     fun tryLearnJob(jobID: Int): Boolean {
-        var job: Job = World.world.getMetier(jobID)!!
+        var job: Job? = World.world.getMetier(jobID)
         if(job == null) return false
 
         if(!canLearnJob(jobID, true)) return false
@@ -1274,7 +1274,7 @@ else -> {turn = 30
         // Already in the state we want
         if(previousLevel==newLevel) return EnsureSpellLevelResult(false, 0, 0, true)
 
-        var ss: Spell.SortStats = Optional.ofNullable(World.world.getSort(spell)).map({ s -> s.getStatsByLevel(newLevel) }).orElse(null)!!
+        var ss: Spell.SortStats? = Optional.ofNullable(World.world.getSort(spell)).map({ s -> s.getStatsByLevel(newLevel) }).orElse(null)
         if(ss==null) return EnsureSpellLevelResult(false, 0, 0, false)
 
         var ptsDelta: Int = 0
@@ -1471,7 +1471,7 @@ else -> {turn = 30
             return
         }
 
-        var fullMorph: Map<String,String> = World.world.getFullMorph(morphid)!!
+        var fullMorph: Map<String,String>? = World.world.getFullMorph(morphid)
 
         if (fullMorph == null) return
 
@@ -1755,8 +1755,8 @@ else -> {turn = 30
         SocketManager.GAME_SEND_MESSAGE(this, if (Config.startMessage.isNullOrEmpty()) this.getLang().trans("client.player.onjoingame.startmessage") else Config.startMessage!!)
         for (`object` in  this.objects.values) {
             if (`object`.template!!.type == Constant.ITEM_TYPE_FAMILIER) {
-                var p: PetEntry = World.world.getPetsEntry(`object`.guid)!!
-                var pets: Pet = World.world.getPets(`object`.template!!.id)!!
+                var p: PetEntry? = World.world.getPetsEntry(`object`.guid)
+                var pets: Pet? = World.world.getPets(`object`.template!!.id)
 
                 if (p == null || pets == null) {
                     if (p != null && p.pdv > 0)
@@ -1940,7 +1940,7 @@ else -> {turn = 30
         if (`object` != null) {
             `object`.encodeStats()
 
-            var obvi: Int = `object`.stats.effects[970]!!
+            var obvi: Int? = `object`.stats.effects[970]
             if (obvi == null) {
                 str.append(Integer.toHexString(`object`.getAppearanceTemplateId()))
             } else {
@@ -1955,7 +1955,7 @@ else -> {turn = 30
         if (`object` != null) {
             `object`.encodeStats()
 
-            var obvi: Int = `object`.stats.effects[970]!!
+            var obvi: Int? = `object`.stats.effects[970]
             if (obvi == null) {
                 str.append(Integer.toHexString(`object`.getAppearanceTemplateId()))
             } else {
@@ -2099,7 +2099,7 @@ else -> {turn = 30
 
                     if (id > 0 && !itemSetApplied.contains(id)) {
                         itemSetApplied.add(id)
-                        var objectSet: ObjectSet = World.world.getItemSet(id)!!
+                        var objectSet: ObjectSet? = World.world.getItemSet(id)
                         if (objectSet != null)
                             stats = Stats.cumulStat(stats, objectSet.getBonusStatByItemNumb(this.getNumbEquipedItemOfPanoplie(id)))
                     }
@@ -2902,7 +2902,7 @@ else -> {return
         }
         if (cellID == -1 || this.curMap == null)
             return
-        var cell: GameCase = this.curMap.getCase(cellID)!!
+        var cell: GameCase? = this.curMap.getCase(cellID)
         if(cell == null) return
 
         // TODO: Call Lua to finish gathering skills
@@ -3984,7 +3984,7 @@ else -> {return str
             return
         }
 
-        var cell: GameCase = map.getCase(World.world.getZaapCellIdByMapId(id))!!
+        var cell: GameCase? = map.getCase(World.world.getZaapCellIdByMapId(id))
         if (cell == null || !cell.isWalkable(false)) {
             SocketManager.GAME_SEND_WUE_PACKET(this)
             return
@@ -5626,7 +5626,7 @@ else -> {mapID = 8534
 
     fun addItemShortcutSend(position: Int, itemID: Int): Boolean {
         // Ensure user owns items
-        var item: GameObject = objects[itemID]!!
+        var item: GameObject? = objects[itemID]
         if(item == null) return false
 
         var hash: ItemHash = ItemHash(item)

@@ -232,7 +232,7 @@ open class Fight {
         var e: ArrayList<Map.Entry<Int,Fighter>> = ArrayList(this.team1.entries)
         for (entry in  e) {
             var f: Fighter = entry.value
-            var cell: GameCase = getRandomCell(start1)!!
+            var cell: GameCase? = getRandomCell(start1)
             if (cell == null) {
                 this.team1.remove(f.id)
                 continue
@@ -248,7 +248,7 @@ open class Fight {
         e.addAll(this.team0.entries)
         for (entry in  e) {
             var f: Fighter = entry.value
-            var cell: GameCase = getRandomCell(start0)!!
+            var cell: GameCase? = getRandomCell(start0)
             if (cell == null) {
                 this.team0.remove(f.id)
                 continue
@@ -310,7 +310,7 @@ open class Fight {
         var e: ArrayList<Map.Entry<Int,Fighter>> = ArrayList(this.team1.entries)
         for (entry in  e) {
             var f: Fighter = entry.value
-            var cell: GameCase = getRandomCell(start1)!!
+            var cell: GameCase? = getRandomCell(start1)
             if (cell == null) {
                 f.setIsDead(true)
                 this.team1.remove(f.id)
@@ -386,7 +386,7 @@ open class Fight {
         var e: ArrayList<Map.Entry<Int,Fighter>> = ArrayList(this.team1.entries)
         for (entry in  e) {
             var f: Fighter = entry.value
-            var cell: GameCase = getRandomCell(start1)!!
+            var cell: GameCase? = getRandomCell(start1)
             if (cell == null) {
                 this.team1.remove(f.id)
                 continue
@@ -465,7 +465,7 @@ open class Fight {
         var e: ArrayList<Map.Entry<Int,Fighter>> = ArrayList(this.team1.entries)
         for (entry in  e) {
             var f: Fighter = entry.value
-            var cell: GameCase = getRandomCell(this.start1)!!
+            var cell: GameCase? = getRandomCell(this.start1)
             if (cell == null) {
                 this.team1.remove(f.id)
                 continue
@@ -563,7 +563,7 @@ open class Fight {
         var e: ArrayList<Map.Entry<Int,Fighter>> = ArrayList(this.team1.entries)
         for (entry in  e) {
             var f: Fighter = entry.value
-            var cell: GameCase = getRandomCell(start1)!!
+            var cell: GameCase? = getRandomCell(start1)
             if (cell == null) {
                 this.team1.remove(f.id)
                 continue
@@ -934,7 +934,7 @@ open class Fight {
         SocketManager.GAME_SEND_GAME_REMFLAG_PACKET_TO_MAP(mapOld, this.init0.id)
 
         for (fighter in  this.getFighters(3)) {
-            var player: Player = fighter.player!!
+            var player: Player? = fighter.player
 
             if (player != null) {
                 player.refreshObjectsClass()
@@ -987,25 +987,25 @@ open class Fight {
             }
 
             for (f in  this.team0.values) {
-                var player: Player = f.player!!
+                var player: Player? = f.player
                 if (f.player != null) {
-                    when (player.classe) {
+                    when (player!!.classe) {
 Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CLASS_XELOR, Constant.CLASS_SRAM -> {hasIndirectDamage = true
                             
 }
 }
 
-                    if (player.hasSpell(367))
+                    if (player!!.hasSpell(367))
                         hasCawotte = true
-                    if (player.hasSpell(373))
+                    if (player!!.hasSpell(373))
                         hasChafer = true
-                    if (player.hasSpell(101))
+                    if (player!!.hasSpell(101))
                         hasRoulette = true
-                    if (player.hasSpell(370))
+                    if (player!!.hasSpell(370))
                         hasArakne = true
-                    if (player.sexe == 0)
+                    if (player!!.sexe == 0)
                         hasMale = true
-                    if (player.sexe == 1)
+                    if (player!!.sexe == 1)
                         hasFemale = true
                 }
             }
@@ -1070,7 +1070,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
         /** Challenges **/
 
         for (F in  getFighters(3)) {
-            var player: Player = F.player!!
+            var player: Player? = F.player
             if (player != null) {
                 player.ready = false
                 if (player.onMount)
@@ -1104,11 +1104,11 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                         if (this.getFighterByGameOrder() != null && this.getFighterByGameOrder()!!.id == caster.id)
                             endTurn(false, caster)
 
-                        val player: Player = caster.player!!
-                        player.duelId = -1
-                        player.ready = false
-                        player.fight = null
-                        player.away = false
+                        val player: Player? = caster.player
+                        player!!.duelId = -1
+                        player!!.ready = false
+                        player!!.fight = null
+                        player!!.away = false
 
                         this.verifIfTeamAllDead()
 
@@ -1252,15 +1252,15 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                                     for (f in this.getFighters(caster.getOtherTeam())) {
                                         if (f.player == null)
                                             continue
-                                        val player: Player = f.player!!
+                                        val player: Player? = f.player
 
-                                        player.duelId = -1
-                                        player.ready = false
-                                        player.fight = null
-                                        player.away = false
+                                        player!!.duelId = -1
+                                        player!!.ready = false
+                                        player!!.fight = null
+                                        player!!.away = false
 
-                                        if (player.isOnline)
-                                            SocketManager.GAME_SEND_GV_PACKET(player)
+                                        if (player!!.isOnline)
+                                            SocketManager.GAME_SEND_GV_PACKET(player!!)
                                     }
                                 }
 
@@ -1452,7 +1452,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                 for (fighter in  fighters) {
                     SocketManager.GAME_SEND_ERASE_ON_MAP_TO_MAP(fight.map!!, fighter.id)
                     if (fighter.hasLeft()) continue
-                    var player: Player = fighter.player!!
+                    var player: Player? = fighter.player
 
                     if (player != null && fight.isBegin) {
                         player.fight = null
@@ -1476,7 +1476,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                 fight.curPlayer = -1
 
                 for (fighter in  fight.team1.values) {
-                    var player: Player = fighter.player!!
+                    var player: Player? = fighter.player
 
                     if (player == null)
                         continue
@@ -1499,7 +1499,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                 }
             } catch (e: Exception) {
                 for (fighter in  fighters) {
-                    var player: Player = fighter.player!!
+                    var player: Player? = fighter.player
                     if (player != null) {
                         player.duelId = -1
                         player.ready = false
@@ -1512,7 +1512,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
 
 
             for (fighter in  fighters) {
-                var player: Player = fighter.player!!
+                var player: Player? = fighter.player
 
 
                 if (player == null)
@@ -1691,14 +1691,14 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
     }
 
     @Synchronized fun endTurn(onAction: Boolean, f: Fighter) {
-        val current: Fighter = this.getFighterByGameOrder()!!
+        val current: Fighter? = this.getFighterByGameOrder()
         if (current != null)
             if (f == current)
                 this.endTurn(onAction)
     }
 
     @Synchronized fun endTurn(onAction: Boolean) {
-        val current: Fighter = this.getFighterByGameOrder()!!
+        val current: Fighter? = this.getFighterByGameOrder()
         if (current == null)
             return
 
@@ -1841,7 +1841,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
         }
 
         if (guid in this.team0) {
-            var cell: GameCase = getRandomCell(start0)!!
+            var cell: GameCase? = getRandomCell(start0)
             if (cell == null)
                 return
             if (type == 7) {
@@ -1849,7 +1849,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
             }
 
             if (onlyGroup0) {
-                var g: Party = this.init0.player!!.party!!
+                var g: Party? = this.init0.player!!.party
                 if (g != null) {
                     if (g.players.contains(perso)) {
                         SocketManager.GAME_SEND_GA903_ERROR_PACKET(perso.getGameClient()!!, 'f', guid)
@@ -1903,11 +1903,11 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
             if (type == 7) {
                 perso.setFullMorphbouf(1)
             }
-            var cell: GameCase = getRandomCell(start1)!!
+            var cell: GameCase? = getRandomCell(start1)
             if (cell == null)
                 return
             if (onlyGroup1) {
-                var g: Party = this.init1.player!!.party!!
+                var g: Party? = this.init1.player!!.party
                 if (g != null) {
                     if (g.players.contains(perso)) {
                         SocketManager.GAME_SEND_GA903_ERROR_PACKET(perso.getGameClient()!!, 'f', guid)
@@ -1986,7 +1986,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
     }
 
     @Synchronized private fun joinCollectorFight(player: Player, collector: Collector) {
-        val cell: GameCase = getRandomCell(this.start1)!!
+        val cell: GameCase? = getRandomCell(this.start1)
 
         if (cell == null)
             return
@@ -2012,7 +2012,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
     }
 
     fun joinPrismFight(player: Player, team: Int) {
-        val cell: GameCase = getRandomCell(if (team == 1) this.start1 else this.start0)!!
+        val cell: GameCase? = getRandomCell(if (team == 1) this.start1 else this.start0)
 
         if (cell == null)
             return
@@ -2050,7 +2050,7 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
     }
 
     fun joinAsSpectator(p: Player) {
-        val current: Fighter = this.getFighterByGameOrder()!!
+        val current: Fighter? = this.getFighterByGameOrder()
         if (current == null)
             return
 
@@ -2267,7 +2267,7 @@ var curMax0: Fighter? = null
     }
 
     fun tryCaC(perso: Player, cellID: Int) {
-        val current: Fighter = this.getFighterByGameOrder()!!
+        val current: Fighter? = this.getFighterByGameOrder()
         if (current == null)
             return
 
@@ -2389,7 +2389,7 @@ var curMax0: Fighter? = null
     }
 
     @Synchronized fun tryCastSpell(fighter: Fighter, spell: SortStats, cell: Int): Int {
-        val current: Fighter = this.getFighterByGameOrder()!!
+        val current: Fighter? = this.getFighterByGameOrder()
 
         if (current == null || spell == null || this.curAction.isEmpty() || current.id != fighter.id) {
             return 10
@@ -2544,13 +2544,13 @@ var curMax0: Fighter? = null
 
 
     fun canCastSpell1(caster: Fighter, spell: SortStats, cell: GameCase, targetCell: Int): Boolean {
-        val current: Fighter = this.getFighterByGameOrder()!!
+        val current: Fighter? = this.getFighterByGameOrder()
 
         if (current == null)
             return false
 
         var casterCell: Int = if (targetCell <= -1) caster.cell!!.cellId else targetCell
-        var player: Player = caster.player!!
+        var player: Player? = caster.player
 
         if (spell == null) {
             if (player != null) {
@@ -2586,8 +2586,8 @@ var curMax0: Fighter? = null
         if (spell.getSpell()!!.hasInvalidState(caster) || !spell.getSpell()!!.hasNeededState(caster))
             return false
 
-        if (caster.getType() == 1 && spell.spellID in player.objectsClassSpell) {
-            var modi: Int = player.getValueOfClassObject(spell.spellID, 285)
+        if (caster.getType() == 1 && spell.spellID in player!!.objectsClassSpell) {
+            var modi: Int = player!!.getValueOfClassObject(spell.spellID, 285)
             usedPA = spell.pACost - modi
         } else {
             usedPA = spell.pACost
@@ -2605,11 +2605,11 @@ var curMax0: Fighter? = null
             return false
         }
 
-        if (caster.getType() == 1 && spell.spellID in player.objectsClassSpell) {
-            var modi: Int = player.getValueOfClassObject(spell.spellID, 288)
+        if (caster.getType() == 1 && spell.spellID in player!!.objectsClassSpell) {
+            var modi: Int = player!!.getValueOfClassObject(spell.spellID, 288)
             var modif: Boolean = modi == 1
             if (spell.isLineLaunch && !modif && !PathFinding.casesAreInSameLine(map!!, casterCell, cell.cellId, 'z', 70)) {
-                SocketManager.GAME_SEND_Im_PACKET(player, "1173")
+                SocketManager.GAME_SEND_Im_PACKET(player!!, "1173")
                 return false
             }
         } else if (spell.isLineLaunch && !PathFinding.casesAreInSameLine(map!!, casterCell, cell.cellId, 'z', 70)) {
@@ -2630,10 +2630,10 @@ var curMax0: Fighter? = null
 
         var hasModification: Boolean = player != null && spell.spellID in player.objectsClassSpell
         if (caster.getType() == 1 && hasModification) {
-            var modi: Int = player.getValueOfClassObject(spell.spellID, 289)
+            var modi: Int = player!!.getValueOfClassObject(spell.spellID, 289)
             var modif: Boolean = modi == 1
             if (spell.hasLDV && !Formulas.checkLos(this.map, (casterCell.toShort()), (cell.cellId.toShort())) && !modif) {
-                SocketManager.GAME_SEND_Im_PACKET(player, "1174")
+                SocketManager.GAME_SEND_Im_PACKET(player!!, "1174")
                 return false
             }
         }
@@ -2716,7 +2716,7 @@ var curMax0: Fighter? = null
     }
 
     fun canCastSpellMob(caster: Fighter, spell: SortStats, cell: GameCase, targetCell: Int): Boolean {
-        val current: Fighter = this.getFighterByGameOrder()!!
+        val current: Fighter? = this.getFighterByGameOrder()
 
         if (current == null || spell == null || current.id != caster.id)
             return false
@@ -2775,7 +2775,7 @@ var curMax0: Fighter? = null
     }
 
     fun onFighterMovement(fighter: Fighter, GA: GameAction): Boolean {
-        val current: Fighter = this.getFighterByGameOrder()!!
+        val current: Fighter? = this.getFighterByGameOrder()
         if (current == null)
             return false
 
@@ -2845,7 +2845,7 @@ var curMax0: Fighter? = null
         }
 
         // Si sur un panda
-        val po: Fighter = current.getHoldedBy()!!
+        val po: Fighter? = current.getHoldedBy()
 
         if (po != null) {
             // si le joueur va bouger
@@ -2876,7 +2876,7 @@ var curMax0: Fighter? = null
 
         curAction = "GA;129;" + current.id.toString() + ";" + current.id.toString() + ",-" + nStep
         // Si porteur
-        val po2: Fighter = current.getIsHolding()!!
+        val po2: Fighter? = current.getIsHolding()
 
         if (po2 != null && current.haveState(Constant.ETAT_PORTEUR)
                 && po2.haveState(Constant.ETAT_PORTE)) {
@@ -2901,7 +2901,7 @@ var curMax0: Fighter? = null
 
     fun onFighterDie(target: Fighter, caster: Fighter) {
         var runnable: Runnable = Runnable {
-            val current: Fighter = this.getFighterByGameOrder()!!
+            val current: Fighter? = this.getFighterByGameOrder()
 
             if (current == null)
                 return@Runnable
@@ -2909,11 +2909,11 @@ var curMax0: Fighter? = null
             var player: Player? = null
             //region Statistics
             if (Config.modeHeroic) {
-                var p: Player = caster.player!!
+                var p: Player? = caster.player
                 var deadPlayer: Player? = target.player
                 if (deadPlayer != null) {
                     var type: Byte = if (caster.mob != null) (2).toByte() else if (p == deadPlayer) (-1).toByte() else 1.toByte()
-                    var id: Long = (if (type == 1.toByte()) p.id else if (type == 2.toByte()) caster.mob!!.template.id else 0).toLong()
+                    var id: Long = (if (type == 1.toByte()) p!!.id else if (type == 2.toByte()) caster.mob!!.template.id else 0).toLong()
                     target.setKilledBy(Couple(type, id))
                 }
                 if (p != null && target != caster && deadPlayer != null) p.increaseTotalKills()
@@ -3254,7 +3254,7 @@ var curMax0: Fighter? = null
             if (entry.value.player != null)
                 continue
             var f: Fighter = entry.value
-            var cell: GameCase = getRandomCell(start1)!!
+            var cell: GameCase? = getRandomCell(start1)
             if (cell == null) {
                 this.team1.remove(f.id)
             } else {
@@ -3610,7 +3610,7 @@ else -> {packet.append(effect.value).append(";;;;")
 
                 if (Constant.FIGHT_TYPE_PVM == this.type) {
                     for (fighter in  this.winners) {
-                        var player: Player = fighter.player!!
+                        var player: Player? = fighter.player
                         if (player == null)
                             continue
 
@@ -3632,7 +3632,7 @@ else -> {packet.append(effect.value).append(";;;;")
                 val packet: String = if (this.type == -1) "GE" else this.getGE(if (winners) 2 else 1)
 
                 for (fighter in  fighters) {
-                    var player: Player = fighter.player!!
+                    var player: Player? = fighter.player
                     if (player != null) {
                         player.fight = null
                         SocketManager.GAME_SEND_ERASE_ON_MAP_TO_MAP(this.map!!, fighter.id)
@@ -3643,7 +3643,7 @@ else -> {packet.append(effect.value).append(";;;;")
 
                 when (this.type) {
 Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYPE_CONQUETE -> {for (fighter in  copyTeam1.values) {
-                            var player: Player = fighter.player!!
+                            var player: Player? = fighter.player
 
                             if (player != null) {
                                 player.duelId = -1
@@ -3655,7 +3655,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
 }
 
                 for (fighter in  this.team0.values) {
-                    var player: Player = fighter.player!!
+                    var player: Player? = fighter.player
 
                     if (player != null) {
                         player.duelId = -1
@@ -3782,7 +3782,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                 }
 
                 for (fighter in  fighters) {
-                    var player: Player = fighter.player!!
+                    var player: Player? = fighter.player
                     if (player != null) {
                         if (this.isBegin) {
                             if (player.curMap.id == 8357 && player.hasItemTemplate(7373, 1, false) && player.hasItemTemplate(7374, 1, false) && player.hasItemTemplate(7375, 1, false) && player.hasItemTemplate(7376, 1, false) && player.hasItemTemplate(7377, 1, false) && player.hasItemTemplate(7378, 1, false)) {
@@ -3800,7 +3800,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
             } catch (e: Exception) {
                 log.error("unexpected error", e)
                 for (fighter in  fighters) {
-                    var player: Player = fighter.player!!
+                    var player: Player? = fighter.player
                     if (player != null) {
                         player.duelId = -1
                         player.ready = false
@@ -3812,7 +3812,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
 
 
             for (fighter in  fighters) {
-                var player: Player = fighter.player!!
+                var player: Player? = fighter.player
 
                 if (player == null)
                     continue
@@ -3858,7 +3858,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
     }
 
     fun onPlayerWin(fighter: Fighter, looseTeam: List<Fighter>) {
-        var player: Player = fighter.player!!
+        var player: Player? = fighter.player
 
         if (player == null)
             return
@@ -3915,7 +3915,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                         souls[id] = 1
                 }
                 if (souls.isEmpty()) {
-                    var pet: PetEntry = World.world.getPetsEntry(obj.guid)!!
+                    var pet: PetEntry? = World.world.getPetsEntry(obj.guid)
                     if (pet != null)
                         pet.eatSouls(player, souls)
                 }
@@ -3924,7 +3924,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
     }
 
     fun onPlayerLoose(fighter: Fighter) {
-        val player: Player = fighter.player!!
+        val player: Player? = fighter.player
 
         if (player == null)
             return
@@ -3950,7 +3950,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
         if (player.getObjetByPos(Constant.ITEM_POS_FAMILIER) != null && this.type != Constant.FIGHT_TYPE_CHALLENGE) {
             var obj: GameObject? = player.getObjetByPos(Constant.ITEM_POS_FAMILIER)
             if (obj != null) {
-                var pets: PetEntry = World.world.getPetsEntry(obj.guid)!!
+                var pets: PetEntry? = World.world.getPetsEntry(obj.guid)
                 if (pets != null)
                     pets.looseFight(player)
             }
@@ -4009,7 +4009,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
     }
 
     fun onGK(player: Player) {
-        val current: Fighter = this.getFighterByGameOrder()!!
+        val current: Fighter? = this.getFighterByGameOrder()
         if (current == null)
             return
         if (curAction.equals("") || current.id != player.id || state != Constant.FIGHT_STATE_ACTIVE)
@@ -4213,7 +4213,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
             //region Quest
             if (this.type == Constant.FIGHT_TYPE_PVM || this.type == Constant.FIGHT_TYPE_DOPEUL) {
                 for (fighter in  winners) {
-                    var player: Player = fighter.player!!
+                    var player: Player? = fighter.player
                     if (player == null) continue
 
                     // TODO: DIABU CALL LUA FOR QUEST UPDATE
@@ -4426,7 +4426,7 @@ Constant.FIGHT_TYPE_CHALLENGE, Constant.FIGHT_TYPE_AGRESSION, Constant.FIGHT_TYP
                             stalk = true
                             fighter.setTraqued(true)
 
-                            var stalkTarget: Stalk = fighter.player!!.stalk!!
+                            var stalkTarget: Stalk? = fighter.player!!.stalk
 
                             if (stalkTarget != null)
                                 if (stalkTarget.target == curPlayer)
@@ -4477,7 +4477,7 @@ Constant.FIGHT_TYPE_AGRESSION -> {val objects1: ArrayList<GameObject> = ArrayLis
                         var money: Int = 0
 
                         for (fighter in  loosers) {
-                            val player: Player = fighter.player!!
+                            val player: Player? = fighter.player
                             if (player != null) {
                                 objects1.addAll(player.items.values)
                                 money = (money + player.kamas).toInt()
@@ -4506,7 +4506,7 @@ Constant.FIGHT_TYPE_PVM -> {try {
                             if (team) { // Players have loose the fight, mob win the fight
                                 objects = ArrayList()
                                 for (fighter in  loosers) {
-                                    val player: Player = fighter.player!!
+                                    val player: Player? = fighter.player
                                     if (player != null)
                                         objects.addAll(player.items.values)
                                 }
@@ -4547,7 +4547,7 @@ Constant.FIGHT_TYPE_PVM -> {try {
                 if (i is CloneFighter)
                     continue
 
-                val player: Player = i.player!!
+                val player: Player? = i.player
 
                 if (player != null && type != Constant.FIGHT_TYPE_CHALLENGE)
                     player.calculTurnCandy()
@@ -4627,7 +4627,7 @@ Constant.FIGHT_TYPE_PVM -> {try {
 }
 }
                             if (jet < chance || ok) {
-                                var objectTemplate: ObjectTemplate = World.world.getObjTemplate(drop.getObjectId())!!
+                                var objectTemplate: ObjectTemplate? = World.world.getObjTemplate(drop.getObjectId())
 
                                 if (objectTemplate == null)
                                     continue
@@ -4737,7 +4737,7 @@ else -> {itsOk = true
                                             val chance = formatter.format(drop.getLocalPercent() * (i.getPros() / 100.0)).replace(',', '.').toDouble()
 
                                     if (jet < chance) {
-                                        var objectTemplate: ObjectTemplate = World.world.getObjTemplate(drop.getObjectId())!!
+                                        var objectTemplate: ObjectTemplate? = World.world.getObjTemplate(drop.getObjectId())
 
                                         if (drop.getAction() == 1 && objectTemplate != null && player.getMetierByID(41) != null && player.getMetierByID(41)!!.get_lvl() >= drop.getLevel())
                                             itemWon2[objectTemplate.id] = (itemWon2[objectTemplate.id] ?: 0) + 1
@@ -4786,7 +4786,7 @@ else -> {itsOk = true
 
                         val dropsToAttribute: MutableMap<ObjectTemplate,Int> = HashMap()
                         for (entry in  objectsWon.entries) {
-                            var objectTemplate: ObjectTemplate = World.world.getObjTemplate(entry.key)!!
+                            var objectTemplate: ObjectTemplate? = World.world.getObjTemplate(entry.key)
 
                             if (player == null && i.getInvocator() == null) break
                             if (objectTemplate == null || i is CloneFighter) continue
@@ -4796,7 +4796,7 @@ else -> {itsOk = true
                             dropsToAttribute[objectTemplate] = entry.value
                         }
                         for (entry in  itemWon2.entries) {
-                            var objectTemplate: ObjectTemplate = World.world.getObjTemplate(entry.key)!!
+                            var objectTemplate: ObjectTemplate? = World.world.getObjTemplate(entry.key)
 
                             if (player == null && i.getInvocator()!!.player == null) break
                             if (objectTemplate == null) continue
@@ -4817,14 +4817,14 @@ else -> {itsOk = true
                                         World.world.addGameObject(obj)
                                     SocketManager.GAME_SEND_Ow_PACKET(target)
                                 } else {
-                                    var newObj: GameObject = World.world.getObjTemplate(template.id)!!.createNewItemWithoutDuplication(target.items.values, entry.value, false)!!
+                                    var newObj: GameObject? = World.world.getObjTemplate(template.id)!!.createNewItemWithoutDuplication(target.items.values, entry.value, false)
                                     if (World.world.getObjTemplate(template.id)!!.type == Constant.ITEM_TYPE_CERTIF_MONTURE) {
                                         //obj.setMountStats(this.player, null);
-                                        var mount: Mount = Mount(Constant.getMountColorByParchoTemplate(newObj.template!!.id), target.id, false)
-                                        newObj.clearStats()
-                                        newObj.stats.addOneStat(995, mount.id)
-                                        newObj.txtStat[996] = target.name
-                                        newObj.txtStat[997] = mount.name!!
+                                        var mount: Mount = Mount(Constant.getMountColorByParchoTemplate(newObj!!.template!!.id), target.id, false)
+                                        newObj!!.clearStats()
+                                        newObj!!.stats.addOneStat(995, mount.id)
+                                        newObj!!.txtStat[996] = target.name
+                                        newObj!!.txtStat[997] = mount.name!!
                                         mount.setToMax()
                                     }
 
@@ -4832,7 +4832,7 @@ else -> {itsOk = true
                                         if (target.addItem(newObj, true, false))
                                             World.world.addGameObject(newObj)
                                     } else {
-                                        SocketManager.GAME_SEND_UPDATE_OBJECT_DISPLAY_PACKET(target, newObj)
+                                        SocketManager.GAME_SEND_UPDATE_OBJECT_DISPLAY_PACKET(target!!, newObj!!)
                                     }
                                 }
                             }
@@ -4849,14 +4849,14 @@ else -> {itsOk = true
                                 if (id == -1) continue
                                 drops.append(id).append("~1")
                                 // Certificat :
-                                var OT2: ObjectTemplate = World.world.getObjTemplate(Constant.getCertificatByDopeuls(IDmob))!!
+                                var OT2: ObjectTemplate? = World.world.getObjTemplate(Constant.getCertificatByDopeuls(IDmob))
                                 if (OT2 != null) {
                                     var obj2: GameObject = OT2.createNewItem(1, false)!!
-                                    if (player.addItem(obj2, true, false))// Si le joueur n'avait pas d'item similaire
+                                    if (player!!.addItem(obj2, true, false))// Si le joueur n'avait pas d'item similaire
                                         World.world.addGameObject(obj2)
                                     obj2.refreshStatsObjet("325#0#0#" + System.currentTimeMillis())
-                                    ((DatabaseManager.get(PlayerData::class.java) as PlayerData)).update(player)
-                                    SocketManager.GAME_SEND_Ow_PACKET(player)
+                                    ((DatabaseManager.get(PlayerData::class.java) as PlayerData)).update(player!!)
+                                    SocketManager.GAME_SEND_Ow_PACKET(player!!)
                                 }
                             }
                         }
@@ -4964,21 +4964,21 @@ else -> {itsOk = true
                             if (this.init1.player!!.alignment != 0 && this.init0.player!!.alignment != 0) {
                                 if (this.init1.player!!.getAccount()!!.currentIp.compareTo(this.init0.player!!.getAccount()!!.currentIp) != 0 || Config.allowMulePvp)
                                     winH = Formulas.calculHonorWin(winners, loosers, i, false)
-                                if (player.deshonor > 0)
+                                if (player!!.deshonor > 0)
                                     winD = -1
                             }
                         } else if (this.type == Constant.FIGHT_TYPE_CONQUETE)
                             winH = Formulas.calculHonorWin(winners, loosers, i, true)
 
-                        if (player.alignment != 0) {
-                            if (player.honor + winH < 0)
-                                winH = -player.honor
-                            player.addHonor(winH)
-                            player.deshonor = player.deshonor + winD
+                        if (player!!.alignment != 0) {
+                            if (player!!.honor + winH < 0)
+                                winH = -player!!.honor
+                            player!!.addHonor(winH)
+                            player!!.deshonor = player!!.deshonor + winD
                         }
 
                         var xpTable: ExperienceTables.ExperienceTable = World.world.experiences!!.pvp
-                        var maxHonor: Long = xpTable.maxXpAt(player.grade)
+                        var maxHonor: Long = xpTable.maxXpAt(player!!.grade)
 
                         var temporary: StringBuilder = StringBuilder()
                         temporary.append("2;").append(i.id).append(";").append(i.getPacketsName()).append(";").append(i.getLvl()).append(";")
@@ -4986,12 +4986,12 @@ else -> {itsOk = true
                             temporary.append(i.getDefaultGfx()).append(";")
                         }
                         temporary.append(if (i.isDead) "1" else "0").append(";")
-                        temporary.append(if (player.alignment != Constant.ALIGNEMENT_NEUTRE) xpTable.minXpAt(player.grade) else 0).append(";")
-                        temporary.append(player.honor).append(";")
-                        temporary.append(if (player.alignment != Constant.ALIGNEMENT_NEUTRE) maxHonor else 0).append(";")
+                        temporary.append(if (player!!.alignment != Constant.ALIGNEMENT_NEUTRE) xpTable.minXpAt(player!!.grade) else 0).append(";")
+                        temporary.append(player!!.honor).append(";")
+                        temporary.append(if (player!!.alignment != Constant.ALIGNEMENT_NEUTRE) maxHonor else 0).append(";")
                         temporary.append(winH).append(";")
-                        temporary.append(player.grade).append(";")
-                        temporary.append(player.deshonor).append(";")
+                        temporary.append(player!!.grade).append(";")
+                        temporary.append(player!!.deshonor).append(";")
                         temporary.append(winD)
                         temporary.append(";")
                         temporary.append(if (stalk) "10275~" + quantity else "")
@@ -5002,7 +5002,7 @@ else -> {itsOk = true
                                     temporary.append(if (stalk) "," else "").append(value)
                             winXp = totalXP / winners.size
                             winKamas = Formulas.getRandomValue(kamas.first, kamas.second)
-                            player.addXp(winXp)
+                            player!!.addXp(winXp)
                         }
                         temporary.append(";").append(winKamas).append(";0;0;0;").append(winXp).append("|")
                         gains[i.id] = temporary
@@ -5091,7 +5091,7 @@ else -> {itsOk = true
                 if (i is CloneFighter)
                     continue
 
-                val player: Player = i.player!!
+                val player: Player? = i.player
 
                 if (player != null && this.type != Constant.FIGHT_TYPE_CHALLENGE)
                     player.calculTurnCandy()
@@ -5205,7 +5205,7 @@ else -> {itsOk = true
                         val chance: Double = (drop.getLocalPercent() * (World.world.getGuild(collector.guildId)!!.getStats(Constant.STATS_ADD_PROS) / 100.0)).toInt().toDouble()
 
                         if (jet < chance) {
-                            var objectTemplate: ObjectTemplate = World.world.getObjTemplate(drop.getObjectId())!!
+                            var objectTemplate: ObjectTemplate? = World.world.getObjTemplate(drop.getObjectId())
 
                             if (objectTemplate == null)
                                 continue
@@ -5270,7 +5270,7 @@ else -> {itsOk = true
                     }
 
                     for (entry in  objectsWon.entries) {
-                        var objectTemplate: ObjectTemplate = World.world.getObjTemplate(entry.key)!!
+                        var objectTemplate: ObjectTemplate? = World.world.getObjTemplate(entry.key)
 
                         if (objectTemplate == null || collector.getPodsTotal() + objectTemplate.pod * entry.value >= collector.getMaxPod())
                             continue
@@ -5278,7 +5278,7 @@ else -> {itsOk = true
 
                         drops += entry.key.toString() + "~" + entry.value
 
-                        var newObj: GameObject = World.world.getObjTemplate(objectTemplate.id)!!.createNewItemWithoutDuplication(collector.getOjects().values, entry.value, false)!!
+                        var newObj: GameObject? = World.world.getObjTemplate(objectTemplate.id)!!.createNewItemWithoutDuplication(collector.getOjects().values, entry.value, false)
 
                         if (newObj != null && collector.getOjects()[newObj.guid] == null) {
                             if (collector.addObjet(newObj))
@@ -5438,7 +5438,7 @@ Constant.FIGHT_TYPE_PVT -> {infos.append("0,")
 
 
     fun cast(fighter: Fighter, runnable: Runnable, SS: SortStats?) {
-        var current: Fighter = this.getFighterByGameOrder()!!
+        var current: Fighter? = this.getFighterByGameOrder()
         if (current != null && fighter != null && current.id == fighter.id) {
             if (this.turn != null && System.currentTimeMillis() - this.turn!!.getStartTime() >= Constant.TIME_BY_TURN) {
                 if (System.currentTimeMillis() - this.turn!!.getStartTime() >= Constant.TIME_BY_TURN) this.endTurn(false)

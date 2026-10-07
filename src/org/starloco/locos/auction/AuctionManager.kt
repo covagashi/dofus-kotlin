@@ -200,17 +200,17 @@ class AuctionManager : Updatable<Void?>(10000) {
         if (!this.isValid(player)) return
 
         if (this.current != null && this.currentIsAvailable()) {
-            val current = this.current!!
+            val current = this.current
             val date = Calendar.getInstance().time
             val hour = (SimpleDateFormat("HH").format(date)).toInt()
             if (hour >= 16 && hour < 23) {
                 player.sendTypeMessage("Auction", player.lang.trans("game.auction.auctionmanager.encherie.infos"))
             }
-            if (current.customer == null) {
-                val msg = player.lang.trans("game.auction.auctionmanager.start", current.`object`!!.quantity, current.price, current.owner!!.name)
+            if (current!!.customer == null) {
+                val msg = player.lang.trans("game.auction.auctionmanager.start", current.`object`!!.quantity, current!!.price, current!!.owner!!.name)
                 this.talk(player, getTalkStringObject(current.`object`!!, msg))
             } else {
-                val msg = player.lang.trans("game.auction.auctionmanager.newAuction", current.`object`!!.quantity, current.price, current.customer!!.name, "")
+                val msg = player.lang.trans("game.auction.auctionmanager.newAuction", current.`object`!!.quantity, current!!.price, current!!.customer!!.name, "")
                 this.talk(player, getTalkStringObject(current.`object`!!, msg))
             }
         }

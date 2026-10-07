@@ -28,8 +28,8 @@ class Sacrieur(fight: Fight, fighter: Fighter, count: Byte) : AbstractEasyIA(fig
                     if (get().tryCastSpell(this.fight, this.fighter, enemy, spell!!.getSpell()!!.id) == 0) {
                         this.setNextParams(1, 3, 1500)
                     } else {
-                        val cell1 = fighter.cell!!
-                        val cell2 = enemy.cell!!
+                        val cell1 = fighter.cell
+                        val cell2 = enemy.cell
                         if (cell1 != null && cell2 != null) {
                             val dir = PathFinding.getDirBetweenTwoCase(cell1.cellId, cell2.cellId, fight.map, true)
                             if (!PathFinding.casesAreInSameLine(fight.map!!, cell1.cellId, cell2.cellId, dir, spell!!.maxPO)) {

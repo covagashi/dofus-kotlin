@@ -151,7 +151,7 @@ open class GameClient {
         if(Config.modeEvent) {
             var manager: EventManager = EventManager.instance
             if(manager.state == EventManager.State.STARTED) {
-                var event: Event = manager.getCurrentEvent()!!
+                var event: Event? = manager.getCurrentEvent()
                 try {
                     if (event != null && event.onReceivePacket(manager, this.player, packet)) {
                         return
@@ -359,11 +359,11 @@ else -> {
             return
         }
 
-        val mimibiote: GameObject = this.player.getItemTemplate(Constant.ID_TEMPLATE_MIMIBIOTE.toInt())!!
+        val mimibiote: GameObject? = this.player.getItemTemplate(Constant.ID_TEMPLATE_MIMIBIOTE.toInt())
         if(mimibiote == null) return
 
-        val itemToKeep: GameObject = World.world.getGameObject(idItemToKeep)!!
-        val itemToDelete: GameObject = World.world.getGameObject(idItemToDelete)!!
+        val itemToKeep: GameObject? = World.world.getGameObject(idItemToKeep)
+        val itemToDelete: GameObject? = World.world.getGameObject(idItemToDelete)
 
         if(itemToKeep == null || itemToDelete == null) return
         if(!this.player.hasItemGuid(idItemToKeep) || !this.player.hasItemGuid(idItemToDelete)) return
@@ -400,14 +400,14 @@ else -> {
             return
         }
 
-        val item: GameObject = World.world.getGameObject(idItem)!!
+        val item: GameObject? = World.world.getGameObject(idItem)
         if(item == null) return
         if(!this.player.hasItemGuid(idItem)) return
         if(!item.isMimibiote()) return
 
         val mimibiote: GameObject = World.world.getObjTemplate(Constant.ID_TEMPLATE_MIMIBIOTE.toInt())!!.createNewItem(1, false)!!
         val idApparat: Int = (item.txtStat!![Constant.STATS_MIMIBIOTE]!!.split(";")[0]).toInt(16)
-        val apparat: GameObject = World.world.getGameObject(idApparat)!!
+        val apparat: GameObject? = World.world.getGameObject(idApparat)
 
         if(apparat == null)
         {
@@ -540,7 +540,7 @@ else -> {
         }
         if(this.language == null) this.language = LangEnum.ENGLISH
 
-        var gifts: String = DatabaseManager.get(GiftData::class.java).load(this.account.id)!!.second!!
+        var gifts: String? = DatabaseManager.get(GiftData::class.java).load(this.account.id)!!.second
         if (gifts == null)
             return
         if (!gifts.isEmpty()) {
@@ -550,7 +550,7 @@ else -> {
                 if(gift.isEmpty()) continue
                 var id: Int = (gift.split(",")[0]).toInt()
                 var qua: Int = (gift.split(",")[1]).toInt()
-                var template: ObjectTemplate = World.world.getObjTemplate(id)!!
+                var template: ObjectTemplate? = World.world.getObjTemplate(id)
                 if(template != null) {
                     if (data.isEmpty()) {
                         data = "1~" + Integer.toString(id, 16) + "~" + Integer.toString(qua, 16) + "~~" + template.strTemplate
@@ -570,7 +570,7 @@ else -> {
         var infos: List<String> = packet.split("|")
 
         var template: Int = (infos[0]).toInt()
-        var player: Player = World.world.getPlayer((infos[1]).toInt()!!)!!
+        var player: Player? = World.world.getPlayer((infos[1]).toInt()!!)
 
         if (player == null)
             return
@@ -653,7 +653,7 @@ else -> {
     }
 
     private fun hardcodeRevive(id: Int) {
-        val player: Player = this.account.getPlayers()[id]!!
+        val player: Player? = this.account.getPlayers()[id]
 
         this.getSession().write("BN")
 
@@ -1016,7 +1016,7 @@ if (k < 30000) {
 else -> {var nom: String = packet.substring(2).split("|")[0]
                 msg = packet.split("|", limit = 2)[1]
                 if (!(nom.length <= 1)) {
-                    var target: Player = World.world.getPlayerByName(nom)!!
+                    var target: Player? = World.world.getPlayerByName(nom)
                     if (target == null || target.getAccount() == null || target.getGameClient() == null) {
                         SocketManager.GAME_SEND_CHAT_ERROR_PACKET(this, nom)
                         return
@@ -1063,7 +1063,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
         fun whoIs(packet: String) {
         var packet = packet
         packet = packet.substring(2)
-        var player: Player = World.world.getPlayerByName(packet)!!
+        var player: Player? = World.world.getPlayerByName(packet)
         if (player == null) {
             if (packet.isEmpty())
                 SocketManager.GAME_SEND_BWK(this.player, this.player.getAccount()!!.pseudo + "|1|" + this.player.name + "|" + (if (this.player.curMap.subArea != null) this.player.curMap.subArea!!.area!!.id else "-1"))
@@ -1193,7 +1193,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
         if (packet[2] == 'J' || packet[2] == 'V') {
             when (packet[2]) {
 'J' -> {if(this.player.curMap != null && this.player.curMap.subArea != null) {
-                        var prism: Prism = this.player.curMap.subArea!!.prism!!
+                        var prism: Prism? = this.player.curMap.subArea!!.prism
                         if (prism != null) {
                             Prism.parseAttack(this.player)
                             Prism.parseDefense(this.player)
@@ -1211,7 +1211,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
 'J' -> {if (this.player.isInPrison())
                     return
 
-                val prism: Prism = this.player.curMap.subArea!!.prism!!
+                val prism: Prism? = this.player.curMap.subArea!!.prism
 
                 if (prism == null)
                     return
@@ -1236,7 +1236,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
 
                 val map: Int = MapID
                 val cell: Int = cellID
-                val fight: Fight = World.world.getMap(map).getFight(FightID)!!
+                val fight: Fight? = World.world.getMap(map).getFight(FightID)
 
                 if(fight == null) {
                     SocketManager.GAME_SEND_BN(this.player)
@@ -1318,7 +1318,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
             return
         }
 
-        var collector: Collector = World.world.getCollector(id)!!
+        var collector: Collector? = World.world.getCollector(id)
 
         if (collector != null && collector.map == player.curMap.id) {
             SocketManager.GAME_SEND_DIALOG_CREATE_PACKET(this, id)
@@ -1326,7 +1326,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
             return
         }
 
-        var npc: Npc = player.curMap.getNpc(id)!!
+        var npc: Npc? = player.curMap.getNpc(id)
 
         if (npc != null) {
             npc.onCreateDialog(player)
@@ -1343,7 +1343,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
         var infos: List<String> = packet.substring(2).split("|")
 
         var data: NpcDialogActionData = ((this.player.exchangeAction as ExchangeAction<NpcDialogActionData>)).getValue()
-        var npc: Npc = data.getNpc(player)!!
+        var npc: Npc? = data.getNpc(player)
 
         if (npc != null && infos.size >= 2) {
             var question: Int = (infos[0]).toInt()
@@ -1457,7 +1457,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
             return
 
         var exchangeAction: ExchangeAction<Int> = (this.player.exchangeAction as ExchangeAction<Int>)
-        var target: Player = World.world.getPlayer(exchangeAction.getValue())!!
+        var target: Player? = World.world.getPlayer(exchangeAction.getValue())
         if(target == null) return
 
         checkExchangeAction = target.exchangeAction
@@ -1502,7 +1502,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
         var exchangeAction: ExchangeAction<Int> = (this.player.exchangeAction as ExchangeAction<Int>)
 
         if (exchangeAction.getType() == ExchangeAction.TRADING_WITH_OFFLINE_PLAYER) {
-            var seller: Player = World.world.getPlayer(exchangeAction.getValue())!!
+            var seller: Player? = World.world.getPlayer(exchangeAction.getValue())
             if (seller != null && seller != this.player) {
                 var itemID: Int = 0
                 var qua: Int = 0
@@ -1521,7 +1521,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
                     }
                     price = seller.storeItems[itemID]!! * qua
                     var price2: Int = seller.storeItems[itemID]!!
-                    var itemStore: GameObject = World.world.getGameObject(itemID)!!
+                    var itemStore: GameObject? = World.world.getGameObject(itemID)
                     if (itemStore == null)
                         return
                     if (price > this.player.kamas)
@@ -1573,7 +1573,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
                 if (qua <= 0 || qua > 100000)
                     return
 
-                var npc: Npc = this.player.curMap.getNpc(exchangeAction.getValue())!!
+                var npc: Npc? = this.player.curMap.getNpc(exchangeAction.getValue())
                 if (npc == null) return
                 var npcTemplate: NpcTemplate = npc.template
 
@@ -1731,7 +1731,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
             var fragment: Fragment = Fragment("")
 
             for (couple in  ((value as BreakingObject)).objects) {
-                var obj: GameObject = this.player.objects[couple.first]!!
+                var obj: GameObject? = this.player.objects[couple.first]
 
                 if (obj == null || couple.second < 1 || obj.quantity < couple.second) {
                     this.player.send("Ea3")
@@ -1827,7 +1827,7 @@ ExchangeAction.TRADING_WITH_ME -> {when (packet[2]) {
                                 var qua: Int = (infos[1]).toInt()
                                 var price: Int = (infos[2]).toInt()
 
-                                var obj: GameObject = this.player.objects[guid]!!
+                                var obj: GameObject? = this.player.objects[guid]
                                 if (obj == null)
                                     return
                                 if (qua <= 0 || obj.isAttach)
@@ -1851,7 +1851,7 @@ ExchangeAction.TRADING_WITH_ME -> {when (packet[2]) {
 
                                 if (qua <= 0)
                                     return
-                                var obj: GameObject = World.world.getGameObject(guid)!!
+                                var obj: GameObject? = World.world.getGameObject(guid)
                                 if (obj == null)
                                     return
                                 if (qua < 0)
@@ -1918,7 +1918,7 @@ ExchangeAction.TRADING_WITH_COLLECTOR -> {var Collector: Collector = World.world
                             if (guid <= 0 || qua <= 0)
                                 return
 
-                            var obj: GameObject = World.world.getGameObject(guid)!!
+                            var obj: GameObject? = World.world.getGameObject(guid)
                             if (obj == null)
                                 return
 
@@ -1949,7 +1949,7 @@ ExchangeAction.BREAKING_OBJECTS -> {val breakingObject: BreakingObject = ((this.
                             if (!this.player.hasItemGuid(id))
                                 return
 
-                            var obj: GameObject = this.player.objects[id]!!
+                            var obj: GameObject? = this.player.objects[id]
 
                             if (obj == null || obj.isAttach)
                                 return
@@ -1972,7 +1972,7 @@ ExchangeAction.BREAKING_OBJECTS -> {val breakingObject: BreakingObject = ((this.
                             var id: Int = (infos[0]).toInt()
                             var qua: Int = (infos[1]).toInt()
 
-                            var obj: GameObject = World.world.getGameObject(id)!!
+                            var obj: GameObject? = World.world.getGameObject(id)
 
                             if (obj == null)
                                 return
@@ -2046,7 +2046,7 @@ ExchangeAction.TRADING_WITH_NPC_EXCHANGE -> {when (packet[2]) {
                                 var quaInExch: Int = ((this.player.exchangeAction!!.getValue() as NpcExchange)).getQuaItem(guid, false)
 
                                 if (!this.player.hasItemGuid(guid)) return
-                                var obj: GameObject = this.player.objects[guid]!!
+                                var obj: GameObject? = this.player.objects[guid]
                                 if (obj == null) return
 
                                 if (qua > obj.quantity - quaInExch)
@@ -2073,7 +2073,7 @@ ExchangeAction.TRADING_WITH_NPC_EXCHANGE -> {when (packet[2]) {
                                 if (!this.player.hasItemGuid(guid))
                                     return
 
-                                var obj: GameObject = World.world.getGameObject(guid)!!
+                                var obj: GameObject? = World.world.getGameObject(guid)
                                 if (obj == null)
                                     return
                                 if (qua > ((this.player.exchangeAction!!.getValue() as NpcExchange)).getQuaItem(guid, false))
@@ -2113,7 +2113,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS -> {when (packet[2]) {
 
                                 if (!this.player.hasItemGuid(guid))
                                     return
-                                var obj: GameObject = this.player.objects[guid]!!
+                                var obj: GameObject? = this.player.objects[guid]
                                 if (obj == null)
                                     return
 
@@ -2140,7 +2140,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS -> {when (packet[2]) {
                                 if (!this.player.hasItemGuid(guid))
                                     return
 
-                                var obj: GameObject = World.world.getGameObject(guid)!!
+                                var obj: GameObject? = World.world.getGameObject(guid)
                                 if (obj == null)
                                     return
                                 if (qua > ((this.player.exchangeAction!!.getValue() as PlayerExchange.NpcExchangePets)).getQuaItem(guid, false))
@@ -2183,7 +2183,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS_RESURRECTION -> {when (packet[2]) {
 
                                 if (!this.player.hasItemGuid(guid))
                                     return
-                                var obj: GameObject = World.world.getGameObject(guid)!!
+                                var obj: GameObject? = World.world.getGameObject(guid)
                                 if (obj == null)
                                     return
 
@@ -2210,7 +2210,7 @@ ExchangeAction.TRADING_WITH_NPC_PETS_RESURRECTION -> {when (packet[2]) {
                                 if (!this.player.hasItemGuid(guid))
                                     return
 
-                                var obj: GameObject = World.world.getGameObject(guid)!!
+                                var obj: GameObject? = World.world.getGameObject(guid)
                                 if (obj == null)
                                     return
                                 if (qua > ((this.player.exchangeAction!!.getValue() as PlayerExchange.NpcRessurectPets)).getQuaItem(guid, false))
@@ -2314,7 +2314,7 @@ ExchangeAction.AUCTION_HOUSE_SELLING -> {var exchangeAction: BigStoreActionData 
                             return
                         }
 
-                        var obj: GameObject? = World.world.getGameObject(itmID)//R?cup?re l'item!!
+                        var obj: GameObject? = World.world.getGameObject(itmID)//R?cup?re l'item
                         if (obj == null || obj.isAttach) return
 
                         this.player.addKamas(taxe.toLong() * -1);//Retire le montant de la taxe au this.playernnage
@@ -2558,7 +2558,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 
                                     if (!this.player.hasItemGuid(guid))
                                         return
-                                    var obj: GameObject = this.player.objects[guid]!!
+                                    var obj: GameObject? = this.player.objects[guid]
                                     if (obj == null)
                                         return
                                     if (qua > obj.quantity - quaInExch)
@@ -2585,7 +2585,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                                 if (!this.player.hasItemGuid(guid))
                                     return
 
-                                var obj: GameObject = this.player.objects[guid]!!
+                                var obj: GameObject? = this.player.objects[guid]
                                 if (obj == null)
                                     return
                                 if (qua > ((this.player.exchangeAction!!.getValue() as PlayerExchange)).getQuaItem(guid, this.player.id))
@@ -2737,7 +2737,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
     private @Synchronized fun putInInventory(packet: String) {
         if(this.player.exchangeAction != null && this.player.exchangeAction!!.getType() == ExchangeAction.IN_MOUNTPARK) {
             var id: Int = -1
-            var park: MountPark = this.player.curMap.mountPark!!
+            var park: MountPark? = this.player.curMap.mountPark
 
             park = if (park == null) (if (player.curMap.id != 10332) World.world.getMap( 8743) else World.world.getMap( 8848))!!.mountPark!! else park!!
             if(park == null) return
@@ -2863,7 +2863,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
         if(this.player.exchangeAction != null && this.player.exchangeAction!!.getType() == ExchangeAction.IN_MOUNTPARK) {
             var id: Int = -1
             var map: GameMap = this.player.curMap
-            var park: MountPark = this.player.curMap.mountPark!!
+            var park: MountPark? = this.player.curMap.mountPark
             if(park == null) return
             try { id = (packet.substring(3)).toInt()
             } catch (ignored: Exception) {}
@@ -2950,7 +2950,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                 var id: Int = (split[1]).toInt()
                 var skill: Int = (split[2]).toInt()
 
-                var player: Player = World.world.getPlayer(id)!!
+                var player: Player? = World.world.getPlayer(id)
 
                 if (player == null) {
                     SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this, 'E')
@@ -3034,7 +3034,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                 var id: Int = (split[1]).toInt()
                 var skill: Int = (split[2]).toInt()
 
-                var player: Player = World.world.getPlayer(id)!!
+                var player: Player? = World.world.getPlayer(id)
 
                 if (player == null) {
                     SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this, 'E')
@@ -3107,7 +3107,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                 return
             }
 
-            var bigStore: BigStore = World.world.getHdv(this.player.curMap.id)!!
+            var bigStore: BigStore? = World.world.getHdv(this.player.curMap.id)
             if (bigStore != null) {
                 var info: String = "1|10|100;" + bigStore.strCategory + ";" + bigStore.parseTaxe() + ";" + bigStore.lvlMax + ";" + bigStore.maxAccountItem + ";-1;" + bigStore.duration
                 SocketManager.GAME_SEND_ECK_PACKET(this.player, 11, info)
@@ -3116,7 +3116,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
             }
             return
         } else if (packet.substring(2, 4).equals("15") && this.player.exchangeAction == null) {
-            var mount: Mount = this.player.mount!!
+            var mount: Mount? = this.player.mount
 
             if(mount != null) {
                 var exchangeAction: ExchangeAction<Int> = ExchangeAction(ExchangeAction.IN_MOUNT, mount.id)
@@ -3143,7 +3143,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                 return
             }
 
-            var bigStore: BigStore = World.world.getHdv(this.player.curMap.id)!!
+            var bigStore: BigStore? = World.world.getHdv(this.player.curMap.id)
             if (bigStore != null) {
                 var infos: String = "1|10|100;" + bigStore.strCategory + ";" + bigStore.parseTaxe() + ";" + bigStore.lvlMax + ";" + bigStore.maxAccountItem + ";-1;" + bigStore.duration
                 SocketManager.GAME_SEND_ECK_PACKET(this.player, 10, infos)
@@ -3171,7 +3171,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
             var exchangeAction: ExchangeAction<*>? = null
             when (packet[2]) {
 '0' -> {id = (packet.substring(4)).toInt()
-                var npc: Npc = this.player.curMap.getNpc(id)!!
+                var npc: Npc? = this.player.curMap.getNpc(id)
 
                 if (npc != null) {
                     var exchangeAction: ExchangeAction<Int> = ExchangeAction(ExchangeAction.TRADING_WITH_NPC, id)
@@ -3184,7 +3184,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 }
 '1' -> {try {
                     id = (packet.substring(4)).toInt()
-                    var target: Player = World.world.getPlayer(id)!!
+                    var target: Player? = World.world.getPlayer(id)
 
                     if (target == null || target.curMap != this.player.curMap || !target.isOnline) {
                         SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this, 'E')
@@ -3227,7 +3227,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 }
 '4' -> {id = (packet.split("|")[1]).toInt()
 
-                var seller: Player = World.world.getPlayer(id)!!
+                var seller: Player? = World.world.getPlayer(id)
                 if (seller == null || !seller.seeSeller || seller.curMap != this.player.curMap) return
 
                 var exchangeAction: ExchangeAction<Int> = ExchangeAction(ExchangeAction.TRADING_WITH_OFFLINE_PLAYER, id)
@@ -3357,7 +3357,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
 
         when (exchangeAction.getType()) {
 ExchangeAction.TRADING_WITH_PLAYER -> {if(exchangeAction.getValue() is Int) {
-                    var target: Player = World.world.getPlayer((exchangeAction.getValue() as Int))!!
+                    var target: Player? = World.world.getPlayer((exchangeAction.getValue() as Int))
                     if(target != null && target.exchangeAction != null && target.exchangeAction!!.getType() == ExchangeAction.TRADING_WITH_PLAYER) {
                         target.send("EV")
                         target.exchangeAction = null
@@ -3374,7 +3374,7 @@ ExchangeAction.TRADING_WITH_NPC_EXCHANGE -> {((exchangeAction.getValue() as NpcE
                 
 }
 ExchangeAction.CRAFTING_SECURE_WITH -> {if(exchangeAction.getValue() is Int) {
-                    var target: Player = World.world.getPlayer((exchangeAction.getValue() as Int))!!
+                    var target: Player? = World.world.getPlayer((exchangeAction.getValue() as Int))
                     if(target != null && target.exchangeAction != null && target.exchangeAction!!.getType() == ExchangeAction.CRAFTING_SECURE_WITH) {
                         target.send("EV")
                         target.exchangeAction = null
@@ -3410,7 +3410,7 @@ ExchangeAction.IN_MOUNT -> {player.send("EV")
 ExchangeAction.IN_MOUNTPARK -> {player.send("EV")
                 var objects: ArrayList<GameObject> = ArrayList()
                 for(obj in  player.objects.values) {
-                    var mount: Mount = World.world.getMountById(obj.stats.getEffect(995))!!
+                    var mount: Mount? = World.world.getMountById(obj.stats.getEffect(995))
 
                     if(mount == null && obj.template!!.type == Constant.ITEM_TYPE_CERTIF_MONTURE)
                         objects.add(obj)
@@ -3518,13 +3518,13 @@ else -> {player.livreArti = false
         else
             this.player.emoteActive = emote
 
-        var MP: MountPark = this.player.curMap.mountPark!!
+        var MP: MountPark? = this.player.curMap.mountPark
         SocketManager.GAME_SEND_eUK_PACKET_TO_MAP(this.player.curMap, this.player.id, this.player.emoteActive)
         if((emote == 2 || emote == 4 || emote == 3 || emote == 6 || emote == 8 || emote == 10) && MP != null)
         {
             val mounts: ArrayList<Mount> = ArrayList()
             for(id in  MP.getListOfRaising())  {
-                var mount: Mount = World.world.getMountById(id)!!
+                var mount: Mount? = World.world.getMountById(id)
                 if(mount != null)
                     if(mount.owner == this.player.id)
                         mounts.add(mount)
@@ -3594,7 +3594,7 @@ else -> {player.livreArti = false
         var guid: Int = -1
         when (packet[2]) {
 '%' -> {packet = packet.substring(3)
-                var P: Player = World.world.getPlayerByName(packet)!!
+                var P: Player? = World.world.getPlayerByName(packet)
                 if (P == null || !P.isOnline)//Si P est nul, ou si P est nonNul et P offline
                 {
                     SocketManager.GAME_SEND_FA_PACKET(this.player, "Ef")
@@ -3604,7 +3604,7 @@ else -> {player.livreArti = false
                 
 }
 '*' -> {packet = packet.substring(3)
-                var C: Account = World.world.getAccountByPseudo(packet)!!
+                var C: Account? = World.world.getAccountByPseudo(packet)
                 if (C == null || !C.isOnline()) {
                     SocketManager.GAME_SEND_FA_PACKET(this.player, "Ef")
                     return
@@ -3613,7 +3613,7 @@ else -> {player.livreArti = false
                 
 }
 else -> {packet = packet.substring(2)
-                var Pr: Player = World.world.getPlayerByName(packet)!!
+                var Pr: Player? = World.world.getPlayerByName(packet)
                 if (Pr == null || !Pr.isOnline)//Si P est nul, ou si P est nonNul et P offline
                 {
                     SocketManager.GAME_SEND_FA_PACKET(this.player, "Ef")
@@ -3637,7 +3637,7 @@ else -> {packet = packet.substring(2)
         var guid: Int = -1
         when (packet[2]) {
 '%' -> {packet = packet.substring(3)
-                var P: Player = World.world.getPlayerByName(packet)!!
+                var P: Player? = World.world.getPlayerByName(packet)
                 if (P == null)//Si P est nul, ou si P est nonNul et P offline
                 {
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
@@ -3647,7 +3647,7 @@ else -> {packet = packet.substring(2)
                 
 }
 '*' -> {packet = packet.substring(3)
-                var C: Account = World.world.getAccountByPseudo(packet)!!
+                var C: Account? = World.world.getAccountByPseudo(packet)
                 if (C == null) {
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
                     return
@@ -3656,7 +3656,7 @@ else -> {packet = packet.substring(2)
                 
 }
 else -> {packet = packet.substring(2)
-                var Pr: Player = World.world.getPlayerByName(packet)!!
+                var Pr: Player? = World.world.getPlayerByName(packet)
                 if (Pr == null || !Pr.isOnline)//Si P est nul, ou si P est nonNul et P offline
                 {
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
@@ -3674,7 +3674,7 @@ else -> {packet = packet.substring(2)
     }
 
     private fun joinWife(packet: String) {
-        var Wife: Player = World.world.getPlayer(this.player.wife)!!
+        var Wife: Player? = World.world.getPlayer(this.player.wife)
         if (Wife == null)
             return
         if (!Wife.isOnline) {
@@ -3855,7 +3855,7 @@ else -> {if(c.code == 1030) {
                         party.players.stream()
                             .filter({ follower1 -> party.isWithTheMaster(follower1, false, oldMap != newMap) })
                             .forEach { follower ->
-                                    var client: GameClient = follower.gameClient!!
+                                    var client: GameClient? = follower.gameClient
                                     if (client != null && newMap.id == follower.curMap.id) {
                                         follower.curCell.removePlayer(follower)
                                         follower.curCell = newMap.getCase(newCase.getId())!!
@@ -4002,7 +4002,7 @@ gameTryCastSpell(packet)
                 return
             }
             //Si d?placement inutile
-            var targetCell: GameCase = this.player.curMap.getCase(World.world.cryptManager.cellCode_To_ID(path.substring(path.length - 2)))!!
+            var targetCell: GameCase? = this.player.curMap.getCase(World.world.cryptManager.cellCode_To_ID(path.substring(path.length - 2)))
 
             if (targetCell == null || !targetCell.isWalkable(false)) {
                 SocketManager.GAME_SEND_GA_PACKET(this, "", "0", "", "")
@@ -4097,7 +4097,7 @@ gameTryCastSpell(packet)
 
             val id: Int = (split[0].substring(5)).toInt()
             val cellId: Int = (split[1]).toInt()
-            val fight: Fight = this.player.fight!!
+            val fight: Fight? = this.player.fight
 
             if (fight != null) {
                 var SS: Spell.SortStats = this.player.getSortStatBySortIfHas(id)
@@ -4151,7 +4151,7 @@ gameTryCastSpell(packet)
 
     private fun houseAction(packet: String) {
         var actionID: Int = (packet.substring(5)).toInt()
-        var h: House = this.player.curHouse!!
+        var h: House? = this.player.curHouse
         if (h == null)
             return
         when (actionID){  81 -> {h.lock(this.player)
@@ -4172,7 +4172,7 @@ gameTryCastSpell(packet)
             if (this.player.cantDefie())
                 return
             var guid: Int = (packet.substring(5)).toInt()
-            var target: Player = World.world.getPlayer(guid)!!
+            var target: Player? = World.world.getPlayer(guid)
             if (target == null)
                 return
             if(this.player.stalk != null && player.stalk!!.onPlayerTryToFight(player, target))
@@ -4239,7 +4239,7 @@ gameTryCastSpell(packet)
 
         SocketManager.GAME_SEND_MAP_START_DUEL_TO_MAP(this.player.curMap, duel, this.player.id)
         this.clearPanelsForPlayer(player)
-        var fight: Fight = this.player.curMap.newFight(World.world.getPlayer(duel)!!, this.player, Constant.FIGHT_TYPE_CHALLENGE)!!
+        var fight: Fight? = this.player.curMap.newFight(World.world.getPlayer(duel)!!, this.player, Constant.FIGHT_TYPE_CHALLENGE)
 
         this.player.fight = fight
         this.player.away = false
@@ -4271,7 +4271,7 @@ gameTryCastSpell(packet)
         var infos: List<String> = packet.substring(5).split(";")
         if (infos.size == 1) {
             try {
-                var F: Fight = this.player.curMap.getFight((infos[0]).toInt())!!
+                var F: Fight? = this.player.curMap.getFight((infos[0]).toInt())
                 if (F != null)
                     F.joinAsSpectator(this.player)
             } catch (e: Exception) {
@@ -4284,11 +4284,11 @@ gameTryCastSpell(packet)
                     SocketManager.GAME_SEND_GA903_ERROR_PACKET(this, 'o', guid)
                     return
                 }
-                var player: Player = World.world.getPlayer(guid)!!
+                var player: Player? = World.world.getPlayer(guid)
                 var fight: Fight? = null
 
                 if (player == null) {
-                    var prism: Prism = World.world.getPrisme(guid)!!
+                    var prism: Prism? = World.world.getPrisme(guid)
                     if(prism != null)
                         fight = prism.fight
                 } else {
@@ -4333,14 +4333,14 @@ gameTryCastSpell(packet)
                 SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(this.player.getGameClient()!!, 'S')
                 return
             }
-            var target: Player = World.world.getPlayer((packet.substring(5)).toInt())!!
+            var target: Player? = World.world.getPlayer((packet.substring(5)).toInt())
 
             if (target == null || !target.isOnline || target.fight != null || target.curMap.id
                     != this.player.curMap.id || target.alignment == this.player.alignment || this.player.
                     curMap.places.size < 2 || !target.canAggro() ||target.isDead().toInt() == 1)
                 return
 
-            var area: Area = this.player.curMap.area!!
+            var area: Area? = this.player.curMap.area
 
             if(area != null && area.id == 42)
                 return
@@ -4373,7 +4373,7 @@ gameTryCastSpell(packet)
                 return
 
             var id: Int = (packet.substring(5)).toInt()
-            var target: Collector = World.world.getCollector(id)!!
+            var target: Collector? = World.world.getCollector(id)
 
             if (target == null || target.inFight > 0)
                 return
@@ -4428,7 +4428,7 @@ gameTryCastSpell(packet)
                 player.send("EV")
             }
             if(player.duelId != -1) {
-                var target: Player = World.world.getPlayer(player.duelId)!!
+                var target: Player? = World.world.getPlayer(player.duelId)
                 if(target != null) {
                     target.away = false
                     target.duelId = -1
@@ -4445,9 +4445,9 @@ gameTryCastSpell(packet)
         var chalID: Int = 0
         chalID = (packet.split("i")[1]).toInt()
         if (chalID != 0 && this.player.fight != null) {
-            var fight: Fight = this.player.fight!!
-            if (chalID in fight.allChallenges)
-                fight.allChallenges[chalID]!!.showCibleToPerso(this.player)
+            var fight: Fight? = this.player.fight
+            if (chalID in fight!!.allChallenges)
+                fight!!.allChallenges[chalID]!!.showCibleToPerso(this.player)
         }
     }
 
@@ -4546,7 +4546,7 @@ gameTryCastSpell(packet)
         }
         if (id == -1)
             return
-        var GA: GameAction = actions[id]!!
+        var GA: GameAction? = actions[id]
 
         if (GA == null)
             return
@@ -4655,13 +4655,13 @@ gameTryCastSpell(packet)
             }
         }
 
-        var fight: Fight = this.player.fight!!
+        var fight: Fight? = this.player.fight
 
         if (fight == null || id < 0)
             return
 
         if (id > 0) {
-            val target: Player = World.world.getPlayer(id)!!
+            val target: Player? = World.world.getPlayer(id)
 
             if (target == null || target.fight == null)
                 return
@@ -4931,7 +4931,7 @@ gameTryCastSpell(packet)
         if (!this.player.guildMember!!.canDo(Constant.G_POSPERCO))
             return;//On peut le retirer si on a le droit de le poser
         var idCollector: Int = (packet).toInt()
-        var collector: Collector = World.world.getCollector(idCollector)!!
+        var collector: Collector? = World.world.getCollector(idCollector)
         if (collector == null || collector.inFight > 0)
             return
         collector.reloadTimer()
@@ -4959,7 +4959,7 @@ gameTryCastSpell(packet)
         if (this.player.fight != null || this.player.away)
             return
         var HouseID: Int = (packet).toInt()
-        var h: House = World.world.houses[HouseID]!!
+        var h: House? = World.world.houses[HouseID]
         if (h == null)
             return
         if (this.player.getGuild()!!.id != h.guildId) {
@@ -4980,7 +4980,7 @@ gameTryCastSpell(packet)
     }
 
     private fun placeTaxCollector() {
-        val guild: Guild = this.player.getGuild()!!
+        val guild: Guild? = this.player.getGuild()
         val map: GameMap = this.player.curMap
 
         if (guild == null || this.player.fight != null || this.player.away || !this.player.guildMember!!.canDo(Constant.G_POSPERCO) || !guild.haveTenMembers())
@@ -5148,7 +5148,7 @@ gameTryCastSpell(packet)
     private fun banToGuild(name: String) {
         if (this.player.getGuild() == null)
             return
-        var P: Player = World.world.getPlayerByName(name)!!
+        var P: Player? = World.world.getPlayerByName(name)
         var guid: Int = -1
         var guildId: Int = -1
         lateinit var toRemGuild: Guild
@@ -5229,7 +5229,7 @@ gameTryCastSpell(packet)
         var xpGive: Byte = (infos[2]).toByte()
         var right: Int = (infos[3]).toInt()
 
-        var p: Player? = World.world.getPlayer(guid) //Cherche le this.playernnage a qui l'on change les droits dans la m?moire!!
+        var p: Player? = World.world.getPlayer(guid) //Cherche le this.playernnage a qui l'on change les droits dans la m?moire
         lateinit var toChange: GuildMember
         var changer: GuildMember = this.player.guildMember!!
 
@@ -5321,7 +5321,7 @@ gameTryCastSpell(packet)
             return
         }
 
-        var collector: Collector = World.world.getCollector(id)!!
+        var collector: Collector? = World.world.getCollector(id)
         var fail: Boolean =this.player.isDead().toInt() == 1 || collector == null || collector.inFight <= 0
 
         if(collector != null) {
@@ -5341,13 +5341,13 @@ gameTryCastSpell(packet)
         /*if (!fail) {
             SocketManager.GAME_SEND_BN(this.player);
         }*/
-        for (z in  World.world.getGuild(collector.guildId)!!.getPlayers()) {
+        for (z in  World.world.getGuild(collector!!.guildId)!!.getPlayers()) {
             if (z == null)
                 continue
             if (z.isOnline) {
-                SocketManager.GAME_SEND_gITM_PACKET(z, Collector.parseToGuild(collector.guildId))
-                Collector.parseAttaque(z, collector.guildId)
-                Collector.parseDefense(z, collector.guildId)
+                SocketManager.GAME_SEND_gITM_PACKET(z, Collector.parseToGuild(collector!!.guildId))
+                Collector.parseAttaque(z, collector!!.guildId)
+                Collector.parseDefense(z, collector!!.guildId)
             }
         }
     }
@@ -5414,7 +5414,7 @@ gameTryCastSpell(packet)
         var guid: Int = -1
         when (packet[2]) {
 '%' -> {packet = packet.substring(3)
-                var P: Player = World.world.getPlayerByName(packet)!!
+                var P: Player? = World.world.getPlayerByName(packet)
                 if (P == null) {
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
                     return
@@ -5424,7 +5424,7 @@ gameTryCastSpell(packet)
                 
 }
 '*' -> {packet = packet.substring(3)
-                var C: Account = World.world.getAccountByPseudo(packet)!!
+                var C: Account? = World.world.getAccountByPseudo(packet)
                 if (C == null) {
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
                     return
@@ -5433,7 +5433,7 @@ gameTryCastSpell(packet)
                 
 }
 else -> {packet = packet.substring(2)
-                var Pr: Player = World.world.getPlayerByName(packet)!!
+                var Pr: Player? = World.world.getPlayerByName(packet)
                 if (Pr == null || !Pr.isOnline) {
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
                     return
@@ -5456,7 +5456,7 @@ else -> {packet = packet.substring(2)
         var guid: Int = -1
         when (packet[2]) {
 '%' -> {packet = packet.substring(3)
-                var P: Player = World.world.getPlayerByName(packet)!!
+                var P: Player? = World.world.getPlayerByName(packet)
                 if (P == null) {
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
                     return
@@ -5466,7 +5466,7 @@ else -> {packet = packet.substring(2)
                 
 }
 '*' -> {packet = packet.substring(3)
-                var C: Account = World.world.getAccountByPseudo(packet)!!
+                var C: Account? = World.world.getAccountByPseudo(packet)
                 if (C == null) {
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
                     return
@@ -5475,7 +5475,7 @@ else -> {packet = packet.substring(2)
                 
 }
 else -> {packet = packet.substring(2)
-                var Pr: Player = World.world.getPlayerByName(packet)!!
+                var Pr: Player? = World.world.getPlayerByName(packet)
                 if (Pr == null || !Pr.isOnline) {
                     SocketManager.GAME_SEND_FD_PACKET(this.player, "Ef")
                     return
@@ -5502,7 +5502,7 @@ else -> {packet = packet.substring(2)
                 var pos: Int = (infos[0]).toInt()
                 var option: Int = (infos[1]).toInt()
                 var slots: Int = (infos[2]).toInt()
-                var SM: JobStat = this.player.metiers[pos]!!
+                var SM: JobStat? = this.player.metiers[pos]
                 if (SM == null)
                     return
                 SM.setOptBinValue(option)
@@ -5618,7 +5618,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
                 qua = (infos[1]).toInt()
             } catch (ignored: Exception) {}
 
-            var obj: GameObject = this.player.objects[guid]!!
+            var obj: GameObject? = this.player.objects[guid]
             if (obj == null || !this.player.hasItemGuid(guid) || qua <= 0
                     || this.player.fight != null || this.player.away) {
                 //SocketManager.GAME_SEND_DELETE_OBJECT_FAILED_PACKET(this);
@@ -5708,7 +5708,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
                 quantity = (infos[2]).toInt()
             } catch (ignored: Exception) {}
 
-            var obj: GameObject = this.player.objects[id]!!
+            var obj: GameObject? = this.player.objects[id]
             if (obj == null || player.exchangeAction != null)
                 return
             if (this.player.fight != null)
@@ -5754,11 +5754,11 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
             /* Feed pet **/
             if (position == Constant.ITEM_POS_FAMILIER && obj.template!!.type != Constant.ITEM_TYPE_FAMILIER && this.player.getObjetByPos(position) != null) {
                 var pets: GameObject = this.player.getObjetByPos(position)!!
-                var p: Pet = World.world.getPets(pets.template!!.id)!!
+                var p: Pet? = World.world.getPets(pets.template!!.id)
                 if (p == null)
                     return
                 if (p.epo == obj.template!!.id) {
-                    var pet: PetEntry = World.world.getPetsEntry(pets.guid)!!
+                    var pet: PetEntry? = World.world.getPetsEntry(pets.guid)
                     if (pet != null && p.epo == obj.template!!.id)
                         pet.giveEpo(this.player)
                     return
@@ -5777,7 +5777,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
                     // ok
                 }
 
-                var MyPets: PetEntry = World.world.getPetsEntry(pets.guid)!!
+                var MyPets: PetEntry? = World.world.getPetsEntry(pets.guid)
                 if (MyPets == null)
                     return
                 if (p.type == 2 || p.type == 3
@@ -5879,7 +5879,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
 
                 // FIN DES VERIFS
 
-                var exObj: GameObject? = this.player.getObjetByPos2(position)//Objet a l'ancienne position!!
+                var exObj: GameObject? = this.player.getObjetByPos2(position)//Objet a l'ancienne position
                 var objGUID: Int = obj.template!!.id
                 // CODE OBVI
                 if (obj.template!!.type == 113) {
@@ -6203,7 +6203,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
             return
         if (target != null && target.away)
             return
-        var obj: GameObject = this.player.objects[guid]!!
+        var obj: GameObject? = this.player.objects[guid]
         if (obj == null)
             return
         var T: ObjectTemplate = obj.template!!
@@ -6368,12 +6368,12 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
         if (!this::player.isInitialized || this.player.inviting == 0)
             return
 
-        var target: Player = World.world.getPlayer(this.player.inviting)!!
+        var target: Player? = World.world.getPlayer(this.player.inviting)
 
         if (target == null)
             return
 
-        var party: Party = target.party!!
+        var party: Party? = target.party
 
         if (party == null) {
             party = Party(target, this.player)
@@ -6396,7 +6396,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     }
 
     private fun followMember(packet: String) {
-        var g: Party = this.player.party!!
+        var g: Party? = this.player.party
         if (g == null)
             return
         var pGuid: Int = -1
@@ -6408,7 +6408,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
         }
         if (pGuid == -1)
             return
-        var P: Player = World.world.getPlayer(pGuid)!!
+        var P: Player? = World.world.getPlayer(pGuid)
         if (P == null || !P.isOnline)
             return
         if (packet[2] == '+')//Suivre
@@ -6431,7 +6431,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     }
 
     private fun followAllMember(packet: String) {
-        var g2: Party = this.player.party!!
+        var g2: Party? = this.player.party
         if (g2 == null)
             return
         var pGuid2: Int = -1
@@ -6444,7 +6444,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
 
         if (pGuid2 == -1)
             return
-        var P2: Player = World.world.getPlayer(pGuid2)!!
+        var P2: Player? = World.world.getPlayer(pGuid2)
         if (P2 == null || !P2.isOnline)
             return
         if (packet[2] == '+')//Suivre
@@ -6479,7 +6479,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             return
 
         var name: String = packet.substring(2)
-        var target: Player = World.world.getPlayerByName(name)!!
+        var target: Player? = World.world.getPlayerByName(name)
 
         if (target == null || !target.isOnline) {
             SocketManager.GAME_SEND_GROUP_INVITATION_ERROR(this, "n" + name)
@@ -6510,7 +6510,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
         if (!this::player.isInitialized || this.player.inviting == 0)
             return
 
-        var player: Player = World.world.getPlayer(this.player.inviting!!)!!
+        var player: Player? = World.world.getPlayer(this.player.inviting!!)
 
         if (player != null) {
             player.inviting = 0
@@ -6521,7 +6521,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     }
 
     private fun leaveParty(packet: String) {
-        var party: Party = this.player.party!!
+        var party: Party? = this.player.party
 
         if (party != null) {
             if (packet.length == 2) { // player leave group
@@ -6547,7 +6547,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     private fun whereIsParty() {
         if (!this::player.isInitialized)
             return
-        var g: Party = this.player.party!!
+        var g: Party? = this.player.party
         if (g == null)
             return
         var str: String = ""
@@ -6664,7 +6664,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             var id: Int = (packet.substring(2).split("|")[0]).toInt()
 
             if (id != 0) {
-                var mount: Mount = World.world.getMountById(id)!!
+                var mount: Mount? = World.world.getMountById(id)
                 if (mount != null)
                     SocketManager.GAME_SEND_MOUNT_DESCRIPTION_PACKET(this.player, mount)
             }
@@ -7052,7 +7052,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
     private fun distPecheur(): Boolean {
         try {
             var packet: String = actions[-1]!!.packet!!.substring(5)
-            var SM: JobStat = this.player.getMetierBySkill((packet.split(";")[1]).toInt())!!
+            var SM: JobStat? = this.player.getMetierBySkill((packet.split(";")[1]).toInt())
             if (SM == null)
                 return false
             if (SM.template == null)

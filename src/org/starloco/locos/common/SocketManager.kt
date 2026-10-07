@@ -1500,7 +1500,7 @@ object SocketManager {
 
         packet.append("Rp").append(MP.owner).append(";").append(MP.price).append(";").append(MP.size).append(";").append(MP.maxObject).append(";")
 
-        var G: Guild = MP.guild!!
+        var G: Guild? = MP.guild
         //Si une guilde est definie
         if (G != null) {
             packet.append(G.name).append(";").append(G.emblem)
@@ -1519,7 +1519,7 @@ object SocketManager {
             packet.append("-").append(pano)
         else {
             packet.append("+").append(pano).append("|")
-            var IS: ObjectSet = World.world.getItemSet(pano)!!
+            var IS: ObjectSet? = World.world.getItemSet(pano)
             if (IS != null) {
                 var items: StringBuilder = StringBuilder()
                 //Pour chaque objet de la pano
@@ -1828,7 +1828,7 @@ object SocketManager {
 
     @JvmStatic fun GAME_SEND_EHP_PACKET(out: Player, id: Int) //Packet d'envoie du prix moyen du template (En r�ponse a un packet EHP)
     {
-        var template: ObjectTemplate = World.world.getObjTemplate(id)!!
+        var template: ObjectTemplate? = World.world.getObjTemplate(id)
         if (template != null)
             send(out, "EHP" + id + "|" + template.avgPrice)
     }
