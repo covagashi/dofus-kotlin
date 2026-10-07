@@ -3521,7 +3521,7 @@ else -> {packet.append(effect.value).append(";;;;")
         for (entry in  this.team1.entries) {
             if (entry.value.isInvocation())
                 continue
-            if (entry.value.isDead) {
+            if (!entry.value.isDead) {
                 finish = false
                 break
             }
@@ -3539,7 +3539,7 @@ else -> {packet.append(effect.value).append(";;;;")
         for (fighter in  ArrayList(this.team0.values)) {
             if (fighter.isInvocation())
                 continue
-            if (fighter.isDead) {
+            if (!fighter.isDead) {
                 team0 = false
                 break
             }
@@ -3548,7 +3548,7 @@ else -> {packet.append(effect.value).append(";;;;")
         for (fighter in  ArrayList(this.team1.values)) {
             if (fighter.isInvocation())
                 continue
-            if (fighter.isDead) {
+            if (!fighter.isDead) {
                 team1 = false
                 break
             }
