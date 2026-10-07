@@ -66,24 +66,30 @@ class Monster(
         thisInit: String, thisXp: String, spellGuard: Boolean = true
     ) {
         var G = 1
+        val gradeParts = thisGrades.split("|")
+        val statsParts = thisStats.split("|")
+        val spellParts = thisSpells.split("|")
+        val pdvParts = thisPdvs.split("|")
+        val initParts = thisInit.split("|")
+        val pointParts = thisPoints.split("|")
+        val xpParts = thisXp.split("|")
 
         for (n in 0 until 12) {
             try {
                 //Grades
-                val split = thisGrades.split("|")
-                val grade = split[n]
+                val grade = gradeParts[n]
                 val infos = grade.split("@")
                 val level = infos[0].toInt()
                 val resists = infos[1]
                 //Stats
-                val stats = thisStats.split("|")[n]
+                val stats = statsParts[n]
                 //Spells
                 var spells = ""
                 if (!spellGuard || (!thisSpells.equals("||||", ignoreCase = true)
                         && !thisSpells.equals("", ignoreCase = true)
                         && !thisSpells.equals("-1", ignoreCase = true))
                 ) {
-                    spells = thisSpells.split("|")[n]
+                    spells = spellParts[n]
                     if (spells == "-1")
                         spells = ""
                 }
@@ -92,8 +98,8 @@ class Monster(
                 var init = 1
 
                 try {
-                    pdvmax = thisPdvs.split("|")[n].toInt()
-                    init = thisInit.split("|")[n].toInt()
+                    if (n < pdvParts.size) pdvmax = pdvParts[n].toInt()
+                    if (n < initParts.size) init = initParts[n].toInt()
                 } catch (e: Exception) {
                     World.world.logger.error("  > Error : Monster (id:$id, grade: $n : Life or initiative unreadable.", e)
                 }
@@ -103,11 +109,11 @@ class Monster(
                 var xp = 10
 
                 try {
-                    val pts = thisPoints.split("|")[n].split(";")
+                    val pts = pointParts[n].split(";")
                     try {
                         PA = pts[0].toInt()
                         PM = pts[1].toInt()
-                        xp = thisXp.split("|")[n].toInt()
+                        if (n < xpParts.size) xp = xpParts[n].toInt()
                     } catch (e: Exception) {
                         World.world.logger.error("  > Error : Monster (id:$id, grade: $n : PA, PM or experience unreadable.", e)
                     }
