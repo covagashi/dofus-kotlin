@@ -16,6 +16,7 @@ Dofus 1.39.8 wire protocol end-to-end without a Flash client.
 | `dofus_items_smoke.py` | Item equip/unequip: `OM<guid>|<pos>` → `OM` ack + `As`/`Oa`/`OT` stat+set refresh. Guid 7 = tpl 770 (boots → slot 5). |
 | `dofus_exchange_smoke.py` | Player-to-player trade: `ER1|<playerId>` → `ECK1` + `EA` accept → `EMG<kamas>` offer → `EK` validate → `EK11`/`EK12` + `EVa` applied. Needs two accounts on the same map (player ids 1+2). |
 | `dofus_mapchange_smoke.py` | Scripted map transition: BFS walk to an `onMovementEnd` trigger cell on map 7411 → `GA001` → server `GA<actionId>;1;...` echo → `GKK<actionId>` ack → `GA;2` + `GDM|7427` teleport. |
+| `dofus_gather_smoke.py` | Resource gathering: `GA500<cell>;<skill>` on the map-952 well (cell 283, skill 102 — no job/tool needed) → `GDF` object lock + `GA;501` gather animation → `OAKO` + `IQ` item reward after the duration. |
 | `run_all.sh` | Runs every smoke in sequence: repositions the test characters, restarts `starloco_game`, waits for boot, then runs each script inside a throwaway python container on the compose network. |
 | `decode_map.py` | Dumps a `maps` table row into the walkable-cell JSON used by `MapGrid`. |
 | `map4.json` / `map7411.json` | Decoded walkability for maps 4 (fight) and 7411 (zaap). Regenerate with `decode_map.py <id>`. |
@@ -64,6 +65,7 @@ restart the game server (player state is cached in memory):
 | `dofus_items_smoke` | any | any | guid 7 owned, level ≥ 2 |
 | `dofus_exchange_smoke` | 1674 | 227 | players 1+2 same map, kamas > 0 |
 | `dofus_mapchange_smoke` | 7411 | 311 | — |
+| `dofus_gather_smoke` | 952 | 281 | — |
 
 ```bash
 docker exec dofus-kotlin-starloco_mariadb-1 mariadb -uroot -p$DB_PASS \

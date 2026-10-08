@@ -41,6 +41,7 @@ dofus_items_smoke.py|1674|227
 dofus_zaap_smoke.py|7411|311
 dofus_mapchange_smoke.py|7411|311
 dofus_shop_smoke.py|692|100
+dofus_gather_smoke.py|952|281
 dofus_fight_smoke.py|4|281"
 
 reposition 1674 227   # any valid spot for the position-independent login smoke
