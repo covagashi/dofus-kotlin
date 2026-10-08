@@ -279,7 +279,7 @@ object SocketManager {
 
     @JvmStatic fun GAME_SEND_ALTER_FIGHTER_MOUNT(fight: Fight, fighter: Fighter, guid: Int, team: Int, otherteam: Int) {
         var packet: StringBuilder = StringBuilder()
-        packet.append("GM|-").append(guid).append((0x00 as Char)).append(fighter.getGmPacket('+', true))
+        packet.append("GM|-").append(guid).append('\u0000').append(fighter.getGmPacket('+', true))
         for (F in  fight.getFighters(team)) {
             if (F.player == null
                     || F.player!!.getGameClient() == null

@@ -1311,7 +1311,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
     }
 
     private fun npcCreateDialog(packet: String) {
-        var id: Int = (packet.substring(2).split((0x0A as Char) + "")[0]).toInt()
+        var id: Int = (packet.substring(2).split('\n')[0]).toInt()
 
         if (player.isMissingSubscription() || player.exchangeAction != null) {
             SocketManager.GAME_SEND_EXCHANGE_REQUEST_ERROR(player.getGameClient()!!, 'S')
@@ -4888,7 +4888,7 @@ gameTryCastSpell(packet)
             }
             var G: Guild = Guild(name, emblem)
             var gm: GuildMember = G.addNewMember(this.player)
-            gm.setAllRights(1, (0 as Byte), 1, this.player);//1 => Meneur (Tous droits)
+            gm.setAllRights(1, 0.toByte(), 1, this.player);//1 => Meneur (Tous droits)
             this.player.guildMember = gm;//On ajthise le meneur
             World.world.addGuild(G)
             DatabaseManager.get(GuildMemberData::class.java).update(this.player)
@@ -5039,7 +5039,7 @@ gameTryCastSpell(packet)
 
         var n1: Short = ((Formulas.getRandomValue(1, 129)) as Short)
         var n2: Short = ((Formulas.getRandomValue(1, 227)) as Short)
-        var collector: Collector = Collector(-1, map.id, this.player.curCell.getId(), (3 as Byte), guild.id, n1, n2, this.player, System.currentTimeMillis(), "", 0, 0)
+        var collector: Collector = Collector(-1, map.id, this.player.curCell.getId(), 3.toByte(), guild.id, n1, n2, this.player, System.currentTimeMillis(), "", 0, 0)
         DatabaseManager.get(CollectorData::class.java).insert(collector)
         World.world.addCollector(collector)
         SocketManager.GAME_SEND_ADD_PERCO_TO_MAP(map)
@@ -5272,7 +5272,7 @@ gameTryCastSpell(packet)
             {
                 if (rank == 1) //Si il met un autre membre "Meneur"
                 {
-                    changer.setAllRights(2, (-1 as Byte), 29694, this.player); //Met le meneur "Bras droit" avec tthis les droits
+                    changer.setAllRights(2, (-1).toByte(), 29694, this.player); //Met le meneur "Bras droit" avec tthis les droits
 
                     //D?fini les droits ? mettre au nouveau meneur
                     rank = 1
@@ -5699,7 +5699,7 @@ ExchangeAction.LOCK_HOUSE -> {World.world.houseManager.lockIt(this.player, packe
     }
 
     @Synchronized fun movementObject(packet: String) {
-        var infos: List<String> = packet.substring(2).split("" + (0x0A as Char))[0].split("|")
+        var infos: List<String> = packet.substring(2).split('\n')[0].split("|")
         try {
             var quantity: Int = 1
             var id: Int = (infos[0]).toInt()

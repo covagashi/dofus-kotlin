@@ -1292,7 +1292,7 @@ else -> {
 				var vale: Int = caster!!.getPdv() / 100 * dmg//Valeur des d�gats
 				//retrait de la r�sist fixe
 				vale -= resF
-				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP//Reduc %resis
+				var reduc: Int = ((((vale.toFloat())) / 100.toFloat()).toInt()) * resP//Reduc %resis
 				vale -= reduc
 				if (vale < 0)
 					vale = 0
@@ -1350,7 +1350,7 @@ else -> {
 				var vale: Int = caster!!.getPdv() / 100 * dmg//Valeur des d�gats
 				//retrait de la r�sist fixe
 				vale -= resF
-				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP//Reduc %resis
+				var reduc: Int = ((((vale.toFloat())) / 100.toFloat()).toInt()) * resP//Reduc %resis
 				vale -= reduc
 				if (vale < 0)
 					vale = 0
@@ -1409,7 +1409,7 @@ else -> {
 				var vale: Int = caster!!.getPdv() / 100 * dmg//Valeur des d�gats
 				//retrait de la r�sist fixe
 				vale -= resF
-				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP//Reduc %resis
+				var reduc: Int = ((((vale.toFloat())) / 100.toFloat()).toInt()) * resP//Reduc %resis
 				vale -= reduc
 				if (vale < 0)
 					vale = 0
@@ -1466,7 +1466,7 @@ else -> {
 				var vale: Int = caster!!.getPdv() / 100 * dmg//Valeur des d�gats
 				//retrait de la r�sist fixe
 				vale -= resF
-				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP//Reduc %resis
+				var reduc: Int = ((((vale.toFloat())) / 100.toFloat()).toInt()) * resP//Reduc %resis
 				vale -= reduc
 				if (vale < 0)
 					vale = 0
@@ -1524,7 +1524,7 @@ else -> {
 				var vale: Int = caster!!.getPdv() / 100 * dmg//Valeur des d�gats
 				//retrait de la r�sist fixe
 				vale -= resF
-				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP//Reduc %resis
+				var reduc: Int = ((((vale.toFloat())) / 100.toFloat()).toInt()) * resP//Reduc %resis
 				vale -= reduc
 				var armor: Int = 0
 				for (SE in  target.getBuffsByEffectID(105)) {
@@ -4056,7 +4056,7 @@ var MG: MonsterGrade? = null
 				dmg = getMaxMinSpell(target, dmg)
 				var vale: Int = caster!!.getPdv() / 100 * dmg// Valor de da�os
 				vale -= resF
-				var reduc: Int = ((((vale.toFloat())) / (100 as Float)).toInt()) * resP// Reduc
+				var reduc: Int = ((((vale.toFloat())) / 100.toFloat()).toInt()) * resP// Reduc
 				// %resis
 				vale -= reduc
 				if (vale < 0)
@@ -4078,10 +4078,10 @@ var MG: MonsterGrade? = null
 	private fun applyEffect_672(targets: ArrayList<Fighter>, fight: Fight) {
 		//Punition
 		//Formule de barge ? :/ Clair que ca punie ceux qui veulent l'utiliser x_x
-		var vale: Double= ((Formulas.getRandomJet(caster, null, jet).toDouble()) / (100 as Double))
+		var vale: Double= ((Formulas.getRandomJet(caster, null, jet).toDouble()) / 100.toDouble())
 		var pdvMax: Int = caster!!.baseMaxPdv()
 		var pVie: Double = (caster!!.getPdv().toDouble()) / (caster!!.getPdvMax().toDouble())
-		var rad: Double = (2 as Double) * Math.PI * ((pVie - 0.5).toDouble())
+		var rad: Double = 2.toDouble() * Math.PI * ((pVie - 0.5).toDouble())
 		var cos: Double = Math.cos(rad)
 		var taux: Double = (Math.pow((cos + 1).toDouble(), 2.0)) / 4.0
 		var dgtMax: Double = vale * pdvMax
@@ -4401,7 +4401,7 @@ var MG: MonsterGrade? = null
 }
 			if (!celll.isWalkableFight())
 				continue
-			var g: Glyph = Glyph(fight, caster!!, celll, (0 as Byte), TS, duration, spell)
+			var g: Glyph = Glyph(fight, caster!!, celll, 0.toByte(), TS, duration, spell)
 			fight.glyphs.add(g)
 
 			SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 999, caster!!.id.toString() + "", "GDZ+" + celll.getId().toString() + ";" + 0 + ";" + g.color)
@@ -4436,7 +4436,7 @@ var MG: MonsterGrade? = null
 				continue
 			if (!celll.isWalkableFight())
 				continue
-			var g: Glyph = Glyph(fight, caster!!, celll, (0 as Byte), TS, duration, spell)
+			var g: Glyph = Glyph(fight, caster!!, celll, 0.toByte(), TS, duration, spell)
 			fight.glyphs.add(g)
 			var unk: Int = g.color
 			var str: String = "GDZ+" + celll.getId().toString() + ";" + 0 + ";" + unk
@@ -4461,7 +4461,7 @@ var MG: MonsterGrade? = null
 			SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(fight, 7, 4, caster!!.id.toString() + "", caster!!.id.toString() + "," + cell!!.getId())
 		}
 
-		var g: Glyph = Glyph(fight, caster!!, cell!!, (0 as Byte), TS, duration, spell)
+		var g: Glyph = Glyph(fight, caster!!, cell!!, 0.toByte(), TS, duration, spell)
 		fight.glyphs.add(g)
 		var unk: Int = g.color
 		var str: String = "GDZ+" + cell!!.getId().toString() + ";" + 0 + ";" + unk

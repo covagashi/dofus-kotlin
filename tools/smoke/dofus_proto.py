@@ -201,8 +201,15 @@ class MapGrid:
 
 
 def decode_map_json(map_id, w, h, key, mapdata):
-    """Decode raw mapData into the JSON form MapGrid.load() consumes."""
-    dec = decrypt_map_data(mapdata, key)
+    """Decode raw mapData into the JSON form MapGrid.load() consumes.
+
+    Some maps store plaintext cell data (10 chars per cell); those are
+    detected by non-hex characters and used as-is.
+    """
+    if all(c in "0123456789abcdefABCDEF" for c in mapdata.strip()):
+        dec = decrypt_map_data(mapdata, key)
+    else:
+        dec = mapdata
     n = len(dec) // 10
     tmp = MapGrid(w, h, [])
     walk = [c for c in range(n)
