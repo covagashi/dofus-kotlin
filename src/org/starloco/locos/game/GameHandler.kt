@@ -39,6 +39,7 @@ class GameHandler : IoHandler {
 
             for (p in s) {
                 var p = p
+                if (p.isEmpty()) continue
                 if (p[0] == 'ù') {
                     if (p.splitJ("ù").size < 3) continue
                     p = p.split("ù")[2]
@@ -61,7 +62,9 @@ class GameHandler : IoHandler {
                     }
                     client.parsePacket(p)
                 } catch (e: Exception) {
-                    throw Exception("Cannot process packet: $p", e)
+                    // A malformed packet must not kill the session; log and
+                    // keep processing the rest of the batch.
+                    logger.warn("Cannot process packet: {}", p, e)
                 } finally {
                     if (Config.debug) {
                         World.world.logger.trace((if (client.player == null) "" else client.player.name) + " <-- " + p)
