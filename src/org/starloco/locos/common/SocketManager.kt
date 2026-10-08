@@ -1912,7 +1912,7 @@ object SocketManager {
         var packet: String = "cMK" + suffix + "|" + guid + "|" + name + "|"
 
         for (target in  World.world.onlinePlayers) {
-            if (target.curMap != null && target.curMap!!.subArea != null && target.curMap!!.subArea!!.area != null && target.curMap!!.subArea!!.area!!.id == 45) {
+            if (target.hasMap() && target.curMap.subArea != null && target.curMap!!.subArea!!.area != null && target.curMap!!.subArea!!.area!!.id == 45) {
                 send(target, packet + msg)
             }
         }

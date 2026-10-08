@@ -114,6 +114,10 @@ open class Fight {
     lateinit var mapOld: GameMap
     lateinit var init0: Fighter
     lateinit var init1: Fighter
+
+    fun hasInit0() = ::init0.isInitialized
+    fun hasInit1() = ::init1.isInitialized
+    fun hasMonsterGroup() = ::monsterGroup.isInitialized
     var turn: Turn? = null
 
     private var totalTurns: Int= 0
@@ -174,9 +178,9 @@ open class Fight {
         SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init2.id.toString() + "", init2.id.toString() + "," + Constant.ETAT_PORTE.toString() + ",0")
         SocketManager.GAME_SEND_GA_PACKET_TO_FIGHT(this, 3, 950, init2.id.toString() + "", init2.id.toString() + "," + Constant.ETAT_PORTEUR.toString() + ",0")
 
-        if (perso.curCell != null)
+        if (perso.hasCell())
             perso.curCell.removePlayer(perso)
-        if (init2.curCell != null)
+        if (init2.hasCell())
             init2.curCell.removePlayer(init2)
 
         this.init0.cell!!.addFighter(init0)
@@ -237,7 +241,7 @@ open class Fight {
                 this.team1.remove(f.id)
                 continue
             }
-            if (init1 == null)
+            if (!hasInit1())
                 this.init1 = f
             f.cell = cell
             f.cell!!.addFighter(f)
@@ -253,7 +257,7 @@ open class Fight {
                 this.team0.remove(f.id)
                 continue
             }
-            if (init0 == null)
+            if (!hasInit0())
                 this.init0 = f
             f.cell = cell
             f.cell!!.addFighter(f)
@@ -325,7 +329,7 @@ open class Fight {
         }
         this.init0.cell = getRandomCell(this.start0)
 
-        if (this.init0.player!!.curCell != null)
+        if (this.init0.player!!.hasCell())
             this.init0.player!!.curCell.removePlayer(this.init0.player!!)
 
         this.init0.cell!!.addFighter(init0)
@@ -1122,9 +1126,9 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                         //region Place
                         var isValid: Boolean = false
                         if (target != null) {
-                            if (init0 != null && this.init0.player != null && caster.player!!.id == this.init0.player!!.id)
+                            if (hasInit0() && this.init0.player != null && caster.player!!.id == this.init0.player!!.id)
                                 isValid = true
-                            if (init1 != null && this.init1.player != null && caster.player!!.id == this.init1.player!!.id)
+                            if (hasInit1() && this.init1.player != null && caster.player!!.id == this.init1.player!!.id)
                                 isValid = true
                         }
 
@@ -1165,9 +1169,9 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
                             //endregion
                         } else if (target == null) {// Il leave de son plein gr\u00e9 donc (target = null)
                             var isValid2: Boolean = false
-                            if (this.init0 != null && this.init0.player != null && caster.player!!.id == this.init0.player!!.id)
+                            if (hasInit0() && this.init0.player != null && caster.player!!.id == this.init0.player!!.id)
                                 isValid2 = true
-                            if (this.init1 != null && this.init1.player != null && caster.player!!.id == this.init1.player!!.id)
+                            if (hasInit1() && this.init1.player != null && caster.player!!.id == this.init1.player!!.id)
                                 isValid2 = true
 
                             if (isValid2) {// Soit il a lancer le combat => annulation du combat
@@ -2101,20 +2105,20 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
     }
 
     fun toggleLockTeam(guid: Int) {
-        if (init0 != null && this.init0.id == guid) {
-            locked0 = locked0
+        if (hasInit0() && this.init0.id == guid) {
+            locked0 = !locked0
             SocketManager.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(this.init0.player!!.curMap, if (locked0) '+' else '-', 'A', guid)
             SocketManager.GAME_SEND_Im_PACKET_TO_FIGHT(this, 1, if (locked0) "095" else "096")
-        } else if (init1 != null && this.init1.id == guid) {
-            locked1 = locked1
+        } else if (hasInit1() && this.init1.id == guid) {
+            locked1 = !locked1
             SocketManager.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(this.init1.player!!.curMap, if (locked1) '+' else '-', 'A', guid)
             SocketManager.GAME_SEND_Im_PACKET_TO_FIGHT(this, 2, if (locked1) "095" else "096")
         }
     }
 
     fun toggleLockSpec(player: Player) {
-        if (init0 != null && this.init0.id == player.id || init1 != null && this.init1.id == player.id) {
-            this.viewerOk = this.viewerOk
+        if (hasInit0() && this.init0.id == player.id || hasInit1() && this.init1.id == player.id) {
+            this.viewerOk = !this.viewerOk
 
             if (this.viewerOk) {
                 ArrayList(this.viewer.values).stream().filter({ target -> target.getGroup() == null }).forEach { target ->
@@ -2136,24 +2140,24 @@ Constant.CLASS_OSAMODAS, Constant.CLASS_FECA, Constant.CLASS_SADIDA, Constant.CL
     }
 
     fun toggleOnlyGroup(guid: Int) {
-        if (init0 != null && this.init0.id == guid) {
-            onlyGroup0 = onlyGroup0
+        if (hasInit0() && this.init0.id == guid) {
+            onlyGroup0 = !onlyGroup0
             SocketManager.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(this.init0.player!!.curMap, if (onlyGroup0) '+' else '-', 'P', guid)
             SocketManager.GAME_SEND_Im_PACKET_TO_FIGHT(this, 1, if (onlyGroup0) "093" else "094")
-        } else if (init1 != null && this.init1.id == guid) {
-            onlyGroup1 = onlyGroup1
+        } else if (hasInit1() && this.init1.id == guid) {
+            onlyGroup1 = !onlyGroup1
             SocketManager.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(this.init1.player!!.curMap, if (onlyGroup1) '+' else '-', 'P', guid)
             SocketManager.GAME_SEND_Im_PACKET_TO_FIGHT(this, 2, if (onlyGroup1) "095" else "096")
         }
     }
 
     fun toggleHelp(guid: Int) {
-        if (init0 != null && this.init0.id == guid) {
-            help0 = help0
+        if (hasInit0() && this.init0.id == guid) {
+            help0 = !help0
             SocketManager.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(this.init0.player!!.curMap, if (help0) '+' else '-', 'H', guid)
             SocketManager.GAME_SEND_Im_PACKET_TO_FIGHT(this, 1, if (help0) "0103" else "0104")
-        } else if (init1 != null && this.init1.id == guid) {
-            help1 = help1
+        } else if (hasInit1() && this.init1.id == guid) {
+            help1 = !help1
             SocketManager.GAME_SEND_FIGHT_CHANGE_OPTION_PACKET_TO_MAP(this.init1.player!!.curMap, if (help1) '+' else '-', 'H', guid)
             SocketManager.GAME_SEND_Im_PACKET_TO_FIGHT(this, 2, if (help1) "0103" else "0104")
         }
@@ -4603,7 +4607,7 @@ Constant.FIGHT_TYPE_PVM -> {try {
                         }
                     } else {
                         var temporary3: ArrayList<Drop> = ArrayList(dropsPlayers)
-                        if (this.type == Constant.FIGHT_TYPE_PVM && this.monsterGroup != null && this.monsterGroup.mobs.size > 1 && Formulas.getRandomValue(0, 100) >= 98) {
+                        if (this.type == Constant.FIGHT_TYPE_PVM && hasMonsterGroup() && this.monsterGroup.mobs.size > 1 && Formulas.getRandomValue(0, 100) >= 98) {
                             var templates: List<ObjectTemplate> = World.world.getEtherealWeapons(if (i.isInvocation()) i.getInvocator()!!.getLvl() else i.getLvl())
                             if (templates.isEmpty()) {
                                 var template: ObjectTemplate = templates[templates.size - 1]
@@ -5522,7 +5526,7 @@ Constant.FIGHT_TYPE_PVT -> {infos.append("0,")
                         fight.init0.id, fight.prism!!.id, fight.init0.player!!.curCell.cellId, "0;" + fight.init0.player!!.alignment, fight.prism!!.cell, "0;" + fight.prism!!.alignment)
             }
             SocketManager.GAME_SEND_REFRESH_TEAM_PACKET_TO_MAP(map, fight.init0.id, fight.team0.values)
-            var id: Int = if (fight.init1 == null) if (fight.collector == null) if (fight.prism == null) -1 else fight.prism!!.id else fight.collector!!.id else fight.init1.id
+            var id: Int = if (!fight.hasInit1()) if (fight.collector == null) if (fight.prism == null) -1 else fight.prism!!.id else fight.collector!!.id else fight.init1.id
             SocketManager.GAME_SEND_REFRESH_TEAM_PACKET_TO_MAP(map, id, fight.team1.values)
         }}
     }

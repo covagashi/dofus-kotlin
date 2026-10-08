@@ -641,7 +641,7 @@ var init1: Player? = null
                 this.sendErrorMessage("The player is not online, are you sure it is the correct player ?")
             return
         } else if (command.equals("MUTEMAP", ignoreCase = true)) {
-            if (this.player!!.curMap == null)
+            if (!this.player!!.hasMap())
                 return
             this.player!!.curMap.mute()
             var mess: String = ""

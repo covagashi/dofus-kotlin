@@ -384,9 +384,9 @@ class Account(guid: Int, val name: String, val pseudo: String,
                 GameClient.leaveExchange(player)
             if (player.party != null)
                 player.party!!.leave(player)
-            if (player.curCell != null)
+            if (player.hasCell())
                 player.curCell.removePlayer(player)
-            if (player.curMap != null && player.isOnline)
+            if (player.hasMap() && player.isOnline)
                 SocketManager.GAME_SEND_ERASE_ON_MAP_TO_MAP(player.curMap, player.id)
 
             player.online = false

@@ -1155,7 +1155,7 @@ class World private constructor() : Scripted<SWorld> {
         var subareas = 0
 
         for (subarea in _subAreas.values) {
-            if (player.curMap != null && player.curMap.subArea != null)
+            if (player.hasMap() && player.curMap.subArea != null)
                 if (subarea.area!!.superArea != player.curMap.subArea!!.area!!.superArea)
                     continue
             if (!subarea.conquerable)
@@ -1353,7 +1353,7 @@ class World private constructor() : Scripted<SWorld> {
     }
 
     fun verifyClone(p: Player) {
-        if (p.curCell != null && p.fight == null) {
+        if (p.hasCell() && p.fight == null) {
             if (p.curCell.players.contains(p)) {
                 p.curCell.removePlayer(p)
                 (DatabaseManager.get(PlayerData::class.java) as PlayerData).update(p)

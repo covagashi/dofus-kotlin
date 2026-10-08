@@ -767,7 +767,7 @@ else -> {
     }
 
     private fun authorisedCommand(packet: String) {
-        if (this.adminUser == null) this.adminUser = CommandAdmin(this.player)
+        if (!::adminUser.isInitialized) this.adminUser = CommandAdmin(this.player)
         if (this.player.getGroup() == null || !this::player.isInitialized) {
             this.getAccount()!!.gameClient!!.kick()
             return
@@ -798,7 +798,7 @@ else -> {
             return
         }
 
-        if (this.player.curMap != null) {
+        if (this.player.hasMap()) {
             if (this.player.curMap.isMute && this.player.getGroup() == null) {
                 this.player.sendServerMessage("The map is currently mute.")
                 return
@@ -1192,7 +1192,7 @@ else -> {var nom: String = packet.substring(2).split("|")[0]
     private fun prismInfos(packet: String) {
         if (packet[2] == 'J' || packet[2] == 'V') {
             when (packet[2]) {
-'J' -> {if(this.player.curMap != null && this.player.curMap.subArea != null) {
+'J' -> {if(this.player.hasMap() && this.player.curMap.subArea != null) {
                         var prism: Prism? = this.player.curMap.subArea!!.prism
                         if (prism != null) {
                             Prism.parseAttack(this.player)
@@ -4140,7 +4140,7 @@ gameTryCastSpell(packet)
         }
 
         //Si packet invalide, ou cellule introuvable
-        if (cellID == -1 || actionID == -1 || !this::player.isInitialized || this.player.curMap == null || this.player.curMap.getCase(cellID) == null)
+        if (cellID == -1 || actionID == -1 || !this::player.isInitialized || !this.player.hasMap() || this.player.curMap.getCase(cellID) == null)
             return
 
         GA.args = cellID.toString() + ";" + actionID
@@ -4553,7 +4553,7 @@ gameTryCastSpell(packet)
         var isOk: Boolean = packet[2] == 'K'
         when (GA.actionId){  1 -> {if (isOk) {
                     if (this.player.fight == null) {
-                        assert(this.player.curCell != null)
+                        assert(this.player.hasCell())
                         val party: Party? = this.player.party
 
                         if(party != null && this.player.fight == null && party.master != null && party.master!!.name.equals(this.player.name)) {
@@ -4668,7 +4668,7 @@ gameTryCastSpell(packet)
             if(fight.getTeamId(target.id) != fight.getTeamId(this.player.id))
                 return
 
-            if ((fight.init0 != null && target == fight.init0.player) || (fight.init1 != null && target == fight.init1.player) || target == this.player)
+            if ((fight.hasInit0() && target == fight.init0.player) || (fight.hasInit1() && target == fight.init1.player) || target == this.player)
                 return
 
             fight.leftFight(this.player, target)

@@ -186,6 +186,9 @@ open class Player : Scripted<SPlayer>, Actor {
     var away: Boolean = false
     lateinit var curMap: GameMap // Will become mapInstance GUID
     lateinit var curCell: GameCase
+
+    fun hasMap() = ::curMap.isInitialized
+    fun hasCell() = ::curCell.isInitialized
     var ready: Boolean= false
     var isOnline: Boolean= false
     var party: Party? = null
@@ -472,14 +475,14 @@ open class Player : Scripted<SPlayer>, Actor {
                 this.enteredOnEnnemyFaction = prison
             }
             this.showWings = this.alignment != 0 && seeAlign.toInt() == 1
-            if (curMap == null && World.world.getMap(7411) != null) {
+            if (!hasMap() && World.world.getMap(7411) != null) {
                 this.curMap = World.world.getMap( 7411)
                 this.curCell = curMap.getCase(311)!!
-            } else if (curMap == null && World.world.getMap(7411) == null) {
+            } else if (!hasMap() && World.world.getMap(7411) == null) {
                 throw IllegalStateException("Cannot find map 7411")
-            } else if (curMap != null) {
+            } else if (hasMap()) {
                 this.curCell = curMap.getCase(cell)!!
-                if (curCell == null) {
+                if (!hasCell()) {
                     this.curMap = World.world.getMap( 7411)
                     this.curCell = curMap.getCase(311)!!
                 }
@@ -493,7 +496,7 @@ open class Player : Scripted<SPlayer>, Actor {
                     }
                 }
             }
-            if (!isNew && (curMap == null || curCell == null)) {
+            if (!isNew && (!hasMap() || !hasCell())) {
                 throw IllegalStateException("Cannot find map/cell for player")
             }
             this.parseObjects(stuff)
@@ -1826,7 +1829,7 @@ else -> {turn = 30
 
     fun parseToGM(): String {
         var str: StringBuilder = StringBuilder()
-        if (fight == null && curCell != null)// Hors combat
+        if (fight == null && hasCell())// Hors combat
         {
             str.append(curCell.getId()).append(";").append(orientation).append(";")
             str.append("0").append(";");//FIXME:?
@@ -2900,7 +2903,7 @@ else -> {return
         } catch (e: Exception) {
             log.error("unexpected error", e)
         }
-        if (cellID == -1 || this.curMap == null)
+        if (cellID == -1 || !hasMap())
             return
         var cell: GameCase? = this.curMap.getCase(cellID)
         if(cell == null) return
@@ -5322,7 +5325,7 @@ else -> {mapID = 8534
     fun isMissingSubscription(): Boolean {
         var ok: Boolean = Config.subscription
 
-        if (this.curMap == null)
+        if (!hasMap())
             return false
         when (this.curMap.id) {
 6824, 6825, 6826 -> {return false
@@ -5358,7 +5361,7 @@ else -> {mapID = 8534
     }
 
     fun isInPrison(): Boolean {
-        if (this.curMap == null)
+        if (!hasMap())
             return false
 
         when (this.curMap.id) {
