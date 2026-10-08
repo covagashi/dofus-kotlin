@@ -14,6 +14,9 @@ Dofus 1.39.8 wire protocol end-to-end without a Flash client.
 | `dofus_zaap_smoke.py` | Zaap teleport: `GA500<zaapCell>;114` on the interactive zaap object (cell 297 on map 7411) → `WC<cur>|<dest>;<cost>|...` → `WU<dest>` → `GDM` map change + `WV`, kamas deducted. Player must be on map 7411 with zaaps unlocked (`7411,8125`). |
 | `dofus_shop_smoke.py` | NPC vendor: `ER0|<actorId>` → `ECK0` + `EL` offer list → `EB<tplId>|<qty>` → `EBK` + `OAKO` + kamas spent → `EV`. Player must be on map 692 (vendor tpl 23). |
 | `dofus_items_smoke.py` | Item equip/unequip: `OM<guid>|<pos>` → `OM` ack + `As`/`Oa`/`OT` stat+set refresh. Guid 7 = tpl 770 (boots → slot 5). |
+| `dofus_exchange_smoke.py` | Player-to-player trade: `ER1|<playerId>` → `ECK1` + `EA` accept → `EMG<kamas>` offer → `EK` validate → `EK11`/`EK12` + `EVa` applied. Needs two accounts on the same map (player ids 1+2). |
+| `dofus_mapchange_smoke.py` | Scripted map transition: BFS walk to an `onMovementEnd` trigger cell on map 7411 → `GA001` → server `GA<actionId>;1;...` echo → `GKK<actionId>` ack → `GA;2` + `GDM|7427` teleport. |
+| `run_all.sh` | Runs every smoke in sequence: repositions the test characters, restarts `starloco_game`, waits for boot, then runs each script inside a throwaway python container on the compose network. |
 | `decode_map.py` | Dumps a `maps` table row into the walkable-cell JSON used by `MapGrid`. |
 | `map4.json` / `map7411.json` | Decoded walkability for maps 4 (fight) and 7411 (zaap). Regenerate with `decode_map.py <id>`. |
 
@@ -22,7 +25,10 @@ Dofus 1.39.8 wire protocol end-to-end without a Flash client.
 With the docker-compose stack up (`docker compose -f compose-test.yml up -d`):
 
 ```bash
-# recommended: throwaway python container on the compose network
+# everything at once (takes a while: one game-server restart per scenario)
+./tools/smoke/run_all.sh
+
+# or individually: throwaway python container on the compose network
 docker run --rm --network dofus-kotlin_starloco \
   -v "$PWD/tools:/tools" python:3-alpine sh -c \
   'cd /tools/smoke && DOFUS_LOGIN_HOST=starloco_login \
@@ -56,6 +62,8 @@ restart the game server (player state is cached in memory):
 | `dofus_zaap_smoke` | 7411 | 310 | `zaaps` col incl. `7411,8125` |
 | `dofus_shop_smoke` | 692 | 241 | kamas > 0 |
 | `dofus_items_smoke` | any | any | guid 7 owned, level ≥ 2 |
+| `dofus_exchange_smoke` | 1674 | 227 | players 1+2 same map, kamas > 0 |
+| `dofus_mapchange_smoke` | 7411 | 311 | — |
 
 ```bash
 docker exec dofus-kotlin-starloco_mariadb-1 mariadb -uroot -p$DB_PASS \

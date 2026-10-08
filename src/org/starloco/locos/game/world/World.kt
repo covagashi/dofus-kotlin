@@ -513,9 +513,8 @@ class World private constructor() : Scripted<SWorld> {
 
                 mapPossible.clear()
             } catch (e: Exception) {
-                logger.error("unexpected error", e)
                 mapPossible.clear()
-                logger.error("An error occurred when the server try to put extra-monster caused by : " + e.message)
+                logger.warn("skipping extra-monster {}: {}", i.key, e.message)
             }
         }
     }
