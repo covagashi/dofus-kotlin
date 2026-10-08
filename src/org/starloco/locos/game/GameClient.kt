@@ -3828,7 +3828,7 @@ else -> {if(c.code == 1030) {
         var actionID: Int
         try {
             actionID = (packet.substring(2, 5)).toInt()
-        } catch (e: NumberFormatException) {
+        } catch (e: Exception) {
             log.error("unexpected error", e)
             return
         }
