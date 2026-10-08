@@ -293,7 +293,7 @@ else -> {if(this::player.isInitialized)
 'P' -> {var name: String = NameGenerator.nameGenerator
                         .compose(((
                                 Math.random() * 3 +
-                                        Formulas.getRandomValue(1, 5)) as Int))
+                                        Formulas.getRandomValue(1, 5)).toInt()))
                 SocketManager.send(this, "APK" + name)
                 
 }
@@ -793,7 +793,7 @@ else -> {
         var lastMsg: String = ""
 
         if (this.player.getAccount() != null && this.player.isMuted()) {
-            var remaining: Short = (((this.getAccount()!!.getMuteTime() - System.currentTimeMillis()) / 60000) as Short)
+            var remaining: Short = (((this.getAccount()!!.getMuteTime() - System.currentTimeMillis()) / 60000).toShort())
             this.player.send("Im117;" + this.getAccount()!!.getMutePseudo() + "~" + remaining)
             return
         }
@@ -2298,7 +2298,7 @@ ExchangeAction.AUCTION_HOUSE_SELLING -> {var exchangeAction: BigStoreActionData 
                                 || packet.substring(3).split("|")[2] == "0")
                             return
 
-                        var taxe: Int = ((price * (curBigStore.taxe / 100)) as Int)
+                        var taxe: Int = ((price * (curBigStore.taxe / 100)).toInt())
 
                         if (taxe < 0)
                             return
@@ -5037,8 +5037,8 @@ gameTryCastSpell(packet)
             this.player.kamas = 0
 
 
-        var n1: Short = ((Formulas.getRandomValue(1, 129)) as Short)
-        var n2: Short = ((Formulas.getRandomValue(1, 227)) as Short)
+        var n1: Short = ((Formulas.getRandomValue(1, 129)).toShort())
+        var n2: Short = ((Formulas.getRandomValue(1, 227)).toShort())
         var collector: Collector = Collector(-1, map.id, this.player.curCell.getId(), 3.toByte(), guild.id, n1, n2, this.player, System.currentTimeMillis(), "", 0, 0)
         DatabaseManager.get(CollectorData::class.java).insert(collector)
         World.world.addCollector(collector)
@@ -6629,7 +6629,7 @@ else -> {SocketManager.GAME_SEND_MESSAGE(this.player, "Erreur d'obvijevan numero
             //this.player.send("Im1103");
             return
         }
-        var enclosMax: Byte = (Math.floor(this.player.getGuild()!!.lvl.toDouble() / 10) as Byte)
+        var enclosMax: Byte = (Math.floor(this.player.getGuild()!!.lvl.toDouble() / 10).toInt().toByte())
         var TotalEncloGuild: Byte = (World.world.totalMPGuild(this.player.getGuild()!!.id).toByte())
         if (TotalEncloGuild >= enclosMax) {
             SocketManager.GAME_SEND_Im_PACKET(this.player, "1103")

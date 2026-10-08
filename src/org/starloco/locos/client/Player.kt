@@ -2851,7 +2851,7 @@ else -> {return
         str.append(_curPdv).append(",").append(this.maxPdv).append(";")
         str.append(this.level).append(";")
         str.append(initiative).append(";")
-        str.append(getTotalStats(false).getEffect(Constant.STATS_ADD_PROS) + ((Math.ceil(getTotalStats(false).getEffect(Constant.STATS_ADD_CHAN) / 10.0) as Int))).append(";")
+        str.append(getTotalStats(false).getEffect(Constant.STATS_ADD_PROS) + ((Math.ceil(getTotalStats(false).getEffect(Constant.STATS_ADD_CHAN) / 10.0).toInt()))).append(";")
         str.append("0");//Side = ?
         return str.toString()
     }

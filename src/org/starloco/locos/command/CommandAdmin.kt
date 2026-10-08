@@ -1353,13 +1353,13 @@ var P: Player? = null
             return
         } else if (command.equals("INFOS", ignoreCase = true)) {
             var uptime: Long = System.currentTimeMillis() - Config.startTime
-            var day: Int = ((uptime / (1000 * 3600 * 24)) as Int)
+            var day: Int = ((uptime / (1000 * 3600 * 24)).toInt())
             uptime %= (1000 * 3600 * 24)
-            var hour: Int = ((uptime / (1000 * 3600)) as Int)
+            var hour: Int = ((uptime / (1000 * 3600)).toInt())
             uptime %= (1000 * 3600)
-            var min: Int = ((uptime / (1000 * 60)) as Int)
+            var min: Int = ((uptime / (1000 * 60)).toInt())
             uptime %= (1000 * 60)
-            var sec: Int = ((uptime / (1000)) as Int)
+            var sec: Int = ((uptime / (1000)).toInt())
 
             var message: String = "\n<u><b>Global informations system of the emulator :</b></u>\n\n<u>Uptime :</u> " + day.toString() + "j " + hour.toString() + "h " + min.toString() + "m " + sec.toString() + "s.\n"
             message += "Online players         : " + Config.gameServer!!.getClients().size.toString() + "\n"
