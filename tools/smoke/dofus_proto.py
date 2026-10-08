@@ -200,9 +200,10 @@ class MapGrid:
         return None
 
 
-def login_and_enter(login_host, login_port, game_host, gi_drain=4):
+def login_and_enter(login_host, login_port, game_host, gi_drain=4,
+                    account="test", password="test", char_id=1, name="game"):
     """Full login -> game-entry handshake. Returns (game Conn, GI packets)."""
-    lg = Conn(login_host, login_port, "login")
+    lg = Conn(login_host, login_port, name + ":login")
     hc = None
     for _ in range(8):
         hc = lg.recv_pkt()
@@ -211,8 +212,8 @@ def login_and_enter(login_host, login_port, game_host, gi_drain=4):
     if not hc:
         print("FAIL: no HC")
         sys.exit(1)
-    lg.send("1.39.8e"); lg.send("test"); lg.recv_pkt(3)
-    lg.send(crypt_pass("test", hc[2:])); lg.drain(2)
+    lg.send("1.39.8e"); lg.send(account); lg.recv_pkt(3)
+    lg.send(crypt_pass(password, hc[2:])); lg.drain(2)
     lg.send("Ax"); lg.drain(2)
     lg.send("AX601")
     ayk = lg.recv_pkt()
@@ -223,7 +224,7 @@ def login_and_enter(login_host, login_port, game_host, gi_drain=4):
     gport = int(ayk[3:].split(";")[0].split(":")[1])
     lg.s.close()
 
-    g = Conn(game_host, gport, "game")
+    g = Conn(game_host, gport, name)
     if g.recv_pkt() != "HG":
         print("FAIL: no HG")
         sys.exit(1)
@@ -238,7 +239,7 @@ def login_and_enter(login_host, login_port, game_host, gi_drain=4):
         p = g.recv_pkt(3)
         if p and p.startswith("ALK"):
             break
-    g.send("AS1"); g.drain(4)
+    g.send("AS%d" % char_id); g.drain(4)
     g.send("GC"); g.drain(3)
     g.send("GI")
     return g, g.drain(gi_drain)
