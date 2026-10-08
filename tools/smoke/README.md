@@ -10,8 +10,12 @@ Dofus 1.39.8 wire protocol end-to-end without a Flash client.
 | `dofus_proto.py` | Shared protocol helpers: `Conn` (packet framing), password `crypt_pass`, `mapData` decryption (port of `CryptManager`), orthogonal grid + BFS pathing (port of `OrthogonalProj`/`PathFinding`). |
 | `dofus_smoke.py` | Login → auth → charlist → charselect → `GCK`/`GDM` map load → `GM`/`GDK` actors → chat (`BM*`/`cMK`) → movement probe → disconnect/reconnect. |
 | `dofus_fight_smoke.py` | Full PvM combat: locate mob group on map 4 → BFS path → `GA001` movement → aggro → `GJK`/`GDF`/`GP` fight init → `Gp` placement → `GR1` ready → turn loop (`GTS`/`Gt`), player spell cast (`GA300141`), mob AI, `GE` fight end. Handles reconnect-mid-fight. |
+| `dofus_npc_smoke.py` | NPC dialog + bank: `DC<npcId>` → `DCK`/`DQ` question+answers → `DR<qid>|<ans>` → `DV` + `ECK5`/`EL` bank open → `EMG±<n>` kamas deposit/withdraw → `EMO±<guid>|<qty>` item deposit/withdraw → `EV`. Player must be on map 1674 (Astrub bank), cell ~227. |
+| `dofus_zaap_smoke.py` | Zaap teleport: `GA500<zaapCell>;114` on the interactive zaap object (cell 297 on map 7411) → `WC<cur>|<dest>;<cost>|...` → `WU<dest>` → `GDM` map change + `WV`, kamas deducted. Player must be on map 7411 with zaaps unlocked (`7411,8125`). |
+| `dofus_shop_smoke.py` | NPC vendor: `ER0|<actorId>` → `ECK0` + `EL` offer list → `EB<tplId>|<qty>` → `EBK` + `OAKO` + kamas spent → `EV`. Player must be on map 692 (vendor tpl 23). |
+| `dofus_items_smoke.py` | Item equip/unequip: `OM<guid>|<pos>` → `OM` ack + `As`/`Oa`/`OT` stat+set refresh. Guid 7 = tpl 770 (boots → slot 5). |
 | `decode_map.py` | Dumps a `maps` table row into the walkable-cell JSON used by `MapGrid`. |
-| `map4.json` | Decoded walkability for map 4 (fixed mob group at cell 280 area; mobs aggro at distance ≤ 2). Regenerate with `decode_map.py 4`. |
+| `map4.json` / `map7411.json` | Decoded walkability for maps 4 (fight) and 7411 (zaap). Regenerate with `decode_map.py <id>`. |
 
 ## Running
 
@@ -38,6 +42,27 @@ connection (no `HG`). The docker-network route avoids the issue entirely.
 Env vars: `DOFUS_LOGIN_HOST` (default `127.0.0.1`), `DOFUS_LOGIN_PORT`
 (`450`), `DOFUS_GAME_HOST` (`127.0.0.1`). The game port is read from the
 login server's `AYK` response.
+
+## Per-smoke map prerequisites
+
+Each smoke expects the test player on a specific map. Reposition then
+restart the game server (player state is cached in memory):
+
+| Smoke | `map` | `cell` | Extra |
+|---|---|---|---|
+| `dofus_smoke` | any | any | — |
+| `dofus_fight_smoke` | 4 | 268 | — |
+| `dofus_npc_smoke` | 1674 | 227 | — |
+| `dofus_zaap_smoke` | 7411 | 310 | `zaaps` col incl. `7411,8125` |
+| `dofus_shop_smoke` | 692 | 241 | kamas > 0 |
+| `dofus_items_smoke` | any | any | guid 7 owned, level ≥ 2 |
+
+```bash
+docker exec dofus-kotlin-starloco_mariadb-1 mariadb -uroot -p$DB_PASS \
+  starloco_login -e \
+  "UPDATE world_players SET map=<map>, cell=<cell> WHERE id=1"
+docker compose restart starloco_game   # wait for "server is ready" + exchange
+```
 
 ## Fight smoke prerequisites
 
