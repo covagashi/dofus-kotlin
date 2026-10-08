@@ -128,6 +128,53 @@ if not any(p.startswith("ECK") for p in pkts):
 print("bank open packet ok — contents:",
       next((p[:120] for p in pkts if p.startswith("EL")), "(no EL seen)"))
 
+# --- bank kamas ops: EMG<n> deposits (n>0) / withdraws (n<0) ---
+g.send("EMG500")
+pkts = g.drain(3)
+for p in pkts:
+    print("<<", p[:140])
+esk = next((p for p in pkts if p.startswith("EsK")), None)
+if not esk or not esk[3:].startswith("G"):
+    print("FAIL: no EsK G<bankKamas> after deposit")
+    sys.exit(1)
+bank_kamas = int(esk[4:])
+print("bank kamas after +500:", bank_kamas)
+if bank_kamas < 500:
+    print("FAIL: deposit did not reach bank")
+    sys.exit(1)
+
+g.send("EMG-500")
+pkts = g.drain(3)
+for p in pkts:
+    print("<<", p[:140])
+esk = next((p for p in pkts if p.startswith("EsK")), None)
+if not esk or int(esk[4:]) != bank_kamas - 500:
+    print("FAIL: withdraw 500 not reflected in EsK")
+    sys.exit(1)
+print("bank kamas after -500:", esk[4:])
+
+# --- bank item ops: EMO+<guid>|<qty> deposit / EMO-<guid>|<qty> withdraw ---
+# find an inventory object guid from the OAKO/EL packets (guid 7 exists on test char)
+ITEM_GUID = int(os.environ.get("DOFUS_BANK_ITEM_GUID", "7"))
+g.send(f"EMO+{ITEM_GUID}|1")
+pkts = g.drain(3)
+for p in pkts:
+    print("<<", p[:140])
+if not any(p.startswith("EsK") for p in pkts) or \
+        not any(p.startswith("OR") for p in pkts):
+    print("FAIL: no EsK+OR after item deposit")
+    sys.exit(1)
+print("item deposited:", next((p[:80] for p in pkts if p.startswith("EsK")), "?"))
+
+g.send(f"EMO-{ITEM_GUID}|1")
+pkts = g.drain(3)
+for p in pkts:
+    print("<<", p[:140])
+if not any(p.startswith("EsK") for p in pkts):
+    print("FAIL: no EsK after item withdraw")
+    sys.exit(1)
+print("item withdrawn:", next((p[:80] for p in pkts if p.startswith("EsK")), "?"))
+
 g.send("EV")
 g.drain(1)
 g.s.close()
