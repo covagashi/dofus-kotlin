@@ -95,6 +95,13 @@ object Main {
         Config.verify(configPath)
         Logging.getInstance().initialize()
 
+        if (!Config.debug) {
+            // Quiet third-party DEBUG noise (SQL statements, packet traces)
+            // from the very start; INFO lifecycle lines still print.
+            val root = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as ch.qos.logback.classic.Logger
+            root.level = Level.INFO
+        }
+
         // Database
         if (DatabaseManager.getInstance().isConnected()) {
             Config.isRunning = true
