@@ -1872,7 +1872,7 @@ ExchangeAction.TRADING_WITH_ME -> {when (packet[2]) {
 }
                 
 }
-ExchangeAction.TRADING_WITH_COLLECTOR -> {var Collector: Collector = World.world.getCollector((this.player.exchangeAction!!.getValue() as Int))!!
+ExchangeAction.TRADING_WITH_COLLECTOR -> {var Collector: Collector? = World.world.getCollector((this.player.exchangeAction!!.getValue() as Int))
                 if (Collector == null || Collector.inFight > 0)
                     return
                 when (packet[2]) {
@@ -3244,7 +3244,7 @@ ExchangeAction.CRAFTING_SECURE_WITH, ExchangeAction.TRADING_WITH_PLAYER -> {when
                 SocketManager.GAME_SEND_ITEM_LIST_PACKET_SELLER(this.player, this.player)
                 
 }
-'8' -> {var collector: Collector = World.world.getCollector((packet.substring(4)).toInt())!!
+'8' -> {var collector: Collector? = World.world.getCollector((packet.substring(4)).toInt())
                 if (collector == null || collector.inFight > 0 || collector.exchange || collector.guildId != this.player.getGuild()!!.id || collector.map != this.player.curMap.id)
                     return
                 if (!this.player.guildMember!!.canDo(Constant.G_COLLPERCO)) {
@@ -3423,7 +3423,7 @@ ExchangeAction.IN_TRUNK -> {((exchangeAction.getValue() as Trunk)).player = null
                 player.send("EV")
                 
 }
-ExchangeAction.TRADING_WITH_COLLECTOR -> {var collector: Collector = World.world.getCollector((exchangeAction.getValue() as Int))!!
+ExchangeAction.TRADING_WITH_COLLECTOR -> {var collector: Collector? = World.world.getCollector((exchangeAction.getValue() as Int))
                 if (collector == null) return
                 for (loc in  World.world.getGuild(collector.guildId)!!.getPlayers()) {
                     if (loc != null && loc.isOnline) {
@@ -5084,7 +5084,7 @@ gameTryCastSpell(packet)
 
     private fun invitationGuild(packet: String) {
         when (packet[0]) {
-'R' -> {var P: Player = World.world.getPlayerByName(packet.substring(1))!!
+'R' -> {var P: Player? = World.world.getPlayerByName(packet.substring(1))
                 if (P == null || this.player.getGuild() == null) {
                     SocketManager.GAME_SEND_gJ_PACKET(this.player, "Eu")
                     return
