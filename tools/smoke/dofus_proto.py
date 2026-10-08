@@ -200,6 +200,74 @@ class MapGrid:
         return None
 
 
+def login_and_enter(login_host, login_port, game_host, gi_drain=4):
+    """Full login -> game-entry handshake. Returns (game Conn, GI packets)."""
+    lg = Conn(login_host, login_port, "login")
+    hc = None
+    for _ in range(8):
+        hc = lg.recv_pkt()
+        if hc and hc.startswith("HC"):
+            break
+    if not hc:
+        print("FAIL: no HC")
+        sys.exit(1)
+    lg.send("1.39.8e"); lg.send("test"); lg.recv_pkt(3)
+    lg.send(crypt_pass("test", hc[2:])); lg.drain(2)
+    lg.send("Ax"); lg.drain(2)
+    lg.send("AX601")
+    ayk = lg.recv_pkt()
+    if not ayk or not ayk.startswith("AYK"):
+        print("FAIL: no AYK")
+        sys.exit(1)
+    ticket = ayk[3:].split(";")[1]
+    gport = int(ayk[3:].split(";")[0].split(":")[1])
+    lg.s.close()
+
+    g = Conn(game_host, gport, "game")
+    if g.recv_pkt() != "HG":
+        print("FAIL: no HG")
+        sys.exit(1)
+    g.send("AT" + ticket)
+    r = g.recv_pkt()
+    if not r or not r.startswith("ATK"):
+        print("FAIL: ATK")
+        sys.exit(1)
+    g.send("AV0"); g.recv_pkt(2)
+    g.send("AL")
+    for _ in range(6):
+        p = g.recv_pkt(3)
+        if p and p.startswith("ALK"):
+            break
+    g.send("AS1"); g.drain(4)
+    g.send("GC"); g.drain(3)
+    g.send("GI")
+    return g, g.drain(gi_drain)
+
+
+def parse_gm_actors(gi_packets):
+    """Split GM actor list into players / mob groups / npcs.
+
+    Returns (my_cell, groups {cell: desc}, npcs {actorId: templateId}).
+    """
+    groups, npcs, my_cell = {}, {}, -1
+    for p in gi_packets:
+        if not p.startswith("GM"):
+            continue
+        for part in p[3:].split("|"):
+            if not part.startswith("+"):
+                continue
+            f = part[1:].split(";")
+            if len(f) > 5 and f[5] == "-4":
+                npcs[int(f[3])] = int(f[4])
+            elif len(f) > 5 and f[5] == "-3":
+                groups[int(f[0])] = part[:90]
+            elif len(f) > 3 and f[3] == "1":
+                my_cell = int(f[0])
+            elif len(f) > 3 and f[3] == "-1":
+                groups[int(f[0])] = part[:90]
+    return my_cell, groups, npcs
+
+
 def decode_map_json(map_id, w, h, key, mapdata):
     """Decode raw mapData into the JSON form MapGrid.load() consumes.
 
